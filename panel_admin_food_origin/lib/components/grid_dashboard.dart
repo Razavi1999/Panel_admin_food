@@ -2,20 +2,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../screens/books_screen.dart';
+
 
 class GridDashboard extends StatelessWidget {
   final BuildContext context;
   final String username, token, firstName, lastName;
   final int user_id;
 
-  GridDashboard(this.context, this.user_id, this.token, this.username, this.firstName, this.lastName);
+  GridDashboard(this.context, this.user_id, this.token,
+      this.username, this.firstName, this.lastName);
 
   Items item1 = new Items(
     title: "خفت کتاب",
     subtitle: "خرید , فروش , تبادل",
     img: "assets/images/khaft.png",
-    dest: BooksScreen.id,
+    dest: null,
   );
 
   Items item2 = new Items(

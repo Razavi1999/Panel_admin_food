@@ -1,21 +1,16 @@
-// TODO Implement this library.
 
 import 'dart:io';
 import 'dart:math';
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:my_university/components/already_have_an_account_acheck.dart';
-import 'package:my_university/components/rounded_button.dart';
-import 'package:my_university/components/rounded_input_field.dart';
-import 'package:my_university/components/rounded_password_field.dart';
+import 'package:panel_admin_food_origin/components/already_have_an_account_acheck.dart';
+import 'package:panel_admin_food_origin/components/rounded_button.dart';
+import 'package:panel_admin_food_origin/components/rounded_input_field.dart';
+import 'package:panel_admin_food_origin/components/rounded_password_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
-import 'email_verfication_screen.dart';
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -63,43 +58,42 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
                 alignment: Alignment.center,
                 children: <Widget>[
                   Positioned(
-                    top: 0,
-                    left: 0,
-                    child: Image.asset(
-                      "assets/images/signup_top.png",
-                      width: size.width * 0.35,
-                    ),
-                  ),
-                  Positioned(
                     bottom: 0,
                     left: 0,
                     child: Image.asset(
-                      "assets/images/main_bottom.png",
-                      width: size.width * 0.25,
+                      "assets/images/photo_6.jpeg",
+                      width: size.width * 1.4 ,
                     ),
                   ),
                   SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        SizedBox(height: size.height * 0.094),
                         Text(
-                          "SIGNUP",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          "به مدیریت دانشگاه من خوش آمدید",
+                          style: TextStyle(fontWeight: FontWeight.bold ,
+                              /*
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 6
+                                ..color = Colors.blue[700],
+                              */
+
+                              color: Colors.red.shade900 ,
+                              fontSize: 23
+                          ),
                         ),
                         SizedBox(height: size.height * 0.03),
-                        SvgPicture.asset(
-                          "assets/icons/signup.svg",
-                          height: size.height * 0.35,
-                        ),
                         RoundedInputField(
-                          hintText: "Your Email",
+                          hintText: "پست الکترونیکی",
                           onChanged: (value) {
                             email = value;
                           },
                           icon: Icons.email,
                         ),
                         RoundedInputField(
-                          hintText: "Your Student ID",
+                          hintText: "شماره پرسنلی",
                           onChanged: (value) {
                             sid = value;
                           },
@@ -114,7 +108,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
                               Expanded(
                                 child: RoundedInputField(
                                   visible: false,
-                                  hintText: "First Name",
+                                  hintText: "نام",
                                   onChanged: (value) {
                                     firstName = value;
                                   },
@@ -127,7 +121,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
                               Expanded(
                                 child: RoundedInputField(
                                   visible: false,
-                                  hintText: "Last Name",
+                                  hintText: "نام خانوادگی",
                                   onChanged: (value) {
                                     lastName = value;
                                   },
@@ -146,7 +140,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
                         ),
                         RoundedButton(
                           color: color,
-                          text: "SIGNUP",
+                          text: "ثبت نام",
                           press: () {
                             checkValidation(context);
                           },
@@ -266,7 +260,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           setState(() {
             showSpinner = false;
           });
-          Navigator.pushNamed(context, EmailVerificationScreen.id, arguments: {
+          Navigator.pushNamed(context, null , arguments: {
             'sid': sid,
           });
         } else {
@@ -331,26 +325,6 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
   }
 
   _showDialog(BuildContext context, String message) {
-    // Scaffold.of(context).showSnackBar(
-    //   SnackBar(
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.only(
-    //         topRight: Radius.circular(20),
-    //         topLeft: Radius.circular(20),
-    //       ),
-    //     ),
-    //     backgroundColor: Colors.red[400],
-    //     content: Container(
-    //       height: 40,
-    //       child: Center(
-    //         child: Text(
-    //           message,
-    //           style: TextStyle(fontSize: 30),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
     AlertDialog dialog = AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),

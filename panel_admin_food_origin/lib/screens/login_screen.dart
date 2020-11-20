@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
+import 'package:panel_admin_food_origin/components/already_have_an_account_acheck.dart';
+import 'package:panel_admin_food_origin/components/rounded_button.dart';
+import 'package:panel_admin_food_origin/components/rounded_input_field.dart';
+import 'package:panel_admin_food_origin/components/rounded_password_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
-
-
 import '../constants.dart';
 import 'home_screen.dart';
 import 'registeration_screen.dart';
@@ -53,43 +56,48 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Colors.purple.shade200,
         child: Builder(builder: (context) {
           return Container(
+            decoration: new BoxDecoration(
+                color: darkGrey,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    bottomLeft: Radius.circular(8.0)),
+                boxShadow: [
+                  BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.16),
+                      offset: Offset(0, 3),
+                      blurRadius: 6.0),
+                ]),
+
             width: double.infinity,
             height: size.height,
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[
                 Positioned(
-                  top: 0,
-                  left: 0,
-                  child: Image.asset(
-                    "assets/images/main_top.png",
-                    width: size.width * 0.35,
-                  ),
-                ),
-                Positioned(
                   bottom: 0,
                   right: 0,
                   child: Image.asset(
-                    "assets/images/login_bottom.png",
-                    width: size.width * 0.4,
+                    "assets/images/photo_2.jpeg",
+                    width: size.width * 1.1 ,
                   ),
                 ),
                 SingleChildScrollView(
                   child: Column(
+
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        "LOGIN",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: size.height * 0.03),
-                      SvgPicture.asset(
-                        "assets/icons/login.svg",
-                        height: size.height * 0.35,
+                      RichText(
+                        text: TextSpan(
+                          text : "به مدیریت دانشگاه من خوش آمدید",
+                          style: TextStyle(fontWeight: FontWeight.bold ,
+                          color: Colors.yellowAccent.shade400 ,
+                            fontSize: 20
+                          ),
+                        ),
                       ),
                       SizedBox(height: size.height * 0.03),
                       RoundedInputField(
-                        hintText: "Your Email",
+                        hintText: "پست الکترونیکی",
                         onChanged: (value) {
                           email = value;
                         },
@@ -202,13 +210,13 @@ class _LoginScreenState extends State<LoginScreen> {
     prefs.setString('first_name', last_name);
     prefs.setString('last_name', first_name);
     print(prefs.getString('last_name'));
-    Navigator.popAndPushNamed(context, HomeScreen.id);
+    Navigator.popAndPushNamed(context, null);
   }
 
   checkStringValueExistence() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('token')) {
-      Navigator.popAndPushNamed(context, HomeScreen.id);
+      Navigator.popAndPushNamed(context, null);
     }
     else {
       // pass
