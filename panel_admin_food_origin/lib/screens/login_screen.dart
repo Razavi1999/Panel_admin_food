@@ -216,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
   checkStringValueExistence() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('token')) {
-      Navigator.popAndPushNamed(context, null);
+      Navigator.popAndPushNamed(context, HomeScreen.id);
     }
     else {
       // pass
