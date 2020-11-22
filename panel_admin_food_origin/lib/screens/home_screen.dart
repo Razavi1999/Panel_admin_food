@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Column(
             children: <Widget>[
               SizedBox(
-                height: size.height /7,
+                height: size.height /9,
               ),
               Padding(
                 padding: EdgeInsets.only(left: 16, right: 16),
@@ -102,15 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.pushNamed(context, BooksScreen.id);
-      //   },
-      //   child: Icon(Icons.book),
-      // ),
-      // body: Center(
-      //   child: Text('Home'),
-      // ),
     );
   }
 

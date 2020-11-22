@@ -12,50 +12,32 @@ class GridDashboard extends StatelessWidget {
   GridDashboard(this.context, this.user_id, this.token,
       this.username, this.firstName, this.lastName);
 
+
   Items item1 = new Items(
-    title: "خفت کتاب",
-    subtitle: "خرید , فروش , تبادل",
-    img: "assets/images/khaft.png",
-    dest: null,
+    title: "سامانه تغذیه",
+    subtitle: "ایجاد تعداد غذا",
+    img: "assets/images/food.png",
   );
 
   Items item2 = new Items(
-    title: "سامانه تغذیه",
-    subtitle: "رزرو اتوماتیک غذا",
-    img: "assets/images/food.png",
-  );
-  Items item3 = new Items(
     title: "ثبت نام در رویداد ها",
-    subtitle: "",
-    img: "assets/images/map.png",
+    subtitle: "رویداد برای تحکیم فردا",
+    img: "assets/images/Event.png",
   );
-  Items item4 = new Items(
-    title: "اخبار دانشگاه",
-    subtitle: "اطلاع از آخرین قوانین ",
-    img: "assets/images/elmos.png",
-  );
-  Items item5 = new Items(
-    title: "درباره ما",
-    subtitle: "گروه برنامه نویسی دولاور",
-    img: "assets/images/logo.png",
-  );
-  Items item6 = new Items(
-    title: "سوالات متداول",
-    subtitle: "",
-    img: "assets/images/setting.png",
-  );
+
 
   @override
   Widget build(BuildContext context) {
-    List<Items> myList = [item1, item2, item3, item4, item5, item6];
+    List<Items> myList = [item1, item2];
     var color = 0xff453658;
     return Flexible(
       child: GridView.count(
-          childAspectRatio: 1.0,
+          childAspectRatio: 1.4,
           padding: EdgeInsets.only(left: 16, right: 16),
-          crossAxisCount: 2,
-          crossAxisSpacing: 18,
-          mainAxisSpacing: 18,
+          crossAxisCount: 1,
+          //childAspectRatio: (itemWidth / itemHeight),
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 8,
           children: myList.map((data) {
             return InkWell(
               onTap: (){
@@ -69,7 +51,8 @@ class GridDashboard extends StatelessWidget {
               },
               child: Container(
                 decoration: BoxDecoration(
-                    color: Color(color), borderRadius: BorderRadius.circular(10)),
+                    color: Color(color), borderRadius: BorderRadius.circular(20)),
+                ///*
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -78,7 +61,7 @@ class GridDashboard extends StatelessWidget {
                       width: 72,
                     ),
                     SizedBox(
-                      height: 14,
+                      height: 1,
                     ),
                     Text(
                       data.title,
@@ -97,19 +80,23 @@ class GridDashboard extends StatelessWidget {
                           textStyle: TextStyle(
                               color: Colors.white38,
                               fontSize: 10,
-                              fontWeight: FontWeight.w600)),
+                              fontWeight: FontWeight.w600)
+                      ),
                     ),
                     SizedBox(
-                      height: 14,
+                      height: 5,
                     ),
                   ],
                 ),
+                //*/
               ),
             );
           }).toList()),
     );
   }
 }
+
+
 
 class Items {
   String title;
