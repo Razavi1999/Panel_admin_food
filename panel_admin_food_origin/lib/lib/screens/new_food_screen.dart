@@ -46,7 +46,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
   Future<String> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token');
-    token = 'Token 965eee7f0022dc5726bc4d03fca6bd3ffe756a1f';
+    // token = 'Token 965eee7f0022dc5726bc4d03fca6bd3ffe756a1f';
     userId = prefs.getInt('user_id');
     return prefs.getString('token');
   }
