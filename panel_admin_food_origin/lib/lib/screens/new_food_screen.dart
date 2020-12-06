@@ -806,8 +806,30 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
       showDialog(
         context: context,
         child: AlertDialog(
-          content: Center(
-            child: Text('کتابی وجود ندارد'),
+          content: Container(
+            height: 100,
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                   Text('غذایی وجود ندارد'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextButton.icon(
+                      onPressed: () {
+                        _newBookDialog();
+                      },
+                      icon: Icon(Icons.add, color: kPrimaryColor),
+                      label: Text('اضافه کردن غذا جدید', style: TextStyle(color: kPrimaryColor),),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       );

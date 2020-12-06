@@ -203,6 +203,7 @@ class _OrderPageState extends State<OrderPage> {
       arguments: {
         'serve_id': serveId,
         'food_id': foodId,
+        'date': selectedDate.toString().substring(0,10),
       },
     );
   }

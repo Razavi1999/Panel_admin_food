@@ -26,6 +26,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
       messageText = 'گفت و گو',
       seller_username,
       buyer_username,
+      date,
       selectedTime;
   int userId, serveId, price, foodId, selectedTimeId;
   bool isBuyer = true;
@@ -46,6 +47,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
     args = ModalRoute.of(context).settings.arguments;
     serveId = args['serve_id'];
     foodId = args['food_id'];
+    date=args['date'];
     isVisible = args['isVisible'];
     return Scaffold(
       appBar: AppBar(
@@ -81,7 +83,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
               child: Column(
                 children: [
                   FutureBuilder(
-                    future: http.get('${url}/?food_id=$foodId',
+                    future: http.get('${url}/?food_id=$foodId&date=$date',
                         headers: {HttpHeaders.authorizationHeader: token}),
                     builder: (context, snapshot) {
                       if (snapshot.hasData &&
