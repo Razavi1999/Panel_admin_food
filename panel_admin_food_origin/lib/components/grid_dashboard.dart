@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:food_panel/screens/food_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+//import 'package:panel_admin_food_origin/screens/food_screen.dart';
 
-
+//import 'lib.dart';
 
 class GridDashboard extends StatelessWidget {
   final BuildContext context;
@@ -17,6 +19,7 @@ class GridDashboard extends StatelessWidget {
     title: "سامانه تغذیه",
     subtitle: "ایجاد تعداد غذا",
     img: "assets/images/food.png",
+    dest: OrderPage.id,
   );
 
   Items item2 = new Items(

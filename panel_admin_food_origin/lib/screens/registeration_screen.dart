@@ -3,11 +3,11 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_panel/components/already_have_an_account_acheck.dart';
+import 'package:food_panel/components/rounded_button.dart';
+import 'package:food_panel/components/rounded_input_field.dart';
+import 'package:food_panel/components/rounded_password_field.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:panel_admin_food_origin/components/already_have_an_account_acheck.dart';
-import 'package:panel_admin_food_origin/components/rounded_button.dart';
-import 'package:panel_admin_food_origin/components/rounded_input_field.dart';
-import 'package:panel_admin_food_origin/components/rounded_password_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
@@ -206,7 +206,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
       setState(() {
         color = Colors.grey[400];
       });
-      // String baseUrl = 'http://danibazi9.pythonanywhere.com/';
+      // String baseUrl = 'https://danibazi9.pythonanywhere.com/';
       // String baseUrl = 'http://192.168.43.126:8000';
       post(baseUrl, context);
     }
@@ -224,7 +224,8 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           ' ' +
           lastName.trim() +
           random.nextInt(9999999).toString(),
-      'mobile_number': 091000000000
+      'mobile_number': 091000000000,
+      'role': 'manager',
     };
     try {
       http.Response result = await http.post(

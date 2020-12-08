@@ -1,4 +1,4 @@
-name: panel_admin_food_origin
+name: food_panel
 description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
@@ -32,6 +32,11 @@ dependencies:
   google_fonts: ^1.1.1
   shared_preferences: ^0.5.1+2
   modal_progress_hud: ^0.1.3
+  image_picker: ^0.6.7+7
+  image_cropper: ^1.3.1
+  persian_fonts: ^1.0.2
+
+
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +57,9 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - fonts/EastSeaDokdo-Regular.ttf
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -64,17 +72,24 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+  - family: EastSeaDokdo
+    fonts:
+    - asset: fonts/EastSeaDokdo-Regular.ttf
+
+  - family: Lemonada
+    fonts:
+    - asset: fonts/Lemonada-SemiBold.ttf
+
+  - family: Lemonada_Regular
+    fonts:
+    - asset: fonts/Jomhuria-Regular.ttf
+
+  #    - family: West
+  #      fonts:
+  #        - asset: fonts/Lobster-Regular.ttf
+  #        - asset: fonts/Lobster-Regular.ttf
+  #          weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

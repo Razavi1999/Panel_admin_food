@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_panel/components/already_have_an_account_acheck.dart';
+import 'package:food_panel/components/rounded_button.dart';
+import 'package:food_panel/components/rounded_input_field.dart';
+import 'package:food_panel/components/rounded_password_field.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
-import 'package:panel_admin_food_origin/components/already_have_an_account_acheck.dart';
-import 'package:panel_admin_food_origin/components/rounded_button.dart';
-import 'package:panel_admin_food_origin/components/rounded_input_field.dart';
-import 'package:panel_admin_food_origin/components/rounded_password_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 import '../constants.dart';
@@ -210,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
     prefs.setString('first_name', last_name);
     prefs.setString('last_name', first_name);
     print(prefs.getString('last_name'));
-    Navigator.popAndPushNamed(context, null);
+    Navigator.popAndPushNamed(context, HomeScreen.id);
   }
 
   checkStringValueExistence() async {
