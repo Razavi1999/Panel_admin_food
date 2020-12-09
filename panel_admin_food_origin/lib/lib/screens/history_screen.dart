@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:panel_admin_food_origin/lib/components/food_history_item.dart';
 import 'package:panel_admin_food_origin/lib/components/food_request_item.dart';
@@ -10,17 +11,17 @@ import '../constants.dart';
 
 class HistoryScreen extends StatefulWidget {
   static String id = 'history_screen';
+
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-
-  String token, date, url='$baseUrl/api/food/admin/order_history/all';
+  String token, date, url = '$baseUrl/api/food/admin/order_history/all';
   DateTime selectedDate = DateTime.now();
   int userId;
 
-  showCalendarDialog()async{
+  showCalendarDialog() async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
@@ -29,7 +30,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        date = selectedDate.toString().substring(0,10);
+        date = selectedDate.toString().substring(0, 10);
         print(selectedDate);
       });
   }
@@ -45,13 +46,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(date == null){
-      date = selectedDate.toString().substring(0,10);
+    if (date == null) {
+      date = selectedDate.toString().substring(0, 10);
     }
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "تاریخچه غذا های فروخته شده",
+          "غذاهای فروخته شده",
           style: TextStyle(color: Colors.white, fontSize: 23.0),
         ),
         leading: IconButton(
@@ -63,6 +64,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
             showCalendarDialog();
           },
         ),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.chevron_right),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ],
         backgroundColor: Colors.purple.shade300,
         elevation: 0.0,
         centerTitle: true,
@@ -72,70 +80,131 @@ class _HistoryScreenState extends State<HistoryScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
-              return FutureBuilder(
-                  future: http.get('$url/?date=$date', headers: {
-                    HttpHeaders.authorizationHeader: token,
-                  }),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData &&
-                        snapshot.connectionState == ConnectionState.done) {
-                      http.Response response = snapshot.data;
-                      if (response.statusCode >= 400) {
-                        print(response.statusCode);
-                        print(response.body);
-                        return Center(
-                          child: Text(
-                            'مشکلی درارتباط با سرور پیش آمد',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        );
-                      }
-                      var jsonResponse = convert
-                          .jsonDecode(convert.utf8.decode(response.bodyBytes));
-                      print(jsonResponse);
-                      List<Map> mapList = [];
-                      int count = 0;
-                      // print(jsonResponse);
-                      for (Map map in jsonResponse) {
-                        count++;
-                        mapList.add(map);
-                        // print(map.toString());
-                      }
-                      if (count == 0) {
-                        return Container(
-                          child: Center(
-                            child: Text('غذایی در تاریخ  ' + date + ' فروخته نشده.', textDirection: TextDirection.rtl,),
-                          ),
-                        );
-                      }
-                      return ListView.builder(
-                        itemBuilder: (context, index) {
-                          List items = mapList[index]['items'];
-                          List foodNames = [];
-                          List foodCounts = [];
-                          int counter = 0;
-                          for (var each in items) {
-                            foodNames.add(each["name"]);
-                            foodCounts.add(each["count"]);
-                            counter++;
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: FutureBuilder(
+                        future: http.get('$url/?date=$date', headers: {
+                          HttpHeaders.authorizationHeader: token,
+                        }),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.connectionState ==
+                                  ConnectionState.done) {
+                            http.Response response = snapshot.data;
+                            if (response.statusCode >= 400) {
+                              print(response.statusCode);
+                              print(response.body);
+                              return Center(
+                                child: Text(
+                                  'مشکلی درارتباط با سرور پیش آمد',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              );
+                            }
+                            var jsonResponse = convert.jsonDecode(
+                                convert.utf8.decode(response.bodyBytes));
+                            print(jsonResponse);
+                            return SizedBox();
+                          } else {
+                            return Center(child: CircularProgressIndicator());
                           }
-                          return FoodHistoryItem(
-                            name: mapList[index]['customer_username'],
-                            student_number: mapList[index]
-                            ['customer_student_id'],
-                            price: mapList[index]['total_price'],
-                            requestId: mapList[index]['order_id'],
-                            foodCounts: foodCounts,
-                            foodNames: foodNames,
-                            counter: counter,
-                          );
                         },
-                        itemCount: count,
-                      );
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  });
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 20,),
+                      child: Text(
+                        'لیست فروش ها',
+                        textAlign: TextAlign.end,
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    FutureBuilder(
+                        future: http.get('$url/?date=$date', headers: {
+                          HttpHeaders.authorizationHeader: token,
+                        }),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.connectionState ==
+                                  ConnectionState.done) {
+                            http.Response response = snapshot.data;
+                            if (response.statusCode >= 400) {
+                              print(response.statusCode);
+                              print(response.body);
+                              return Center(
+                                child: Text(
+                                  'مشکلی درارتباط با سرور پیش آمد',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              );
+                            }
+                            var jsonResponse = convert.jsonDecode(
+                                convert.utf8.decode(response.bodyBytes));
+                            print(jsonResponse);
+                            List<Map> mapList = [];
+                            int count = 0;
+                            // print(jsonResponse);
+                            for (Map map in jsonResponse) {
+                              count++;
+                              mapList.add(map);
+                              // print(map.toString());
+                            }
+                            if (count == 0) {
+                              return Container(
+                                child: Center(
+                                  child: Text(
+                                    'غذایی در تاریخ  ' + date + ' فروخته نشده.',
+                                    textDirection: TextDirection.rtl,
+                                  ),
+                                ),
+                              );
+                            }
+                            return ListView.builder(
+                              itemBuilder: (context, index) {
+                                List items = mapList[index]['items'];
+                                List foodNames = [];
+                                List foodCounts = [];
+                                int counter = 0;
+                                for (var each in items) {
+                                  foodNames.add(each["name"]);
+                                  foodCounts.add(each["count"]);
+                                  counter++;
+                                }
+                                return FoodHistoryItem(
+                                  name: mapList[index]['customer_username'],
+                                  student_number: mapList[index]
+                                      ['customer_student_id'],
+                                  price: mapList[index]['total_price'],
+                                  requestId: mapList[index]['order_id'],
+                                  foodCounts: foodCounts,
+                                  foodNames: foodNames,
+                                  counter: counter,
+                                );
+                              },
+                              itemCount: count,
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        }),
+                  ],
+                ),
+              );
             } else {
               return Center(child: CircularProgressIndicator());
             }
@@ -156,11 +225,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
         'done': true,
       }),
     );
-    if(response.statusCode >= 400){
+    if (response.statusCode >= 400) {
       showDialog(
         context: context,
         child: AlertDialog(
-          title: Text('مشکلی پیش آمد.', textDirection: TextDirection.rtl,),
+          title: Text(
+            'مشکلی پیش آمد.',
+            textDirection: TextDirection.rtl,
+          ),
           content: FlatButton(
             onPressed: () {
               Navigator.pop(context);
@@ -175,7 +247,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
       bool result = await showDialog(
         context: context,
         child: AlertDialog(
-          title: Text('غذا فروخته شد', textDirection: TextDirection.rtl,),
+          title: Text(
+            'غذا فروخته شد',
+            textDirection: TextDirection.rtl,
+          ),
           content: FlatButton(
             onPressed: () {
               Navigator.pop(context, true);

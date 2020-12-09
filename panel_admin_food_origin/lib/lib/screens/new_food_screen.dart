@@ -462,6 +462,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 margin: EdgeInsets.only(left: 15, right: 15),
                                 child: TextField(
                                   textDirection: TextDirection.rtl,
+                                  maxLength: 100,
                                   maxLines: 40,
                                   controller: ingredientController,
                                   decoration: InputDecoration(
