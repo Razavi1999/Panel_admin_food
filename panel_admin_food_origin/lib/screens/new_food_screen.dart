@@ -779,7 +779,10 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
       setState(() {
         showSpinner = false;
       });
-    } catch (e) {
+    }
+
+    catch (e)
+    {
       print('myError: $e');
       setState(() {
         showSpinner = false;
@@ -801,7 +804,9 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
           ),
           Text(
             message,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20 ,
+              fontFamily: 'EastSeaDokdo'
+            ),
           ),
           FlatButton(
             onPressed: () {

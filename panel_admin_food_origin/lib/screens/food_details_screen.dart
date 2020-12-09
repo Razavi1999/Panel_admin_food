@@ -68,7 +68,10 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
         title: Text(
           ' جزئیات غذا',
           style: const TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 30.0),
+              fontFamily: 'Lemonada_Regular',
+              color: Colors.white,
+              //fontFamily: 'EastSeaDokdo',
+              fontWeight: FontWeight.w500, fontSize: 50.0),
         ),
       ),
       body: FutureBuilder(
@@ -103,12 +106,12 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                               Container(
                                 child: Center(
                                   child: Banner(
-                                    color: Colors.purple.shade300,
+                                    color: Colors.purple.shade100,
                                     message: result[0]['food']['cost'].toString(),
                                     location: BannerLocation.bottomEnd,
                                     child: FadeInImage(
-                                      height: 150,
-                                      width: 150,
+                                      height: 250,
+                                      width: 250,
                                       fit: BoxFit.cover,
                                       placeholder: AssetImage(
                                           'assets/images/book-1.png'),
@@ -141,7 +144,9 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                     Text(
                                       'نام غذا',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 18),
+                                          color: Colors.black, fontSize: 39 ,
+                                        fontFamily: 'Lemonada_Regular',
+                                      ),
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.right,
                                     ),
@@ -158,6 +163,10 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                   children: [
                                     Text(
                                       result[0]['food']['name'],
+                                      style: TextStyle(
+                                        fontSize: 29,
+                                        fontFamily: 'Lemonada_Regular',
+                                      ),
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.right,
                                     ),
@@ -172,8 +181,15 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
+                                    SizedBox(
+                                      height: 19,
+                                    ),
                                     Text(
                                       result[0]['food']['cost'].toString() + ' تومان',
+                                      style: TextStyle(
+                                          fontSize: 32,
+                                        fontFamily: 'Lemonada_Regular',
+                                      ),
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.right,
                                     ),
@@ -191,23 +207,32 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                     Text(
                                       'محتویات',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 18),
+                                          color: Colors.black,
+                                          fontFamily: 'Lemonada_Regular',
+                                          fontSize: 29),
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.right,
                                     ),
+                                    SizedBox(
+                                      height: 10,
+                                    )
                                   ],
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 30,
-                                  vertical: 0,
+                                  horizontal: 5,
+                                  vertical: 5,
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Text(
                                       result[0]['food']['description'],
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                        fontFamily: 'Lemonada_Regular',
+                                      ),
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.right,
                                     ),
@@ -222,10 +247,11 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                 itemCount: count,
                                 itemBuilder: (context, index) {
                                   return Card(
+                                    shadowColor: kPrimaryColor,
                                     margin: EdgeInsets.only(
                                         bottom: 10, left: 20, right: 20),
-                                    color: Colors.purple.shade50,
-                                    elevation: 4,
+                                    color: Colors.yellowAccent.shade100,
+                                    elevation: 25,
                                     child: ListTile(
                                       title: Text(
                                         result[index]
@@ -234,8 +260,20 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                             result[index]
                                             ['end_serve_time'],
                                         textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          color: kPrimaryColor,
+                                          fontFamily: 'Lemonada_Regular',
+                                          fontSize: 30
+                                        ),
                                       ),
-                                      leading: Text('تعداد باقیمانده: ${result[index]['remaining_count'].toString()}'),
+                                      leading: Text(
+                                          'تعداد باقیمانده: ${result[index]['remaining_count'].toString()}',
+                                          style: TextStyle(
+                                            color: kPrimaryColor,
+                                            fontFamily: 'Lemonada_Regular',
+                                            fontSize: 25
+                                          ),
+                                      ),
                                     ),
                                   );
                                   return SizedBox();
