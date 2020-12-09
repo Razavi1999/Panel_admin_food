@@ -52,7 +52,11 @@ class _OrderPageState extends State<OrderPage> {
       appBar: AppBar(
         title: Text(
           "لیست غذا های موجود امروز",
-          style: TextStyle(color: Colors.black, fontSize: 23.0),
+          style: TextStyle(
+              color: kPrimaryColor,
+              fontSize: 33.0,
+          fontFamily: 'Lemonada_Regular'
+          ),
         ),
         leading: IconButton(
           icon: Icon(

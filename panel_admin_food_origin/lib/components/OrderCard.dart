@@ -20,13 +20,15 @@ class _OrderCardState extends State<OrderCard> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         child: Card(
-          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          margin: EdgeInsets.symmetric(horizontal: 40.0, vertical: 30.0),
           elevation: 2,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 10.0,
+                const EdgeInsets.symmetric(
+                  horizontal: 10.0,
                     vertical: 10.0
                 ),
+
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -37,17 +39,23 @@ class _OrderCardState extends State<OrderCard> {
                     Text(
                       widget.name,
                       style: TextStyle(
-                          fontSize: 16.0,
+                          fontSize: 23.0,
+                          fontFamily: 'Lemonada_Regular',
+                          //fontSize: 16.0,
                           fontWeight: FontWeight.bold),
                     ),
+
                     SizedBox(
                       height: 5.0,
                     ),
+
                     Text(
                       'قیمت :   ' +
                       widget.cost.toString(),
                       style: TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.bold),
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold ,
+                      ),
                     ),
                     SizedBox(
                       height: 1.0,
@@ -55,7 +63,10 @@ class _OrderCardState extends State<OrderCard> {
                     Text(
                       widget.description,
                       style: TextStyle(
-                          fontSize: 16.0),
+                          fontSize: 20.0,
+                          fontFamily: 'Lemonada_Regular',
+                          //fontSize: 16.0
+                      ),
                     ),
                     SizedBox(
                       height: 5.0,
@@ -66,15 +77,17 @@ class _OrderCardState extends State<OrderCard> {
                   width: 50.0,
                 ),
                 Container(
-                  height: 95.0,
-                  width: 70.0,
+                  height: 55.0,
+                  width:47.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10)
                   ),
-                  child: FadeInImage(
-                    fit: BoxFit.cover,
-                    placeholder: AssetImage('assets/images/food.png'),
-                    image: NetworkImage(widget.image),
+                  child: SingleChildScrollView(
+                    child: FadeInImage(
+                      fit: BoxFit.cover,
+                      placeholder: AssetImage('assets/images/food.png'),
+                      image: NetworkImage(widget.image),
+                    ),
                   ),
                 ),
                 SizedBox(
