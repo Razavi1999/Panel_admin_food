@@ -20,69 +20,65 @@ class _OrderCardState extends State<OrderCard> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         child: Card(
-          margin: EdgeInsets.symmetric(horizontal: 40.0, vertical: 30.0),
+          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           elevation: 2,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                    vertical: 10.0
-                ),
-
+            const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      widget.name,
-                      style: TextStyle(
-                          fontSize: 23.0,
-                          fontFamily: 'Lemonada_Regular',
-                          //fontSize: 16.0,
-                          fontWeight: FontWeight.bold),
-                    ),
 
-                    SizedBox(
-                      height: 5.0,
-                    ),
-
-                    Text(
-                      'قیمت :   ' +
-                      widget.cost.toString(),
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold ,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        widget.name,
+                        style: TextStyle(
+                            fontFamily: 'Lemonada',
+                            fontSize: 15.0, fontWeight: FontWeight.bold),
                       ),
-                    ),
-                    SizedBox(
-                      height: 1.0,
-                    ),
-                    Text(
-                      widget.description,
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          fontFamily: 'Lemonada_Regular',
-                          //fontSize: 16.0
+                      SizedBox(
+                        height: 5.0,
                       ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                  ],
+                      Text(
+                        'قیمت :   ' +
+                            widget.cost.toString(),
+                        style: TextStyle(
+                            fontFamily: 'Lemonada',
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      //Expanded(
+                         Text(
+                          widget.description,
+                          style: TextStyle(
+                            fontFamily: 'Lemonada',
+                              fontSize: 10.0),
+                          textDirection: TextDirection.rtl,
+                        ),
+                      //),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   width: 50.0,
                 ),
                 Container(
-                  height: 55.0,
-                  width:47.0,
+                  height: 95.0,
+                  width: 70.0,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10)
+                      borderRadius: BorderRadius.circular(10)
                   ),
-                  child: SingleChildScrollView(
+                  child: Flexible(
                     child: FadeInImage(
                       fit: BoxFit.cover,
                       placeholder: AssetImage('assets/images/food.png'),

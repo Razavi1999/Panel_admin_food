@@ -89,7 +89,9 @@ class _OrderPageState extends State<OrderPage> {
                     return Center(
                       child: Text(
                         'مشکلی درارتباط با سرور پیش آمد',
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20 ,
+                          fontFamily: 'Lemonada'
+                        ),
                       ),
                     );
                   }
@@ -109,7 +111,13 @@ class _OrderPageState extends State<OrderPage> {
                   if (count == 0) {
                     return Container(
                       child: Center(
-                        child: Text('غذایی برای این روز سرو نکرده اید'),
+                        child: Text(' !!! غذایی برای این روز سرو نکرده اید',
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontFamily: 'Lemonada' ,
+                            fontSize: 15
+                          ),
+                        ),
                       ),
                     );
                   }
@@ -134,7 +142,9 @@ class _OrderPageState extends State<OrderPage> {
                     },
                   );
                   return SizedBox();
-                } else {
+                }
+
+                else {
                   return Center(child: CircularProgressIndicator());
                 }
               },
@@ -144,6 +154,8 @@ class _OrderPageState extends State<OrderPage> {
           }
         },
       ),
+
+
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {

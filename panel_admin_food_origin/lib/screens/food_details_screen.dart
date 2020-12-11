@@ -204,14 +204,16 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      'محتویات',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Lemonada_Regular',
-                                          fontSize: 29),
-                                      textDirection: TextDirection.rtl,
-                                      textAlign: TextAlign.right,
+                                    Flexible(
+                                      child: Text(
+                                        'محتویات',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontFamily: 'Lemonada_Regular',
+                                            fontSize: 29),
+                                        textDirection: TextDirection.rtl,
+                                        textAlign: TextAlign.right,
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 10,
@@ -227,15 +229,19 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      result[0]['food']['description'],
-                                      style: TextStyle(
+                                    Flexible(
+                                      child : Text(
+                                        result[0]['food']['description'],
+                                        style: TextStyle(
                                           fontSize: 24,
-                                        fontFamily: 'Lemonada_Regular',
+                                          fontFamily: 'Lemonada_Regular',
+                                        ),
+                                        textDirection: TextDirection.rtl,
+                                        textAlign: TextAlign.right,
                                       ),
-                                      textDirection: TextDirection.rtl,
-                                      textAlign: TextAlign.right,
-                                    ),
+
+                                    )
+
                                   ],
                                 ),
                               ),

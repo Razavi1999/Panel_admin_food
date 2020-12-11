@@ -220,7 +220,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                 Text(selectedFoodName ??
                                                     'غذایی انتخاب نشده'
                                                 ,
-                                                  style: TextStyle(color: kPrimaryColor,
+                                                  style: TextStyle(
+                                                    color: kPrimaryColor,
                                                     fontSize: 25,
                                                     fontFamily: 'Lemonada_Regular',
                                                     //fontWeight: 5,
@@ -249,6 +250,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 ],
                               ),
                             ),
+
                             SizedBox(
                               height: 10,
                             ),
@@ -263,6 +265,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                     child: Text(
                                       'عکس غذا',
                                       style: TextStyle(
+                                          fontFamily: 'Lemonada',
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -275,12 +278,12 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                   Padding(
                                     padding: EdgeInsets.only(right: 10),
                                     child: Text(
-                                      'افزودن عکس بازدید آگهی شما را تا سه برابر افزایش می دهد.',
+                                      'افزودن عکس بازدید آگهی شما را افزایش می دهد.',
 
                                       textDirection: TextDirection.rtl,
                                         style: TextStyle(color: kPrimaryColor,
-                                          fontSize: 10,
-                                          fontFamily: 'Lemonada_Regular',
+                                          fontSize: 11,
+                                          fontFamily: 'Lemonada',
                                           //fontWeight: 5,
                                         ),
                                       ),
@@ -305,11 +308,14 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                   MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  'انتخاب عکس : ',
+                                                  'انتخاب عکس  ',
                                                   textDirection:
                                                       TextDirection.rtl,
                                                   style: TextStyle(
-                                                      color: Colors.grey[800]),
+                                                      fontFamily: 'Lemonada',
+                                                      color: kPrimaryColor ,
+                                                      fontSize: 17
+                                                      ),
                                                 ),
                                               ],
                                             ),
@@ -341,7 +347,10 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                     textDirection:
                                                         TextDirection.rtl,
                                                     style: TextStyle(
-                                                        color: Colors.black),
+                                                        fontFamily: 'Lemonada',
+                                                        color: kPrimaryColor ,
+                                                        fontSize: 12
+                                                        ),
                                                   ),
                                                   SizedBox(
                                                     width: 20,
@@ -373,7 +382,10 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                     textDirection:
                                                         TextDirection.rtl,
                                                     style: TextStyle(
-                                                        color: Colors.black),
+                                                        fontFamily: 'Lemonada',
+                                                        color: kPrimaryColor ,
+                                                      fontSize: 12
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     width: 20,
@@ -437,7 +449,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                     child: Text(
                                       'نام غذا',
                                       style: TextStyle(
-                                          fontSize: 20,
+                                          fontFamily: 'Lemonada',
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -447,13 +460,23 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 height: 10,
                               ),
                               Container(
+                                decoration: BoxDecoration(
+                                    boxShadow : [
+                                      BoxShadow(
+                                        color: Colors.blueAccent.shade100,
+                                        spreadRadius: 5,
+                                        blurRadius: 15,
+                                        //offset: Offset(0, 7),
+                                      )
+                                    ]
+                                ),
                                 height: 45,
                                 margin: EdgeInsets.only(left: 15, right: 15),
                                 child: TextField(
                                   textDirection: TextDirection.rtl,
                                   controller: foodController,
                                   decoration: InputDecoration(
-                                    fillColor: KBuyBook,
+                                    fillColor: Colors.yellowAccent.shade100,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
                                     ),
@@ -471,8 +494,10 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                     child: Text(
                                       'مواد اولیه',
                                       style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
+                                          fontFamily: 'Lemonada',
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -481,6 +506,16 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 height: 10,
                               ),
                               Container(
+                                decoration: BoxDecoration(
+                                    boxShadow : [
+                                      BoxShadow(
+                                        color: Colors.blueAccent.shade100,
+                                        spreadRadius: 10,
+                                        blurRadius: 15,
+                                        //offset: Offset(0, 7),
+                                      )
+                                    ]
+                                ),
                                 height: 100,
                                 margin: EdgeInsets.only(left: 15, right: 15),
                                 child: TextField(
@@ -495,7 +530,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 ),
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 20,
                               ),
                               Padding(
                                 padding: EdgeInsets.only(right: 20),
@@ -503,6 +538,16 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Container(
+                                      decoration: BoxDecoration(
+                                          boxShadow : [
+                                            BoxShadow(
+                                              color: Colors.blueAccent.shade100,
+                                              spreadRadius: 5,
+                                              blurRadius: 15,
+                                              //offset: Offset(0, 7),
+                                            )
+                                          ]
+                                      ),
                                       height: 45,
                                       width: 100,
                                       margin:
@@ -521,6 +566,9 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                     ),
                                     Text(
                                       'قیمت :',
+                                      style: TextStyle(
+                                        fontFamily: 'Lemonada'
+                                      ),
                                       textDirection: TextDirection.rtl,
                                     ),
                                   ],
@@ -804,8 +852,9 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
           ),
           Text(
             message,
-            style: TextStyle(fontSize: 20 ,
-              fontFamily: 'EastSeaDokdo'
+            style: TextStyle(fontSize: 15 ,
+              color: Colors.redAccent.shade400,
+              fontFamily: 'Lemonada'
             ),
           ),
           FlatButton(
@@ -814,7 +863,9 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
             },
             child: Text(
               '!باشه',
-              style: TextStyle(color: kPrimaryColor),
+              style: TextStyle(color: kPrimaryColor,
+                fontFamily: 'Lemonada' ,
+              ),
             ),
           ),
         ],
@@ -887,7 +938,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                             boxShadow:[
                               BoxShadow(
                                 color: KBuyBook,
-                                spreadRadius: 10,
+                                spreadRadius: 5,
                                 blurRadius: 10,
                                 offset: Offset(0, 3),
                             )
