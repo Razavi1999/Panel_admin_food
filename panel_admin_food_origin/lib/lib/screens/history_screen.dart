@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:panel_admin_food_origin/lib/components/food_history_item.dart';
 import 'package:panel_admin_food_origin/lib/components/food_request_item.dart';
+import 'package:panel_admin_food_origin/lib/models/food.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -17,7 +18,10 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  String token, date, url = '$baseUrl/api/food/admin/order_history/all';
+  String token,
+      date,
+      url = '$baseUrl/api/food/admin/order_history/all',
+      historyUrl = '$baseUrl/api/food/admin/order_history';
   DateTime selectedDate = DateTime.now();
   int userId;
 
@@ -46,6 +50,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     if (date == null) {
       date = selectedDate.toString().substring(0, 10);
     }
@@ -80,129 +85,148 @@ class _HistoryScreenState extends State<HistoryScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.all(20),
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: FutureBuilder(
-                        future: http.get('$url/?date=$date', headers: {
-                          HttpHeaders.authorizationHeader: token,
-                        }),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData &&
-                              snapshot.connectionState ==
-                                  ConnectionState.done) {
-                            http.Response response = snapshot.data;
-                            if (response.statusCode >= 400) {
-                              print(response.statusCode);
-                              print(response.body);
-                              return Center(
-                                child: Text(
-                                  'مشکلی درارتباط با سرور پیش آمد',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              );
-                            }
-                            var jsonResponse = convert.jsonDecode(
-                                convert.utf8.decode(response.bodyBytes));
-                            print(jsonResponse);
-                            return SizedBox();
-                          } else {
-                            return Center(child: CircularProgressIndicator());
+              return Container(
+                margin: EdgeInsets.all(20),
+                child: FutureBuilder(
+                  future: http.get('$historyUrl?date=$date', headers: {
+                    HttpHeaders.authorizationHeader: token,
+                  }),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData &&
+                        snapshot.connectionState == ConnectionState.done) {
+                      http.Response response = snapshot.data;
+                      if (response.statusCode >= 400) {
+                        print(response.statusCode);
+                        print(response.body);
+                        print('$historyUrl?date=$date');
+                        return Center(
+                          child: Text(
+                            'مشکلی درارتباط با سرور پیش آمد',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        );
+                      }
+                      var jsonResponse = convert
+                          .jsonDecode(convert.utf8.decode(response.bodyBytes));
+                      print(jsonResponse);
+                      List<Food> listFood = [];
+
+                      for (Map each in jsonResponse) {
+                        bool flag = false;
+                        int index;
+                        for (int i = 0; i < listFood.length; i++) {
+                          if (listFood[i].id == each['food_id']) {
+                            flag = true;
+                            index = i;
+                            break;
                           }
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 20,),
-                      child: Text(
-                        'لیست فروش ها',
-                        textAlign: TextAlign.end,
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    FutureBuilder(
-                        future: http.get('$url/?date=$date', headers: {
-                          HttpHeaders.authorizationHeader: token,
-                        }),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData &&
-                              snapshot.connectionState ==
-                                  ConnectionState.done) {
-                            http.Response response = snapshot.data;
-                            if (response.statusCode >= 400) {
-                              print(response.statusCode);
-                              print(response.body);
-                              return Center(
-                                child: Text(
-                                  'مشکلی درارتباط با سرور پیش آمد',
+                        }
+                        if (flag == false) {
+                          listFood.add(Food(
+                              image: '$baseUrl${each['food_image']}',
+                              id: each['food_id'],
+                              name: each['food_name'],
+                              totalCount: each['total_count'],
+                              remainingCount: each['remaining_count'],
+                              cost: each['food_cost']));
+                        } else {
+                          listFood[index].totalCount += each['total_count'];
+                          listFood[index].remainingCount +=
+                              each['remaining_count'];
+                        }
+                      }
+                      print('***************************');
+                      for (var each in listFood) {
+                        print(each.name);
+                      }
+
+                      if (listFood.length == 0) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'غذایی فروخته نشده !!!',
+                                style: TextStyle(fontSize: 20),
+                                textDirection: TextDirection.rtl,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              FlatButton.icon(
+                                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                                color: kPrimaryColor,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                onPressed: () {
+                                  showCalendarDialog();
+                                },
+                                label: Text('تقویم', style: TextStyle(color: Colors.white),),
+                                icon: Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      return ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '${listFood[index].name}',
                                   style: TextStyle(fontSize: 20),
                                 ),
-                              );
-                            }
-                            var jsonResponse = convert.jsonDecode(
-                                convert.utf8.decode(response.bodyBytes));
-                            print(jsonResponse);
-                            List<Map> mapList = [];
-                            int count = 0;
-                            // print(jsonResponse);
-                            for (Map map in jsonResponse) {
-                              count++;
-                              mapList.add(map);
-                              // print(map.toString());
-                            }
-                            if (count == 0) {
-                              return Container(
-                                child: Center(
-                                  child: Text(
-                                    'غذایی در تاریخ  ' + date + ' فروخته نشده.',
-                                    textDirection: TextDirection.rtl,
+                                Text(
+                                  'تعداد کل: ${listFood[index].totalCount}',
+                                ),
+                                Text(
+                                  'فروش کل: ${(listFood[index].totalCount - listFood[index].remainingCount) * (listFood[index].cost)} تومان',
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'تعداد فروش یافته: ${listFood[index].totalCount - listFood[index].remainingCount} ',
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(color: Colors.green),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        'تعداد باقی مانده: ${listFood[index].remainingCount} ',
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              );
-                            }
-                            return ListView.builder(
-                              itemBuilder: (context, index) {
-                                List items = mapList[index]['items'];
-                                List foodNames = [];
-                                List foodCounts = [];
-                                int counter = 0;
-                                for (var each in items) {
-                                  foodNames.add(each["name"]);
-                                  foodCounts.add(each["count"]);
-                                  counter++;
-                                }
-                                return FoodHistoryItem(
-                                  name: mapList[index]['customer_username'],
-                                  student_number: mapList[index]
-                                      ['customer_student_id'],
-                                  price: mapList[index]['total_price'],
-                                  requestId: mapList[index]['order_id'],
-                                  foodCounts: foodCounts,
-                                  foodNames: foodNames,
-                                  counter: counter,
-                                );
-                              },
-                              itemCount: count,
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        }),
-                  ],
+                              ],
+                            ),
+                          );
+                        },
+                        itemCount: listFood.length,
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
                 ),
               );
             } else {

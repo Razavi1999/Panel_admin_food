@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:panel_admin_food_origin/lib/models/bucket.dart';
 import 'package:panel_admin_food_origin/lib/screens/history_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+
   String token, url = '$baseUrl/api/food/admin/serve/all/';
   int userId;
   DateTime selectedDate = DateTime.now();
@@ -35,6 +37,14 @@ class _OrderPageState extends State<OrderPage> {
   Future<bool> _refresh() async {
     setState(() {});
     return true;
+  }
+
+  saveToSharedPreferences(String foodName, int count) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map map = {
+      'foodName': foodName,
+      'count': count,
+    };
   }
 
   showCalendarDialog() async {
@@ -111,9 +121,33 @@ class _OrderPageState extends State<OrderPage> {
                       // print(map.toString());
                     }
                     if (count == 0) {
-                      return Container(
-                        child: Center(
-                          child: Text('غذایی برای این روز سرو نکرده اید'),
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'غذایی فروخته نشده !!!',
+                              style: TextStyle(fontSize: 20),
+                              textDirection: TextDirection.rtl,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            FlatButton.icon(
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                              color: kPrimaryColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              onPressed: () {
+                                showCalendarDialog();
+                              },
+                              label: Text('تقویم', style: TextStyle(color: Colors.white),),
+                              icon: Icon(
+                                Icons.calendar_today,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     }

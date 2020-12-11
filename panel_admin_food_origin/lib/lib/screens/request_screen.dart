@@ -145,7 +145,7 @@ class _RequestScreenState extends State<RequestScreen> {
                         if (count == 0) {
                           return Container(
                             child: Center(
-                              child: Text('درخواست غذایی وجود ندارد'),
+                              child: Text('درخواست غذایی وجود ندارد !!!', style: TextStyle(fontSize: 20), textDirection: TextDirection.rtl,),
                             ),
                           );
                         }
