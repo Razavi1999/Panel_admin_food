@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:panel_admin_food_origin/lib/models/bucket.dart';
+import 'package:panel_admin_food_origin/lib/screens/history_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -18,6 +20,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+
   String token, url = '$baseUrl/api/food/admin/serve/all/';
   int userId;
   DateTime selectedDate = DateTime.now();
@@ -31,7 +34,20 @@ class _OrderPageState extends State<OrderPage> {
     return prefs.getString('token');
   }
 
-  showCalendarDialog()async{
+  Future<bool> _refresh() async {
+    setState(() {});
+    return true;
+  }
+
+  saveToSharedPreferences(String foodName, int count) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map map = {
+      'foodName': foodName,
+      'count': count,
+    };
+  }
+
+  showCalendarDialog() async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
@@ -50,89 +66,120 @@ class _OrderPageState extends State<OrderPage> {
       appBar: AppBar(
         title: Text(
           "لیست غذا های موجود امروز",
-          style: TextStyle(color: Colors.black, fontSize: 23.0),
+          style: TextStyle(color: Colors.white, fontSize: 23.0),
         ),
         leading: IconButton(
           icon: Icon(
             Icons.calendar_today,
-            color: kPrimaryColor,
+            color: Colors.white,
           ),
           onPressed: () {
             showCalendarDialog();
           },
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.purple.shade300,
         elevation: 0.0,
         centerTitle: true,
       ),
-      body: FutureBuilder(
-        future: getToken(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            print(url);
-            return FutureBuilder(
-              future: http.get('${url}?date=${selectedDate.toString().substring(0,10)}', headers: {
-                HttpHeaders.authorizationHeader: token,
-              }),
-              builder: (context, snapshot) {
-                if (snapshot.hasData &&
-                    snapshot.connectionState == ConnectionState.done) {
-                  http.Response response = snapshot.data;
-                  if (response.statusCode >= 400) {
-                    return Center(
-                      child: Text(
-                        'مشکلی درارتباط با سرور پیش آمد',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    );
-                  }
-                  var jsonResponse = convert
-                      .jsonDecode(convert.utf8.decode(response.bodyBytes));
-                  // print(jsonResponse);
-                  List<Map> mapList = [];
-                  int count = 0;
-                  // print(jsonResponse);
-                  for (Map map in jsonResponse) {
-                    count++;
-                    mapList.add(map);
-                    // print(map.toString());
-                  }
-                  if (count == 0) {
-                    return Container(
-                      child: Center(
-                        child: Text('غذایی برای این روز سرو نکرده اید'),
-                      ),
-                    );
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: count,
-                    itemBuilder: (context, index) {
-                      return OrderCard(
-                        name: mapList[index]['name'],
-                        cost: mapList[index]['cost'],
-                        description: mapList[index]['description'],
-                        image: '$baseUrl${mapList[index]['image']}',
-                        onPressed: () {
-                          navigateToFoodDetailScreen(
-                            mapList[index]['serve_id'],
-                            mapList[index]['food_id'],
-                          );
-                        },
-                      );
-                    },
-                  );
-                  return SizedBox();
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
+      body: RefreshIndicator(
+        onRefresh: () {
+          return _refresh();
         },
+        child: FutureBuilder(
+          future: getToken(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData &&
+                snapshot.connectionState == ConnectionState.done) {
+              print(url);
+              return FutureBuilder(
+                future: http.get(
+                    '${url}?date=${selectedDate.toString().substring(0, 10)}',
+                    headers: {
+                      HttpHeaders.authorizationHeader: token,
+                    }),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData &&
+                      snapshot.connectionState == ConnectionState.done) {
+                    http.Response response = snapshot.data;
+                    if (response.statusCode >= 400) {
+                      return Center(
+                        child: Text(
+                          'مشکلی درارتباط با سرور پیش آمد',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      );
+                    }
+                    var jsonResponse = convert
+                        .jsonDecode(convert.utf8.decode(response.bodyBytes));
+                    // print(jsonResponse);
+                    List<Map> mapList = [];
+                    int count = 0;
+                    // print(jsonResponse);
+                    for (Map map in jsonResponse) {
+                      count++;
+                      mapList.add(map);
+                      // print(map.toString());
+                    }
+                    if (count == 0) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'غذایی فروخته نشده !!!',
+                              style: TextStyle(fontSize: 20),
+                              textDirection: TextDirection.rtl,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            FlatButton.icon(
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                              color: kPrimaryColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              onPressed: () {
+                                showCalendarDialog();
+                              },
+                              label: Text('تقویم', style: TextStyle(color: Colors.white),),
+                              icon: Icon(
+                                Icons.calendar_today,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: count,
+                      itemBuilder: (context, index) {
+                        return OrderCard(
+                          name: mapList[index]['name'],
+                          cost: mapList[index]['cost'],
+                          description: mapList[index]['description'],
+                          image: '$baseUrl${mapList[index]['image']}',
+                          onPressed: () {
+                            navigateToFoodDetailScreen(
+                              mapList[index]['serve_id'],
+                              mapList[index]['food_id'],
+                            );
+                          },
+                        );
+                      },
+                    );
+                    return SizedBox();
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -193,7 +240,7 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   _navigateToHistoryScreen() {
-
+    Navigator.pushNamed(context, HistoryScreen.id);
   }
 
   navigateToFoodDetailScreen(int serveId, int foodId) {
@@ -203,6 +250,7 @@ class _OrderPageState extends State<OrderPage> {
       arguments: {
         'serve_id': serveId,
         'food_id': foodId,
+        'date': selectedDate.toString().substring(0, 10),
       },
     );
   }

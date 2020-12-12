@@ -462,6 +462,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 margin: EdgeInsets.only(left: 15, right: 15),
                                 child: TextField(
                                   textDirection: TextDirection.rtl,
+                                  maxLength: 100,
                                   maxLines: 40,
                                   controller: ingredientController,
                                   decoration: InputDecoration(
@@ -806,8 +807,30 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
       showDialog(
         context: context,
         child: AlertDialog(
-          content: Center(
-            child: Text('کتابی وجود ندارد'),
+          content: Container(
+            height: 100,
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                   Text('غذایی وجود ندارد'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextButton.icon(
+                      onPressed: () {
+                        _newBookDialog();
+                      },
+                      icon: Icon(Icons.add, color: kPrimaryColor),
+                      label: Text('اضافه کردن غذا جدید', style: TextStyle(color: kPrimaryColor),),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       );
