@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:food_panel/screens/food_screen.dart';
+import 'package:food_panel/screens/login_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:food_panel/constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'dart:convert' as convert;
 
 
 import '../components/grid_dashboard.dart';
@@ -78,17 +85,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    IconButton(
-                      alignment: Alignment.topCenter,
-                      icon: Image.asset(
-                        "assets/images/notification.png",
-                        width: size.width * 0.1,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          print(size.width);
-                        });
-                      },
+
+                    Row(
+                      children: [
+                        IconButton(
+                          alignment: Alignment.topCenter,
+                          icon: Image.asset(
+                            "assets/images/notification.png",
+                            width: size.width * 0.1,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              print(size.width);
+                            });
+                          },
+                        ),
+
+                        IconButton(
+                          alignment: Alignment.topCenter,
+                          icon: Image.asset(
+                            "assets/images/elmos.png",
+                            width: size.width * 0.1,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              showlogoutDialog();
+                            });
+                          },
+                        )
+                      ],
                     )
                   ],
                 ),
@@ -127,6 +152,156 @@ class _HomeScreenState extends State<HomeScreen> {
     lastName = prefs.getString('last_name');
     userId = prefs.getInt('user_id');
     print(userId);
+  }
+
+  showlogoutDialog(){
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: Row(
+                mainAxisAlignment:
+                MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        'خارج می شوید؟ ',
+                        textDirection:
+                        TextDirection.rtl,
+                        style: TextStyle(
+                            fontFamily: 'Lemonada',
+                            color: kPrimaryColor ,
+                            fontSize: 17
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 0.5,
+              width: double.infinity,
+              color: Colors.grey,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    logoutApp();
+                  },
+                  child: Padding(
+                    padding:
+                    EdgeInsets.only(right: 10),
+                    child: Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'بلی‌',
+                          textDirection:
+                          TextDirection.rtl,
+                          style: TextStyle(
+                              fontFamily: 'Lemonada',
+                              color: kPrimaryColor ,
+                              fontSize: 12
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                InkWell(
+                  onTap: () {
+                    //selectFromGallery();
+                  },
+                  child: Padding(
+                    padding:
+                    EdgeInsets.only(right: 10),
+                    child: Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'خیر',
+                          textDirection:
+                          TextDirection.rtl,
+                          style: TextStyle(
+                              fontFamily: 'Lemonada',
+                              color: kPrimaryColor ,
+                              fontSize: 12
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )
+
+          ],
+        ),
+      ),
+    );
+  }
+
+  void logoutApp() async{
+
+
+
+    ///*
+    http.Response response;
+     response = await http.post(
+        "http://danibazi9.pythonanywhere.com/api/account/logout",
+        headers: {
+        HttpHeaders.authorizationHeader: token,
+        "Accept": "application/json",
+        "content-type": "application/json",
+        },
+    );
+    print(response.statusCode);
+    print(token);
+
+    if(response.statusCode == 200){
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.clear();
+      Navigator.popAndPushNamed(context, LoginScreen.id);
+    }
+
+    else{
+
+    }
+
+    //*/
+
+
+
+
+
+
+
   }
 
 

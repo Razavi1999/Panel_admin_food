@@ -155,7 +155,8 @@ class _LoginScreenState extends State<LoginScreen> {
     post(baseUrl, context);
   }
 
-  post(String url, BuildContext context) async {
+  post(String url, BuildContext context) async
+  {
     Map data = {
       'username': email.trim(),
       'password': password.trim(),
@@ -210,6 +211,8 @@ class _LoginScreenState extends State<LoginScreen> {
     prefs.setString('first_name', last_name);
     prefs.setString('last_name', first_name);
     print(prefs.getString('last_name'));
+
+
     Navigator.popAndPushNamed(context, HomeScreen.id);
   }
 
