@@ -231,6 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 InkWell(
                   onTap: () {
+                    Navigator.pop(context);
                     //selectFromGallery();
                   },
                   child: Padding(
