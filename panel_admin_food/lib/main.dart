@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:panel_admin_food_origin/screens/events_screen.dart';
+import 'package:panel_admin_food_origin/screens/users_screen.dart';
 import 'screens/food_details_screen.dart';
 import 'screens/history_screen.dart';
 import 'screens/login_screen.dart';
@@ -32,6 +34,8 @@ class MyApp extends StatelessWidget {
         HistoryScreen.id: (context) => HistoryScreen(),
         FoodDetailsScreen.id: (context) => FoodDetailsScreen(),
         RequestScreen.id: (context) => RequestScreen(),
+        EventScreen.id: (context) => EventScreen(),
+        UsersScreen.id: (context) => UsersScreen(),
       },
     );
   }
