@@ -28,8 +28,8 @@ const List<BoxShadow> shadow = [
 ];
 
 final kShadowColor = Color(0xFFD3D3D3).withOpacity(.84);
-// String baseUrl = 'http://danibazi9.pythonanywhere.com';
-String baseUrl = 'http://192.168.43.126:8000';
+String baseUrl = 'http://danibazi9.pythonanywhere.com';
+// String baseUrl = 'http://192.168.43.126:8000';
 screenAwareSize(int size, BuildContext context) {
   double baseHeight = 640.0;
   return size * MediaQuery.of(context).size.height / baseHeight;

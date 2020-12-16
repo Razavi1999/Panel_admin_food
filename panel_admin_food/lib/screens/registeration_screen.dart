@@ -11,6 +11,7 @@ import '../components/rounded_button.dart';
 import '../components/rounded_input_field.dart';
 import '../components/rounded_password_field.dart';
 import '../constants.dart';
+import 'home_screen.dart';
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -261,7 +262,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           setState(() {
             showSpinner = false;
           });
-          Navigator.pushNamed(context, null , arguments: {
+          Navigator.pushNamed(context, HomeScreen.id , arguments: {
             'sid': sid,
           });
         } else {
