@@ -5,10 +5,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 import 'package:panel_admin_food_origin/constants.dart';
+import 'package:panel_admin_food_origin/screens/event_details_screen.dart';
 import 'package:panel_admin_food_origin/screens/users_screen.dart';
 
 String usersUrl = '$baseUrl/api/event/admin/auth/all/';
 String eventsUrl = '$baseUrl/api/event/admin/requests/all/';
+String eventChangeUrl = '$baseUrl/api/event/admin/requests/';
 String authorizedUsersUrl = '$baseUrl/api/event/admin/auth/all/?state=true';
 String changeUserAccessUrl = '$baseUrl/api/event/admin/auth/';
 String authSearch = '';
@@ -25,8 +27,11 @@ class _EventScreenState extends State<EventScreen> {
   bool visible = true;
   String token;
   Map args = Map();
+  String eventSearch = '', cartableSearch = '';
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController userController = TextEditingController();
+  TextEditingController eventController = TextEditingController();
+  TextEditingController cartableController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,158 +90,231 @@ class _EventScreenState extends State<EventScreen> {
 
   Widget cartableList() {
     return SafeArea(
-      child: FutureBuilder(
-        future: http.get('$eventsUrl?verified=false', headers: {
-          HttpHeaders.authorizationHeader: token,
-        }),
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            http.Response response = snapshot.data;
-            if (response.statusCode >= 400) {
-              print(response.statusCode);
-              print(response.body);
-              try {
-                String jsonResponse =
-                convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-                if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
-                  return errorWidget('شما به عنوان ارشد دانشکده انتخاب نشدید.');
-                } else {
-                  return errorWidget('sth else');
-                }
-              } catch (e) {
-                print(e);
-                return errorWidget('مشکلی درارتباط با سرور پیش آمد');
-              }
-            }
-            var jsonResponse =
-            convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-            // print(jsonResponse);
-            List<Map> mapList = [];
-            int cartableCount = 0;
-            // print(jsonResponse);
-            for (Map map in jsonResponse) {
-              cartableCount++;
-              mapList.add(map);
-              // print(map.toString());
-            }
-            if (cartableCount == 0) {
-              errorWidget('ایوندی وجود ندارد.');
-            }
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return cartableBuilder(
-                  '$baseUrl${mapList[index]['image']}',
-                  mapList[index]['name'],
-                  mapList[index]['remaining_capacity'],
-                  mapList[index]['event_id'],
-                );
+      child: Column(
+        children: [
+          Container(
+            height: 40,
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: TextField(
+              controller: cartableController,
+              onChanged: (value) {
+                cartableSearch = cartableController.text;
+                setState(() {});
               },
-              itemCount: cartableCount,
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                labelText: 'جست و جو',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: http
+                .get('$eventsUrl?state=false&search=$cartableSearch', headers: {
+              HttpHeaders.authorizationHeader: token,
+            }),
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                http.Response response = snapshot.data;
+                print(response.body);
+                if (response.statusCode >= 400) {
+                  print(response.statusCode);
+                  print(response.body);
+                  try {
+                    String jsonResponse = convert
+                        .jsonDecode(convert.utf8.decode(response.bodyBytes));
+                    if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
+                      return errorWidget(
+                          'شما به عنوان ارشد دانشکده انتخاب نشدید.');
+                    } else {
+                      return errorWidget('sth else');
+                    }
+                  } catch (e) {
+                    print(e);
+                    return errorWidget('مشکلی درارتباط با سرور پیش آمد');
+                  }
+                }
+                var jsonResponse =
+                    convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+                // print(jsonResponse);
+                List<Map> mapList = [];
+                int cartableCount = 0;
+                // print(jsonResponse);
+                for (Map map in jsonResponse) {
+                  cartableCount++;
+                  mapList.add(map);
+                  // print(map.toString());
+                }
+                if (cartableCount == 0) {
+                  return errorWidget('ایوندی وجود ندارد.');
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return cartableBuilder(
+                        '$baseUrl${mapList[index]['image']}',
+                        mapList[index]['name'],
+                        mapList[index]['remaining_capacity'],
+                        mapList[index]['event_id'],
+                        (mapList[index]['image'] == null) ? false : true,
+                      );
+                    },
+                    itemCount: cartableCount,
+                  ),
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 
   Widget eventList() {
     return SafeArea(
-      child: FutureBuilder(
-        future: http.get(eventsUrl, headers: {
-          HttpHeaders.authorizationHeader: token,
-        }),
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            http.Response response = snapshot.data;
-            if (response.statusCode >= 400) {
-              print(response.statusCode);
-              print(response.body);
-              try {
-                String jsonResponse =
-                    convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-                if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
-                  return errorWidget('شما به عنوان ارشد دانشکده انتخاب نشدید.');
-                } else {
-                  return errorWidget('sth else');
-                }
-              } catch (e) {
-                print(e);
-                return errorWidget('مشکلی درارتباط با سرور پیش آمد');
-              }
-            }
-            var jsonResponse =
-                convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-            // print(jsonResponse);
-            List<Map> mapList = [];
-            int eventCount = 0;
-            // print(jsonResponse);
-            for (Map map in jsonResponse) {
-              eventCount++;
-              mapList.add(map);
-              // print(map.toString());
-            }
-            if (eventCount == 0) {
-              errorWidget('شخصی دارای مجوز وجود ندارد.');
-            }
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return eventBuilder(
-                  '$baseUrl${mapList[index]['image']}',
-                  mapList[index]['name'],
-                  mapList[index]['remaining_capacity'],
-                  mapList[index]['event_id'],
-                );
+      child: Column(
+        children: [
+          Container(
+            height: 40,
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: TextField(
+              controller: eventController,
+              onChanged: (value) {
+                eventSearch = eventController.text;
+                setState(() {});
               },
-              itemCount: eventCount,
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                labelText: 'جست و جو',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future:
+                http.get('$eventsUrl?state=true&search=$eventSearch', headers: {
+              HttpHeaders.authorizationHeader: token,
+            }),
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                http.Response response = snapshot.data;
+                if (response.statusCode >= 400) {
+                  print(response.statusCode);
+                  print(response.body);
+                  try {
+                    String jsonResponse = convert
+                        .jsonDecode(convert.utf8.decode(response.bodyBytes));
+                    if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
+                      return errorWidget(
+                          'شما به عنوان ارشد دانشکده انتخاب نشدید.');
+                    } else {
+                      return errorWidget('sth else');
+                    }
+                  } catch (e) {
+                    print(e);
+                    return errorWidget('مشکلی درارتباط با سرور پیش آمد');
+                  }
+                }
+                var jsonResponse =
+                    convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+                // print(jsonResponse);
+                List<Map> mapList = [];
+                int eventCount = 0;
+                // print(jsonResponse);
+                for (Map map in jsonResponse) {
+                  eventCount++;
+                  mapList.add(map);
+                  // print(map.toString());
+                }
+                if (eventCount == 0) {
+                  return errorWidget('ایوندی وجود ندارد.');
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return eventBuilder(
+                        '$baseUrl${mapList[index]['image']}',
+                        mapList[index]['name'],
+                        mapList[index]['remaining_capacity'],
+                        mapList[index]['event_id'],
+                        (mapList[index]['image'] == null) ? false : true,
+                      );
+                    },
+                    itemCount: eventCount,
+                  ),
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 
   declineEvent(int eventId) async {
     print('accepted');
-    await http.put(changeUserAccessUrl,
+    http.Response response = await http.post(eventChangeUrl,
         body: convert.jsonEncode({
-          'verified': false,
+          'verified': false.toString(),
+          'event_id': eventId,
         }),
         headers: {
           HttpHeaders.authorizationHeader: token,
           "Accept": "application/json",
           "content-type": "application/json",
         });
-    setState(() {});
+    if (response.statusCode == 200) {
+      setState(() {});
+    } else {
+      _showDialog('مشکلی پیش آمد');
+      print(response.statusCode);
+      print(response.body);
+    }
   }
 
-  Widget eventBuilder(
-      String imageUrl, String eventName, int remainingCapacity, int eventId) {
+  Widget eventBuilder(String imageUrl, String eventName, int remainingCapacity,
+      int eventId, bool imageIsAvailable) {
     return Card(
+      elevation: 3,
+      margin: EdgeInsets.only(left: 30, right: 30, bottom: 10),
       child: ListTile(
-        leading: FadeInImage(
+        onTap: () {
+          _navigateToEventDetailScreen(eventId, token);
+        },
+        leading: (imageIsAvailable)?FadeInImage(
           placeholder: AssetImage('assets/images/junk.jpeg'),
           image: NetworkImage(imageUrl),
+        ):Image(
+          image: AssetImage('assets/images/junk.jpeg'),
         ),
         title: Text(eventName),
         subtitle: Text(remainingCapacity.toString()),
         trailing: FlatButton(
-          shape: RoundedRectangleBorder(),
-          color: Colors.green,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          color: Colors.red,
           onPressed: () {
             declineEvent(eventId);
           },
           child: Text(
-            'قبول درخواست',
+            'رد رویداد',
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -246,30 +324,48 @@ class _EventScreenState extends State<EventScreen> {
 
   acceptEvent(int eventId) async {
     print('accepted');
-    await http.put(changeUserAccessUrl,
+    http.Response response = await http.post(eventChangeUrl,
         body: convert.jsonEncode({
-          'verified': true,
+          'verified': true.toString(),
+          'event_id': eventId,
         }),
         headers: {
           HttpHeaders.authorizationHeader: token,
           "Accept": "application/json",
           "content-type": "application/json",
         });
-    setState(() {});
+    if (response.statusCode == 200) {
+      setState(() {});
+    } else {
+      _showDialog('مشکلی پیش آمد');
+      print(response.statusCode);
+      print(response.body);
+    }
   }
 
-  Widget cartableBuilder(
-      String imageUrl, String eventName, int remainingCapacity, int eventId) {
+  Widget cartableBuilder(String imageUrl, String eventName,
+      int remainingCapacity, int eventId, bool imageIsAvailable) {
     return Card(
+      elevation: 2,
+      margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: ListTile(
-        leading: FadeInImage(
-          placeholder: AssetImage('assets/images/junk.jpeg'),
-          image: NetworkImage(imageUrl),
-        ),
+        onTap: () {
+          _navigateToEventDetailScreen(eventId, token);
+        },
+        leading: (imageIsAvailable)
+            ? FadeInImage(
+                placeholder: AssetImage('assets/images/junk.jpeg'),
+                image: NetworkImage(imageUrl),
+              )
+            : Image(
+                image: AssetImage('assets/images/junk.jpeg'),
+              ),
         title: Text(eventName),
         subtitle: Text(remainingCapacity.toString()),
         trailing: FlatButton(
-          shape: RoundedRectangleBorder(),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           color: Colors.green,
           onPressed: () {
             acceptEvent(eventId);
@@ -285,123 +381,130 @@ class _EventScreenState extends State<EventScreen> {
 
   Widget authorizedUsersList() {
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 40,
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: TextField(
-                controller: controller,
-                onChanged: (value) {
-                  onChange();
-                },
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  labelText: 'جست و جو',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+      child: Column(
+        children: [
+          Container(
+            height: 40,
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: TextField(
+              controller: userController,
+              onChanged: (value) {
+                onChange();
+              },
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                labelText: 'جست و جو',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
-            FutureBuilder(
-              future:
-                  http.get("$authorizedUsersUrl&search=$authSearch", headers: {
-                HttpHeaders.authorizationHeader: token,
-              }),
-              builder: (context, snapshot) {
-                // print('*$authorizedUsersUrl&search=$authSearch*');
-                if (snapshot.hasData &&
-                    snapshot.connectionState == ConnectionState.done) {
-                  http.Response response = snapshot.data;
-                  if (response.statusCode >= 400) {
-                    print(response.statusCode);
-                    print(response.body);
-                    try {
-                      String jsonResponse = convert
-                          .jsonDecode(convert.utf8.decode(response.bodyBytes));
-                      if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
-                        return errorWidget(
-                            'شما به عنوان ارشد دانشکده انتخاب نشدید.');
-                      } else {
-                        return errorWidget('sth else');
-                      }
-                    } catch (e) {
-                      print(e);
-                      return errorWidget('مشکلی درارتباط با سرور پیش آمد');
+          ),
+          FutureBuilder(
+            future:
+                http.get("$authorizedUsersUrl&search=$authSearch", headers: {
+              HttpHeaders.authorizationHeader: token,
+            }),
+            builder: (context, snapshot) {
+              // print('*$authorizedUsersUrl&search=$authSearch*');
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                http.Response response = snapshot.data;
+                if (response.statusCode >= 400) {
+                  print(response.statusCode);
+                  print(response.body);
+                  try {
+                    String jsonResponse = convert
+                        .jsonDecode(convert.utf8.decode(response.bodyBytes));
+                    if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
+                      return errorWidget(
+                          'شما به عنوان ارشد دانشکده انتخاب نشدید.');
+                    } else {
+                      return errorWidget('sth else');
                     }
+                  } catch (e) {
+                    print(e);
+                    return errorWidget('مشکلی درارتباط با سرور پیش آمد');
                   }
-                  var jsonResponse = convert
-                      .jsonDecode(convert.utf8.decode(response.bodyBytes));
-                  // print(jsonResponse);
-                  List<Map> mapList = [];
-                  int userCount = 0;
-                  // print(jsonResponse);
-                  for (Map map in jsonResponse) {
-                    userCount++;
-                    mapList.add(map);
-                    // print(map.toString());
-                  }
-                  if (userCount == 0) {
-                    errorWidget('شخصی دارای مجوز وجود ندارد.');
-                  }
-                  return ListView.builder(
+                }
+                var jsonResponse =
+                    convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+                // print(jsonResponse);
+                List<Map> mapList = [];
+                int userCount = 0;
+                // print(jsonResponse);
+                for (Map map in jsonResponse) {
+                  userCount++;
+                  mapList.add(map);
+                  // print(map.toString());
+                }
+                if (userCount == 0) {
+                  errorWidget('شخصی دارای مجوز وجود ندارد.');
+                }
+                return Expanded(
+                  child: ListView.builder(
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return userAuthBuilder(
                         mapList[index]['username'],
                         mapList[index]['first_name'],
                         mapList[index]['last_name'],
-                        true,
+                        mapList[index]['grant'],
                         () {
-                          onPressed(true, mapList[index]['username']);
+                          grantDeclineUserAccess(mapList[index]['grant'],
+                              mapList[index]['user_id']);
                         },
                       );
                     },
                     itemCount: userCount,
-                  );
-                } else {
-                  return Center(
-                    child: Container(
-                      margin: EdgeInsets.only(top: 100),
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
-        ),
+                  ),
+                );
+              } else {
+                return Center(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 100),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 
-  onPressed(bool status, String username) async {
-    await http.put(changeUserAccessUrl,
-        body: convert.jsonEncode({
-          'username': username,
-          'status': !status,
-        }),
-        headers: {
-          HttpHeaders.authorizationHeader: token,
-          "Accept": "application/json",
-          "content-type": "application/json",
-        });
-    setState(() {});
+  grantDeclineUserAccess(bool status, int userId) async {
+    print('user_id: $userId');
+    Map map = Map();
+    map['user_id'] = userId;
+    map['grant'] = (!status).toString();
+    http.Response response = await http
+        .post(changeUserAccessUrl, body: convert.json.encode(map), headers: {
+      HttpHeaders.authorizationHeader: token,
+      "Accept": "application/json",
+      "content-type": "application/json",
+    });
+    if (response.statusCode == 200) {
+      setState(() {});
+    } else {
+      print(response.statusCode);
+      print(response.body);
+    }
   }
 
   Widget userAuthBuilder(String username, String firstName, String lastName,
       bool status, Function onPressed) {
     return Card(
+      elevation: 5,
+      margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: ListTile(
-        onTap: onPressed,
         leading: Text('$firstName $lastName'),
         trailing: FlatButton(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           color: status ? Colors.red : Colors.green,
-          onPressed: () {},
+          onPressed: onPressed,
           child: Text(
             status ? 'گرفتن اجازه' : 'دادن اجازه',
             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -415,7 +518,7 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   onChange() {
-    authSearch = controller.text;
+    authSearch = userController.text;
     setState(() {});
   }
 
@@ -437,5 +540,43 @@ class _EventScreenState extends State<EventScreen> {
         ),
       ),
     );
+  }
+
+  _showDialog(String message) {
+    // Scaffold.of(context).showSnackBar(SnackBar(content: Text(message)));
+    AlertDialog dialog = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            message,
+            style: TextStyle(fontSize: 20),
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(
+              '!باشه',
+              style: TextStyle(color: kPrimaryColor),
+            ),
+          ),
+        ],
+      ),
+    );
+    showDialog(context: context, child: dialog);
+  }
+
+  _navigateToEventDetailScreen(int eventId, String token) {
+    Navigator.pushNamed(context, EventDetailsScreen.id, arguments: {
+      'event_id': eventId,
+      'token': token,
+    });
   }
 }

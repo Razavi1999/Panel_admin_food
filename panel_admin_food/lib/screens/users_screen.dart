@@ -104,14 +104,24 @@ class _UsersScreenState extends State<UsersScreen> {
                   return ListView.builder(
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
-                      return userBuilder(
-                        mapList[index]['username'],
-                        mapList[index]['first_name'],
-                        mapList[index]['last_name'],
-                        true,
-                            () {
-                          onPressed(true, mapList[index]['username']);
-                        },
+                      print(mapList[index]['user_id']);
+                      return Card(
+                        child: ListTile(
+                          leading: Text('${mapList[index]['first_name']} ${mapList[index]['last_name']}'),
+                          trailing: FlatButton(
+                            shape:
+                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            color: mapList[index]['grant'] ? Colors.red : Colors.green,
+                            onPressed: () {
+                              print(mapList[index]['user_id']);
+                              onPressed(mapList[index]['grant'], mapList[index]['user_id']);
+                            },
+                            child: Text(
+                              mapList[index]['grant'] ? 'گرفتن اجازه' : 'دادن اجازه',
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ),
+                        ),
                       );
                     },
                     itemCount: userCount,
@@ -123,10 +133,6 @@ class _UsersScreenState extends State<UsersScreen> {
                       child: CircularProgressIndicator(),
                     ),
                   );
-                  return Center(
-                    child: Text('شخصی دارای مجوز وجود ندارد.',
-                        textDirection: TextDirection.rtl),
-                  );
                 }
               },
             ),
@@ -136,20 +142,34 @@ class _UsersScreenState extends State<UsersScreen> {
     );
   }
 
-  onPressed(bool status, String username) async {
-    await http.put(changeUserAccessUrl,
+  onPressed(bool status, int userId) async {
+    print('here');
+    http.Response response = await http.post(changeUserAccessUrl,
         body: convert.jsonEncode({
-          'username': username,
-          'status': !status,
-        }));
-    setState(() {});
+          'user_id': userId,
+          'grant': (!status).toString(),
+        }),
+        headers: {
+          HttpHeaders.authorizationHeader: token,
+          "Accept": "application/json",
+          "content-type": "application/json",
+        });
+    if (response.statusCode == 200) {
+      setState(() {});
+    }
+    else {
+      print(response.statusCode);
+      print(response.body);
+    }
   }
 
   Widget userBuilder(String username, String firstName, String lastName,
       bool status, Function onPressed) {
     return Card(
       child: ListTile(
-        onTap: onPressed,
+        onTap: (){
+          onPressed();
+        },
         leading: Text('$firstName $lastName'),
         trailing: FlatButton(
           shape:
