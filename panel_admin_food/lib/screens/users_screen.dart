@@ -1,8 +1,12 @@
+import 'dart:collection';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 import '../constants.dart';
+String changeUserAccessUrl = '$baseUrl/api/event/admin/auth/';
 
 class UsersScreen extends StatefulWidget {
   static String id = 'users_screen';
@@ -14,9 +18,18 @@ class UsersScreen extends StatefulWidget {
 class _UsersScreenState extends State<UsersScreen> {
   String usersUrl = '$baseUrl/api/event/admin/auth/all/';
   String userSearch = '';
+  int selectedItem = 0;
+  bool visible = true;
+  String token;
+  Map args = Map();
+
+  TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context).settings.arguments;
+    token = args['token'];
+    token = 'Token dd324d7d0d603c13c34647ddf59ebb176db085c1';
     return Scaffold(
       body: usersList(),
     );
@@ -31,6 +44,7 @@ class _UsersScreenState extends State<UsersScreen> {
               height: 40,
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: TextField(
+                controller: controller,
                 onChanged: (value) {
                   onChange();
                 },
@@ -44,7 +58,9 @@ class _UsersScreenState extends State<UsersScreen> {
               ),
             ),
             FutureBuilder(
-              future: http.get("$usersUrl&search=$userSearch"),
+              future: http.get("$usersUrl?search=$userSearch", headers: {
+                HttpHeaders.authorizationHeader: token,
+              }),
               builder: (context, snapshot) {
                 if (snapshot.hasData &&
                     snapshot.connectionState == ConnectionState.done) {
@@ -53,11 +69,14 @@ class _UsersScreenState extends State<UsersScreen> {
                     print(response.statusCode);
                     print(response.body);
                     try {
-                      String jsonResponse = convert
+                      LinkedHashMap jsonResponse = convert
                           .jsonDecode(convert.utf8.decode(response.bodyBytes));
-                      if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
+                      if (jsonResponse['detail'].startsWith('ERROR: You haven\'t been')) {
                         return errorWidget(
                             'شما به عنوان ارشد دانشکده انتخاب نشدید.');
+                      }
+                      else if(jsonResponse['detail'].startsWith('Authentication credentials')){
+                        return errorWidget('متاسفانه شما شناسایی نشده اید.');
                       }
                       else {
                         return errorWidget(
@@ -85,7 +104,15 @@ class _UsersScreenState extends State<UsersScreen> {
                   return ListView.builder(
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
-                      return userBuilder();
+                      return userBuilder(
+                        mapList[index]['username'],
+                        mapList[index]['first_name'],
+                        mapList[index]['last_name'],
+                        true,
+                            () {
+                          onPressed(true, mapList[index]['username']);
+                        },
+                      );
                     },
                     itemCount: userCount,
                   );
@@ -109,11 +136,40 @@ class _UsersScreenState extends State<UsersScreen> {
     );
   }
 
-  Widget userBuilder() {
-    return Container();
+  onPressed(bool status, String username) async {
+    await http.put(changeUserAccessUrl,
+        body: convert.jsonEncode({
+          'username': username,
+          'status': !status,
+        }));
+    setState(() {});
+  }
+
+  Widget userBuilder(String username, String firstName, String lastName,
+      bool status, Function onPressed) {
+    return Card(
+      child: ListTile(
+        onTap: onPressed,
+        leading: Text('$firstName $lastName'),
+        trailing: FlatButton(
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          color: status ? Colors.red : Colors.green,
+          onPressed: () {},
+          child: Text(
+            status ? 'گرفتن اجازه' : 'دادن اجازه',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+      ),
+    );
+    return Container(
+      child: Text(username),
+    );
   }
 
   onChange() {
+    userSearch = controller.text;
     setState(() {});
   }
 

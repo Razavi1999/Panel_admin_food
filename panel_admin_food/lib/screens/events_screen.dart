@@ -26,6 +26,8 @@ class _EventScreenState extends State<EventScreen> {
   String token;
   Map args = Map();
 
+  TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context).settings.arguments;
@@ -90,6 +92,7 @@ class _EventScreenState extends State<EventScreen> {
               height: 40,
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: TextField(
+                controller: controller,
                 onChanged: (value) {
                   onChange();
                 },
@@ -207,11 +210,14 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   onChange() {
+    authSearch = controller.text;
     setState(() {});
   }
 
   _navigateToUsersScreen() async {
-    await Navigator.pushNamed(context, UsersScreen.id);
+    await Navigator.pushNamed(context, UsersScreen.id, arguments: {
+      'token': token,
+    });
     setState(() {});
   }
 
