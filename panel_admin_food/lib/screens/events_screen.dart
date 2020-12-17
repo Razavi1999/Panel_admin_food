@@ -73,14 +73,214 @@ class _EventScreenState extends State<EventScreen> {
       return authorizedUsersList();
     } else if (selectedItem == 1) {
       visible = false;
-      return SizedBox();
+      return cartableList();
     } else if (selectedItem == 2) {
       visible = false;
-      return SizedBox();
+      return eventList();
     } else {
       visible = false;
       return SizedBox();
     }
+  }
+
+  Widget cartableList() {
+    return SafeArea(
+      child: FutureBuilder(
+        future: http.get('$eventsUrl?verified=false', headers: {
+          HttpHeaders.authorizationHeader: token,
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            http.Response response = snapshot.data;
+            if (response.statusCode >= 400) {
+              print(response.statusCode);
+              print(response.body);
+              try {
+                String jsonResponse =
+                convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+                if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
+                  return errorWidget('شما به عنوان ارشد دانشکده انتخاب نشدید.');
+                } else {
+                  return errorWidget('sth else');
+                }
+              } catch (e) {
+                print(e);
+                return errorWidget('مشکلی درارتباط با سرور پیش آمد');
+              }
+            }
+            var jsonResponse =
+            convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+            // print(jsonResponse);
+            List<Map> mapList = [];
+            int cartableCount = 0;
+            // print(jsonResponse);
+            for (Map map in jsonResponse) {
+              cartableCount++;
+              mapList.add(map);
+              // print(map.toString());
+            }
+            if (cartableCount == 0) {
+              errorWidget('ایوندی وجود ندارد.');
+            }
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return cartableBuilder(
+                  '$baseUrl${mapList[index]['image']}',
+                  mapList[index]['name'],
+                  mapList[index]['remaining_capacity'],
+                  mapList[index]['event_id'],
+                );
+              },
+              itemCount: cartableCount,
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget eventList() {
+    return SafeArea(
+      child: FutureBuilder(
+        future: http.get(eventsUrl, headers: {
+          HttpHeaders.authorizationHeader: token,
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            http.Response response = snapshot.data;
+            if (response.statusCode >= 400) {
+              print(response.statusCode);
+              print(response.body);
+              try {
+                String jsonResponse =
+                    convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+                if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
+                  return errorWidget('شما به عنوان ارشد دانشکده انتخاب نشدید.');
+                } else {
+                  return errorWidget('sth else');
+                }
+              } catch (e) {
+                print(e);
+                return errorWidget('مشکلی درارتباط با سرور پیش آمد');
+              }
+            }
+            var jsonResponse =
+                convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+            // print(jsonResponse);
+            List<Map> mapList = [];
+            int eventCount = 0;
+            // print(jsonResponse);
+            for (Map map in jsonResponse) {
+              eventCount++;
+              mapList.add(map);
+              // print(map.toString());
+            }
+            if (eventCount == 0) {
+              errorWidget('شخصی دارای مجوز وجود ندارد.');
+            }
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return eventBuilder(
+                  '$baseUrl${mapList[index]['image']}',
+                  mapList[index]['name'],
+                  mapList[index]['remaining_capacity'],
+                  mapList[index]['event_id'],
+                );
+              },
+              itemCount: eventCount,
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  declineEvent(int eventId) async {
+    print('accepted');
+    await http.put(changeUserAccessUrl,
+        body: convert.jsonEncode({
+          'verified': false,
+        }),
+        headers: {
+          HttpHeaders.authorizationHeader: token,
+          "Accept": "application/json",
+          "content-type": "application/json",
+        });
+    setState(() {});
+  }
+
+  Widget eventBuilder(
+      String imageUrl, String eventName, int remainingCapacity, int eventId) {
+    return Card(
+      child: ListTile(
+        leading: FadeInImage(
+          placeholder: AssetImage('assets/images/junk.jpeg'),
+          image: NetworkImage(imageUrl),
+        ),
+        title: Text(eventName),
+        subtitle: Text(remainingCapacity.toString()),
+        trailing: FlatButton(
+          shape: RoundedRectangleBorder(),
+          color: Colors.green,
+          onPressed: () {
+            declineEvent(eventId);
+          },
+          child: Text(
+            'قبول درخواست',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  acceptEvent(int eventId) async {
+    print('accepted');
+    await http.put(changeUserAccessUrl,
+        body: convert.jsonEncode({
+          'verified': true,
+        }),
+        headers: {
+          HttpHeaders.authorizationHeader: token,
+          "Accept": "application/json",
+          "content-type": "application/json",
+        });
+    setState(() {});
+  }
+
+  Widget cartableBuilder(
+      String imageUrl, String eventName, int remainingCapacity, int eventId) {
+    return Card(
+      child: ListTile(
+        leading: FadeInImage(
+          placeholder: AssetImage('assets/images/junk.jpeg'),
+          image: NetworkImage(imageUrl),
+        ),
+        title: Text(eventName),
+        subtitle: Text(remainingCapacity.toString()),
+        trailing: FlatButton(
+          shape: RoundedRectangleBorder(),
+          color: Colors.green,
+          onPressed: () {
+            acceptEvent(eventId);
+          },
+          child: Text(
+            'قبول درخواست',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget authorizedUsersList() {
@@ -182,7 +382,12 @@ class _EventScreenState extends State<EventScreen> {
         body: convert.jsonEncode({
           'username': username,
           'status': !status,
-        }));
+        }),
+        headers: {
+          HttpHeaders.authorizationHeader: token,
+          "Accept": "application/json",
+          "content-type": "application/json",
+        });
     setState(() {});
   }
 

@@ -28,7 +28,7 @@ class GridDashboard extends StatelessWidget {
     title: "ثبت نام در رویداد ها",
     subtitle: "رویداد برای تحکیم فردا",
     img: "assets/images/Event.png",
-    dest: EventDetailsScreen.id,
+    dest: EventScreen.id,
   );
 
 

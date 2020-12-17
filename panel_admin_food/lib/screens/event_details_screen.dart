@@ -36,6 +36,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        title: Text('جزئیات ایوند'),
         backgroundColor: Colors.purple.shade300,
         automaticallyImplyLeading: false,
         actions: [
