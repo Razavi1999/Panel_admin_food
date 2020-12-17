@@ -10,6 +10,7 @@ import 'package:panel_admin_food_origin/screens/users_screen.dart';
 String usersUrl = '$baseUrl/api/event/admin/auth/all/';
 String eventsUrl = '$baseUrl/api/event/admin/requests/all/';
 String authorizedUsersUrl = '$baseUrl/api/event/admin/auth/all/?state=true';
+String changeUserAccessUrl = '$baseUrl/api/event/admin/auth/';
 String authSearch = '';
 
 class EventScreen extends StatefulWidget {
@@ -120,10 +121,8 @@ class _EventScreenState extends State<EventScreen> {
                       if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
                         return errorWidget(
                             'شما به عنوان ارشد دانشکده انتخاب نشدید.');
-                      }
-                      else {
-                        return errorWidget(
-                            'sth else');
+                      } else {
+                        return errorWidget('sth else');
                       }
                     } catch (e) {
                       print(e);
@@ -147,7 +146,15 @@ class _EventScreenState extends State<EventScreen> {
                   return ListView.builder(
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
-                      return userAuthBuilder(mapList[index]['username']);
+                      return userAuthBuilder(
+                        mapList[index]['username'],
+                        mapList[index]['first_name'],
+                        mapList[index]['last_name'],
+                        true,
+                        () {
+                          onPressed(true, mapList[index]['username']);
+                        },
+                      );
                     },
                     itemCount: userCount,
                   );
@@ -167,7 +174,33 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
-  Widget userAuthBuilder(String username) {
+  onPressed(bool status, String username) async {
+    await http.put(changeUserAccessUrl,
+        body: convert.jsonEncode({
+          'username': username,
+          'status': !status,
+        }));
+    setState(() {});
+  }
+
+  Widget userAuthBuilder(String username, String firstName, String lastName,
+      bool status, Function onPressed) {
+    return Card(
+      child: ListTile(
+        onTap: onPressed,
+        leading: Text('$firstName $lastName'),
+        trailing: FlatButton(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          color: status ? Colors.red : Colors.green,
+          onPressed: () {},
+          child: Text(
+            status ? 'گرفتن اجازه' : 'دادن اجازه',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+      ),
+    );
     return Container(
       child: Text(username),
     );
