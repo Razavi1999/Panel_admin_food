@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:jalali_calendar/jalali_calendar.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -11,6 +13,8 @@ import 'history_screen.dart';
 import 'new_food_screen.dart';
 import 'request_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
+import 'package:persian_date/persian_date.dart';
+
 
 
 class OrderPage extends StatefulWidget {
@@ -24,7 +28,12 @@ class _OrderPageState extends State<OrderPage> {
 
   String token, url = '$baseUrl/api/food/admin/serve/all/';
   int userId;
+  ////////////////////////////
   DateTime selectedDate = DateTime.now();
+  PersianDate persianDate = PersianDate(format: "yyyy/mm/dd  \n DD  , d  MM  ");
+  String _datetime = '';
+  String _format = 'yyyy-mm-dd';
+  ////////////////////////////
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,17 +57,34 @@ class _OrderPageState extends State<OrderPage> {
     };
   }
 
-  showCalendarDialog() async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        print(selectedDate);
-      });
+  void _showDatePicker() {
+    final bool showTitleActions = false;
+    DatePicker.showDatePicker(context,
+        minYear: 1300,
+        maxYear: 1450,
+        confirm: Text(
+          'تایید',
+          style: TextStyle(color: Colors.red),
+        ),
+        cancel: Text(
+          'لغو',
+          style: TextStyle(color: Colors.cyan),
+        ),
+        dateFormat: _format, onChanged: (year, month, day) {
+          if (!showTitleActions) {
+            _datetime = '$year-$month-$day';
+          }
+        }, onConfirm: (year, month, day) {
+          setState(() {});
+          Jalali j = Jalali(year, month, day);
+          selectedDate = j.toDateTime();
+          print('dateTime is: $selectedDate');
+          _datetime = '$year-$month-$day';
+          setState(() {
+            _datetime = '$year-$month-$day';
+            print('time' + _datetime);
+          });
+        });
   }
 
   @override
@@ -77,7 +103,8 @@ class _OrderPageState extends State<OrderPage> {
             color: Colors.white,
           ),
           onPressed: () {
-            showCalendarDialog();
+            // showCalendarDialog();
+            _showDatePicker();
           },
         ),
         backgroundColor: kPrimaryColor,
@@ -146,7 +173,7 @@ class _OrderPageState extends State<OrderPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                'غذایی فروخته نشده !!!',
+                                'غذایی سرو نشده !!!',
                                 style: PersianFonts.Shabnam.copyWith(fontSize: 20),
                                 textDirection: TextDirection.rtl,
                               ),
@@ -158,7 +185,8 @@ class _OrderPageState extends State<OrderPage> {
                                 color: kPrimaryColor,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 onPressed: () {
-                                  showCalendarDialog();
+                                  // showCalendarDialog();
+                                  _showDatePicker();
                                 },
                                 label: Text('تقویم',
                                   style: PersianFonts.Shabnam.copyWith(color: Colors.white),
@@ -180,7 +208,7 @@ class _OrderPageState extends State<OrderPage> {
                         itemBuilder: (context, index) {
                           //print("maplist : " + mapList.toString());
 
-                          print('salam : ${mapList[index]['start_serve_time']}');
+                          // print('salam : ${mapList[index]['start_serve_time']}');
                           Map<String , double> my_map = Map();
                           my_map['${mapList[index]['start_serve_time']}'] = double.parse(
                               mapList[index]['remaining_count'].toString());

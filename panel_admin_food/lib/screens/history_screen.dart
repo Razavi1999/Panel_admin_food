@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jalali_calendar/jalali_calendar.dart';
 import 'package:panel_admin_food_origin/models/food.dart';
 import 'package:persian_fonts/persian_fonts.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import '../constants.dart';
+import 'package:persian_date/persian_date.dart';
 
 class HistoryScreen extends StatefulWidget {
   static String id = 'history_screen';
@@ -18,25 +21,46 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   String token,
-      date,
       url = '$baseUrl/api/food/admin/order_history/all',
       historyUrl = '$baseUrl/api/food/admin/order_history';
-  DateTime selectedDate = DateTime.now();
   int userId;
+  ////////////////////////////
+  DateTime selectedDate = DateTime.now();
+  PersianDate persianDate = PersianDate(format: "yyyy/mm/dd  \n DD  , d  MM  ");
+  String _datetime = '';
+  String _format = 'yyyy-mm-dd';
+  ////////////////////////////
 
-  showCalendarDialog() async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        date = selectedDate.toString().substring(0, 10);
-        print(selectedDate);
-      });
+  showCalendarDialog()async{
+    final bool showTitleActions = false;
+    DatePicker.showDatePicker(context,
+        minYear: 1300,
+        maxYear: 1450,
+        confirm: Text(
+          'تایید',
+          style: TextStyle(color: Colors.red),
+        ),
+        cancel: Text(
+          'لغو',
+          style: TextStyle(color: Colors.cyan),
+        ),
+        dateFormat: _format, onChanged: (year, month, day) {
+          if (!showTitleActions) {
+            _datetime = '$year-$month-$day';
+          }
+        }, onConfirm: (year, month, day) {
+          setState(() {});
+          Jalali j = Jalali(year, month, day);
+          selectedDate = j.toDateTime();
+          print('dateTime is: $selectedDate');
+          _datetime = '$year-$month-$day';
+          setState(() {
+            _datetime = '$year-$month-$day';
+            print('time' + _datetime);
+          });
+        });
   }
+
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -50,9 +74,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    if (date == null) {
-      date = selectedDate.toString().substring(0, 10);
-    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -87,7 +108,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               return Container(
                 margin: EdgeInsets.all(20),
                 child: FutureBuilder(
-                  future: http.get('$historyUrl?date=$date', headers: {
+                  future: http.get('$historyUrl?date=${selectedDate.toString().substring(0, 10)}', headers: {
                     HttpHeaders.authorizationHeader: token,
                   }),
                   builder: (context, snapshot) {
@@ -97,7 +118,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       if (response.statusCode >= 400) {
                         print(response.statusCode);
                         print(response.body);
-                        print('$historyUrl?date=$date');
+                        print('$historyUrl?date=${selectedDate.toString().substring(0, 10)}');
                         return Center(
                           child: Text(
                             'مشکلی درارتباط با سرور پیش آمد',

@@ -7,11 +7,15 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:persian_fonts/persian_fonts.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jalali_calendar/jalali_calendar.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import '../constants.dart';
 import 'package:http_parser/http_parser.dart';
 import 'dart:convert' as convert;
-
+import 'package:persian_fonts/persian_fonts.dart';
+import 'package:persian_date/persian_date.dart';
 import '../time_model.dart';
 
 class NewFoodScreen extends StatefulWidget {
@@ -35,15 +39,17 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
   List<TextEditingController> controllersList = [];
   List<ServeTime> serveTimesList = [];
 
-  Set timesSet = Set();
-
   String selectedFood, token, selectedFoodName;
   int selectedFacultyId, selectedFoodId;
   int userId;
   bool showSpinner = false, isAddingCompletelyNewFood = false;
   String base64Image;
+  ////////////////////////////
   DateTime selectedDate = DateTime.now();
-
+  PersianDate persianDate = PersianDate(format: "yyyy/mm/dd  \n DD  , d  MM  ");
+  String _datetime = '';
+  String _format = 'yyyy-mm-dd';
+  ////////////////////////////
   Future<String> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token');
@@ -93,16 +99,33 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
   }
 
   showCalendarDialog()async{
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        print(selectedDate);
-      });
+    final bool showTitleActions = false;
+    DatePicker.showDatePicker(context,
+        minYear: 1300,
+        maxYear: 1450,
+        confirm: Text(
+          'تایید',
+          style: TextStyle(color: Colors.red),
+        ),
+        cancel: Text(
+          'لغو',
+          style: TextStyle(color: Colors.cyan),
+        ),
+        dateFormat: _format, onChanged: (year, month, day) {
+          if (!showTitleActions) {
+            _datetime = '$year-$month-$day';
+          }
+        }, onConfirm: (year, month, day) {
+          setState(() {});
+          Jalali j = Jalali(year, month, day);
+          selectedDate = j.toDateTime();
+          print('dateTime is: $selectedDate');
+          _datetime = '$year-$month-$day';
+          setState(() {
+            _datetime = '$year-$month-$day';
+            print('time' + _datetime);
+          });
+        });
   }
 
   @override
@@ -850,6 +873,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
           Text(
             message,
             style: PersianFonts.Shabnam.copyWith(fontSize: 20),
+            textDirection: TextDirection.rtl,
           ),
           FlatButton(
             onPressed: () {
@@ -858,6 +882,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
             child: Text(
               '!باشه',
               style: PersianFonts.Shabnam.copyWith(color: kPrimaryColor),
+              textDirection: TextDirection.rtl,
             ),
           ),
         ],
