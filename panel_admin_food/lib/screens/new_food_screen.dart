@@ -102,7 +102,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
       setState(() {
         selectedDate = picked;
         print(selectedDate);
-      });
+      }
+      );
   }
 
   @override
@@ -315,11 +316,13 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                     textDirection:
                                                         TextDirection.rtl,
                                                     style: PersianFonts.Shabnam.copyWith(
-                                                        color: Colors.grey[200]),
+                                                        color: kPrimaryColor
+                                                    ),
                                                   ),
                                                 ],
                                               ),
                                             ),
+
                                             SizedBox(
                                               height: 10,
                                             ),
@@ -431,7 +434,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                               height: 200,
                                               fit: BoxFit.cover,
                                               image: AssetImage(
-                                                  'assets/images/add_image.png'),
+                                                  'assets/images/add_image.png'
+                                              ),
                                             ),
                                           ]
                                         ],

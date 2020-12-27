@@ -71,6 +71,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             remainingCapacity = jsonResponse['remaining_capacity'];
             location = jsonResponse['location'];
             image = '${jsonResponse['image']}';
+            print("image : " + image);
 
             return bodyContainer();
           }

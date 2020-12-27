@@ -294,16 +294,15 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
 
                                       child: ListTile(
                                           title: Text(
-                                            result[index]
-                                            ['start_serve_time'] +
-                                                ' تا ' +
-                                                result[index]
-                                                ['end_serve_time'],
+                                              replaceFarsiNumber(result[index]['start_serve_time']).substring(0,5)
+                                                  + ' تا ' +
+                                                replaceFarsiNumber(result[index]['end_serve_time']).substring(0,5),
+                                                
                                             style: PersianFonts.Shabnam.copyWith(),
                                             textDirection: TextDirection.rtl,
                                           ),
                                           leading: Text(
-                                            'تعداد باقیمانده: ${result[index]['remaining_count'].toString()}',
+                                            'تعداد باقیمانده: ${replaceFarsiNumber(result[index]['remaining_count'].toString())}',
                                             style: PersianFonts.Shabnam.copyWith(),
                                           ),
                                         ),
