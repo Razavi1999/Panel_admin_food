@@ -104,7 +104,7 @@ class _EventScreenState extends State<EventScreen> {
               },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                labelText: 'جست و جو',
+                labelText: '                                                  جستجو',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -187,6 +187,8 @@ class _EventScreenState extends State<EventScreen> {
             height: 40,
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: TextField(
+              textAlign: TextAlign.right,
+              textDirection: TextDirection.rtl,
               controller: eventController,
               onChanged: (value) {
                 eventSearch = eventController.text;
@@ -194,7 +196,7 @@ class _EventScreenState extends State<EventScreen> {
               },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                labelText: 'جست و جو',
+                labelText: '                                                  جستجو',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -292,12 +294,12 @@ class _EventScreenState extends State<EventScreen> {
   Widget eventBuilder(String imageUrl, String eventName, int remainingCapacity,
       int eventId, bool imageIsAvailable) {
     return Card(
+      color: Color.fromRGBO(216, 228 , 240, 50),
       shape:  RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      color: Colors.white,
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      elevation: 6,
+      elevation: 12,
       child: InkWell(
         onTap: (){
           _navigateToEventDetailScreen(eventId, token);
@@ -328,7 +330,7 @@ class _EventScreenState extends State<EventScreen> {
                     ),
 
                     Text(
-                      remainingCapacity.toString() + ' :ظرفیت ',
+                      replaceFarsiNumber(remainingCapacity.toString()) + ' :ظرفیت ',
                       textAlign: TextAlign.right,
                       style: PersianFonts.Shabnam.copyWith(
                           fontSize: 16.0,
@@ -346,16 +348,21 @@ class _EventScreenState extends State<EventScreen> {
                 width: 50.0,
               ),
               Container(
-                height: 95.0,
-                width: 70.0,
+                height: 110.0,
+                width: 90.0,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10)
                 ),
-                child: FadeInImage(
-                  fit: BoxFit.cover,
-                  //height: 50,
-                  placeholder: AssetImage('assets/images/junk.jpeg'),
-                  image: NetworkImage(imageUrl),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+
+                  child: FadeInImage(
+                    fit: BoxFit.cover,
+                    height: 80,
+                    //width: 100,
+                    placeholder: AssetImage('assets/images/junk.jpeg'),
+                    image: NetworkImage(imageUrl),
+                  ),
                 ),
               ),
               SizedBox(
@@ -380,9 +387,12 @@ class _EventScreenState extends State<EventScreen> {
           "Accept": "application/json",
           "content-type": "application/json",
         });
-    if (response.statusCode == 200) {
+
+    if (response.statusCode == 200)
       setState(() {});
-    } else {
+
+
+    else {
       _showDialog('مشکلی پیش آمد');
       print(response.statusCode);
       print(response.body);
@@ -392,10 +402,11 @@ class _EventScreenState extends State<EventScreen> {
   Widget cartableBuilder(String imageUrl, String eventName,
       int remainingCapacity, int eventId, bool imageIsAvailable) {
     return Card(
+      color: Color.fromRGBO(216, 228 , 240, 50),
       shape:  RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      elevation: 6,
+      elevation: 12,
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: InkWell(
         onTap: (){
@@ -433,7 +444,7 @@ class _EventScreenState extends State<EventScreen> {
                         const EdgeInsets.symmetric(horizontal: 10.0),
                         child: FlatButton(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           color: Colors.green,
                           onPressed: () {
@@ -444,7 +455,7 @@ class _EventScreenState extends State<EventScreen> {
                              ' قبول درخواست ',
                             textAlign: TextAlign.right,
                             style: PersianFonts.Shabnam.copyWith(
-                                fontSize: 15.0,
+                                fontSize: 14.0,
                                 color: Colors.white
                             ),
                           ),
@@ -462,16 +473,20 @@ class _EventScreenState extends State<EventScreen> {
                 width: 50.0,
               ),
               Container(
-                height: 95.0,
-                width: 70.0,
+                height: 110.0,
+                width: 90.0,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10)
                 ),
-                child: FadeInImage(
-                  fit: BoxFit.cover,
-                  //height: 50,
-                  placeholder: AssetImage('assets/images/junk.jpeg'),
-                  image: NetworkImage(imageUrl),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+
+                  child: FadeInImage(
+                    fit: BoxFit.cover,
+                    //height: 50,
+                    placeholder: AssetImage('assets/images/junk.jpeg'),
+                    image: NetworkImage(imageUrl),
+                  ),
                 ),
               ),
               SizedBox(
@@ -492,13 +507,14 @@ class _EventScreenState extends State<EventScreen> {
             height: 40,
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: TextField(
+              textDirection: TextDirection.rtl,
               controller: userController,
               onChanged: (value) {
                 onChange();
               },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                labelText: 'جست و جو',
+                labelText: '                                                  جستجو',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -543,9 +559,9 @@ class _EventScreenState extends State<EventScreen> {
                   mapList.add(map);
                   // print(map.toString());
                 }
-                if (userCount == 0) {
+                if (userCount == 0)
                   errorWidget('شخصی دارای مجوز وجود ندارد.');
-                }
+
                 return Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -609,8 +625,9 @@ class _EventScreenState extends State<EventScreen> {
       shape:  RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      elevation: 6,
-      shadowColor: Colors.grey[300],
+      elevation: 12,
+      shadowColor: Colors.grey[400],
+      color: Color.fromRGBO(216, 228 , 240, 50),
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       //margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: Align(
@@ -618,11 +635,14 @@ class _EventScreenState extends State<EventScreen> {
           leading:
           Text('$firstName $lastName',
             textAlign: TextAlign.center,
+            style: PersianFonts.Shabnam.copyWith(
+              fontSize: 16
+            ),
 
           ),
           trailing: FlatButton(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             color: status ? Colors.red : Colors.green,
             onPressed: onPressed,
             child: Text(

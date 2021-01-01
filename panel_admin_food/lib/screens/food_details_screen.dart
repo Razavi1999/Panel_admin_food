@@ -20,13 +20,6 @@ class FoodDetailsScreen extends StatefulWidget {
 
 class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
 
-  final Map<String, double> my_map = {
-    "a": 1.2,
-    "b": 2.4,
-    "c" : 3.6,
-    "d" : 4.8,
-    "e" : 6
-  };
 
 
   int count = 0;
@@ -45,6 +38,8 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   bool isBuyer = true;
   String url = '$baseUrl/api/food';
   String timeUrl = '$baseUrl/api/food/times/';
+
+  //get my_map => null;
 
   Future<String> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -115,6 +110,14 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                         price = result[0]['cost'];
                         count = 0;
 
+                        final Map<String , double> my_map = Map() ;
+
+                        for(int i = 0 ; i < result.length ; i++)
+                        my_map[replaceFarsiNumber( result[i]['start_serve_time'].toString().substring(0,5) )]
+                          = double.parse( result[i]['remaining_count'].toString());
+
+                        print('my_map' + my_map.toString());
+
                         for (var each in result)
                           count++;
 
@@ -172,6 +175,9 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                   ],
                                 ),
                               ),
+
+
+
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 30,
@@ -184,6 +190,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                       result[0]['food']['name'],
                                       textDirection: TextDirection.rtl,
                                       style: PersianFonts.Shabnam.copyWith(
+                                        fontWeight: FontWeight.w800,
                                         color: kPrimaryColor,
                                         fontSize: 15
                                       ),
@@ -204,10 +211,11 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                       height: 20,
                                     ),
                                     Text(
-                                      result[0]['food']['cost'].toString() + ' تومان',
+                                      replaceFarsiNumber(result[0]['food']['cost'].toString()) + ' تومان',
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.right,
                                       style: PersianFonts.Shabnam.copyWith(
+                                          fontWeight: FontWeight.w800,
                                         color: kPrimaryColor,
                                           fontSize: 15
                                       ),
@@ -215,6 +223,9 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                   ],
                                 ),
                               ),
+
+
+
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 10,
@@ -235,7 +246,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                           'محتویات',
                                           style: PersianFonts.Shabnam.copyWith(
                                               color: kPrimaryColor,
-                                              fontSize: 20),
+                                              fontSize: 28),
                                           textDirection: TextDirection.rtl,
                                           textAlign: TextAlign.right,
                                         ),
@@ -258,6 +269,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                         text: TextSpan(
                                             text: result[0]['food']['description'],
                                             style: PersianFonts.Shabnam.copyWith(
+                                                fontWeight: FontWeight.w800,
                                                 color: kPrimaryColor
                                             )
                                         ),
@@ -269,57 +281,14 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                               SizedBox(
                                 height: 50,
                               ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: count,
-                                itemBuilder: (context, index) {
-
-
-                                  print("start_serve_time : " + result[index]['start_serve_time'].toString());
-                                  print("remaining_count  : " + result[index]['remaining_count'].toString());
-
-                                  print("Im here !!!!");
-                                  print(my_map.toString());
-
-
-                                  //my_map['${result[index]['start_serve_time'].toString()}'] = double.parse(result[index]['remaining_count'].toString());
-
-                                  return Card(
-                                    shadowColor: Colors.grey[300],
-                                    margin: EdgeInsets.only(
-                                        bottom: 10, left: 20, right: 20
-                                    ),
-                                    color: Colors.purple.shade50,
-                                    elevation: 4,
-
-                                      child: ListTile(
-                                          title: Text(
-                                              replaceFarsiNumber(result[index]['start_serve_time']).substring(0,5)
-                                                  + ' تا ' +
-                                                replaceFarsiNumber(result[index]['end_serve_time']).substring(0,5),
-                                                
-                                            style: PersianFonts.Shabnam.copyWith(),
-                                            textDirection: TextDirection.rtl,
-                                          ),
-                                          leading: Text(
-                                            'تعداد باقیمانده: ${replaceFarsiNumber(result[index]['remaining_count'].toString())}',
-                                            style: PersianFonts.Shabnam.copyWith(),
-                                          ),
-                                        ),
-
-                                  );
-                                  return SizedBox();
-                                },
-                              ),
-
 
                               PieChart(
                                 dataMap: my_map,
                                 legendFontColor: Colors.blueGrey[900],
-                                legendFontSize: 10.0,
-                                legendFontWeight: FontWeight.w500,
+                                legendFontSize: 22.0,
+                                legendFontWeight: FontWeight.w800,
                                 animationDuration: Duration(milliseconds: 800),
-                                chartLegendSpacing: 20.0,
+                                chartLegendSpacing: 25.0,
                                 chartRadius: MediaQuery.of(context).size.width / 2,
                                 showChartValuesInPercentage: true,
                                 //showChartValues: true,
@@ -334,6 +303,53 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                 //chartValueLabelColor: Colors.grey[200],
                                 //initialAngle: 0,
                               ),
+
+
+
+
+
+                              ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: count,
+                                itemBuilder: (context, index) {
+
+
+
+                                  return Card(
+                                    shape:  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    color: Colors.white,
+                                    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                    elevation: 6,
+
+
+                                      child: ListTile(
+                                          title: Text(
+                                              replaceFarsiNumber(result[index]['start_serve_time']).substring(0,5)
+                                                  + ' تا ' +
+                                                replaceFarsiNumber(result[index]['end_serve_time']).substring(0,5),
+                                                
+                                            style: PersianFonts.Shabnam.copyWith(
+                                              fontWeight: FontWeight.w700
+                                            ),
+                                            textDirection: TextDirection.rtl,
+                                          ),
+                                          leading: Text(
+                                            'تعداد باقیمانده: ${replaceFarsiNumber(result[index]['remaining_count'].toString())}',
+                                            style: PersianFonts.Shabnam.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+
+                                  );
+                                  return SizedBox();
+                                },
+                              ),
+
+
+
 
 
                             ],

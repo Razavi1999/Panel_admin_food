@@ -101,27 +101,7 @@ class _OrderCardState extends State<OrderCard> {
                       ),
 
 
-                      PieChart(
-                        dataMap: widget.data,
-                        legendFontColor: Colors.blueGrey[900],
-                        legendFontSize: 10.0,
-                        legendFontWeight: FontWeight.w500,
-                        animationDuration: Duration(milliseconds: 800),
-                        chartLegendSpacing: 7.0,
-                        chartRadius: MediaQuery.of(context).size.width / 10,
-                        showChartValuesInPercentage: true,
-                        //showChartValues: true,
-                        //showChartValuesOutside: false,
-                        chartValuesColor: Colors.blueGrey[900].withOpacity(0.9),
-                        //colorList: colorList,
-                        //showLegends: true,
-                        //decimalPlaces: 1,
-                        //showChartValueLabel: true,
-                        //chartValueFontSize: 12,
-                        //chartValueFontWeight: FontWeight.bold,
-                        //chartValueLabelColor: Colors.grey[200],
-                        //initialAngle: 0,
-                      ),
+
 
 
                       SizedBox(

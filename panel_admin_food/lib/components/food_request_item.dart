@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:persian_fonts/persian_fonts.dart';
+
+import '../constants.dart';
 
 class FoodRequestItem extends StatelessWidget {
   final String name;
@@ -23,19 +26,27 @@ class FoodRequestItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape:  RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      color: Colors.white,
+      elevation: 16,
+
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      elevation: 2,
+
       child: ListTile(
         leading: Column(
           children: [
             Text(
-              name,
-              style: TextStyle(fontSize: 13),
+               name,
+              style: PersianFonts.Shabnam.copyWith(fontSize: 13),
             ),
-            SizedBox(height: 5,),
+
+            SizedBox(height: 15,),
+
             Text(
-              price.toString().substring(0, price.toString().length-2) + ' تومان',
-              style: TextStyle(fontSize: 12),
+              replaceFarsiNumber(price.toString().substring(0, price.toString().length-2)) + ' تومان',
+              style: PersianFonts.Shabnam.copyWith(fontSize: 16),
               textDirection: TextDirection.rtl,
             ),
           ],
@@ -43,8 +54,11 @@ class FoodRequestItem extends StatelessWidget {
         title: ListView.builder(
           itemBuilder: (context, index) {
             return Text(
-              foodNames[index] + ' ' + foodCounts[index].toString() + ' عدد',
+              foodNames[index] + ' ' + replaceFarsiNumber(foodCounts[index].toString()) + ' عدد',
               textDirection: TextDirection.rtl,
+              style: PersianFonts.Shabnam.copyWith(
+                fontWeight: FontWeight.w200
+              ),
             );
           },
           itemCount: counter,
@@ -57,7 +71,11 @@ class FoodRequestItem extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Text('پایان خرید'),
+          child: Text('پایان خرید' ,
+            style: PersianFonts.Shabnam.copyWith(
+              color: Colors.white
+            ),
+          ),
           color: Colors.green,
         ),
       ),

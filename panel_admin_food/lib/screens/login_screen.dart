@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
+import 'package:persian_fonts/persian_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 import '../components/already_have_an_account_acheck.dart';
@@ -144,15 +145,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   checkValidation(BuildContext context) async {
     if (email.length == 0) {
-      _showDialog(context, 'Fill email');
+      _showDialog(context, 'ایمیل را پر کنید');
       return;
     }
     if (!email.contains('@')) {
-      _showDialog(context, 'Bad email format');
+      _showDialog(context, 'فرمت ایمیل اشتباه است');
       return;
     }
     if (password.length == 0) {
-      _showDialog(context, 'Fill password');
+      _showDialog(context, 'رمز را پر کنید');
       return;
     }
     setState(() {
@@ -191,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
           showSpinner = false;
         });
         _showDialog(
-            context, 'The email may not exist or the password is wrong');
+            context, 'همچین ایمیلی موجود نیست و یا رمز اشتباه است');
       } else {
         setState(() {
           showSpinner = false;
@@ -204,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         showSpinner = false;
       });
-      _showDialog(context, 'There is a problem with the host');
+      _showDialog(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
       print("My Error: $e");
     }
   }
@@ -245,15 +246,21 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Text(
             message,
-            style: TextStyle(fontSize: 20),
+            textDirection: TextDirection.rtl,
+            textAlign: TextAlign.start,
+            style: PersianFonts.Shabnam.copyWith(fontSize: 20),
           ),
           FlatButton(
             onPressed: () {
               Navigator.pop(context);
             },
             child: Text(
-              'Done!',
-              style: TextStyle(color: kPrimaryColor),
+              'باشه!',
+              textDirection: TextDirection.rtl,
+              style: PersianFonts.Shabnam.copyWith(
+                  color: kPrimaryColor ,
+                  fontWeight: FontWeight.w600
+              ),
             ),
           ),
         ],

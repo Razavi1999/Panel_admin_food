@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:persian_fonts/persian_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/already_have_an_account_acheck.dart';
@@ -158,36 +159,36 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
 
   checkValidation(BuildContext context) async {
     if (email.length == 0) {
-      _showDialog(context, 'fill email');
+      _showDialog(context, 'ایمیل را پر کنید');
       return;
     }
     if (firstName.length == 0) {
-      _showDialog(context, 'fill first name');
+      _showDialog(context, 'نام خود را وارد کنید');
       return;
     }
     if (lastName.length == 0) {
-      _showDialog(context, 'fill last name');
+      _showDialog(context, 'نام خانوادگی خود را وارد کنید');
       return;
     }
     if (sid.length != 8) {
-      _showDialog(context, 'Bad student ID format');
+      _showDialog(context, 'فرمت شماره دانشجویی اشتباه است');
       return;
     }
     try {
       int.parse(sid);
     } catch (e) {
-      _showDialog(context, 'Bad student ID format');
+      _showDialog(context, 'فرمت شماره دانشجویی اشتباه است');
       return;
     }
     try {
       int.parse(sid);
     } catch (e) {
       print('My Error: $e');
-      _showDialog(context, 'bad Student number format');
+      _showDialog(context, 'فرمت شماره دانشجویی اشتباه است');
       return;
     }
     if (password.length == 0) {
-      _showDialog(context, 'fill password');
+      _showDialog(context, 'رمز را پر کنید');
       return;
     }
     count++;
@@ -258,7 +259,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           });
         } else {
           resetCounter();
-          _showDialog(context, 'failed to send email');
+          _showDialog(context, 'ارسال ایمیل ناموفق بود');
           setState(() {
             showSpinner = false;
           });
@@ -271,13 +272,13 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
         });
         resetCounter();
         print(result.body.toString());
-        _showDialog(context, 'Please insert an academic email');
+        _showDialog(context, 'لطفا ایمیل دانشجویی وارد کنید');
       } else if (result.statusCode == 500) {
         setState(() {
           showSpinner = false;
         });
         resetCounter();
-        _showDialog(context, 'This email is used by another user');
+        _showDialog(context, 'این ایمیل توسط کاربر دیگری در مورد استفاده است');
       } else {
         setState(() {
           showSpinner = false;
@@ -290,7 +291,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
     } catch (e) {
       showSpinner = false;
       resetCounter();
-      _showDialog(context, 'There is a problem with host');
+      _showDialog(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
       print("My Error: $e");
     }
   }
@@ -328,24 +329,28 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           SizedBox(
             height: 20,
           ),
+
           Text(
             message,
-            style: TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
+            style: PersianFonts.Shabnam.copyWith(
+                color: kPrimaryColor,
+                fontSize: 20 ,
+                fontWeight: FontWeight.w500
+            ),
           ),
-          // Row(
-          //   children: [
-          //     Expanded(
-          //       child: Text('Done!'),
-          //     ),
-          //   ],
-          // ),
+
+
           FlatButton(
             onPressed: () {
               Navigator.pop(context);
             },
             child: Text(
-              'Done!',
-              style: TextStyle(color: kPrimaryColor),
+              '!باشه',
+              textAlign: TextAlign.center,
+              style: PersianFonts.Shabnam.copyWith(
+                  fontWeight: FontWeight.w700
+              ),
             ),
           ),
         ],

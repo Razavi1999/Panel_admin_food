@@ -7,11 +7,15 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:persian_fonts/persian_fonts.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jalali_calendar/jalali_calendar.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import '../constants.dart';
 import 'package:http_parser/http_parser.dart';
 import 'dart:convert' as convert;
-
+import 'package:persian_fonts/persian_fonts.dart';
+import 'package:persian_date/persian_date.dart';
 import '../time_model.dart';
 
 class NewFoodScreen extends StatefulWidget {
@@ -35,15 +39,17 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
   List<TextEditingController> controllersList = [];
   List<ServeTime> serveTimesList = [];
 
-  Set timesSet = Set();
-
   String selectedFood, token, selectedFoodName;
   int selectedFacultyId, selectedFoodId;
   int userId;
   bool showSpinner = false, isAddingCompletelyNewFood = false;
   String base64Image;
+  ////////////////////////////
   DateTime selectedDate = DateTime.now();
-
+  PersianDate persianDate = PersianDate(format: "yyyy/mm/dd  \n DD  , d  MM  ");
+  String _datetime = '';
+  String _format = 'yyyy-mm-dd';
+  ////////////////////////////
   Future<String> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token');
@@ -93,17 +99,33 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
   }
 
   showCalendarDialog()async{
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        print(selectedDate);
-      }
-      );
+    final bool showTitleActions = false;
+    DatePicker.showDatePicker(context,
+        minYear: 1300,
+        maxYear: 1450,
+        confirm: Text(
+          'تایید',
+          style: TextStyle(color: Colors.red),
+        ),
+        cancel: Text(
+          'لغو',
+          style: TextStyle(color: Colors.cyan),
+        ),
+        dateFormat: _format, onChanged: (year, month, day) {
+          if (!showTitleActions) {
+            _datetime = '$year-$month-$day';
+          }
+        }, onConfirm: (year, month, day) {
+          setState(() {});
+          Jalali j = Jalali(year, month, day);
+          selectedDate = j.toDateTime();
+          print('dateTime is: $selectedDate');
+          _datetime = '$year-$month-$day';
+          setState(() {
+            _datetime = '$year-$month-$day';
+            print('time' + _datetime);
+          });
+        });
   }
 
   @override
@@ -141,7 +163,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
           body: Container(
             decoration:BoxDecoration(
                 image: DecorationImage(
-                  image : AssetImage("assets/images/ahmad_11.jpg"),
+                  fit: BoxFit.fitHeight,
+                  image : AssetImage("assets/images/ahmad_13.jpg"),
                 )
             ),
             child: FutureBuilder(
@@ -357,7 +380,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                     ),
                                                     Icon(
                                                       Icons.camera_alt,
-                                                      color: Colors.grey[200],
+                                                      color: kPrimaryColor,
                                                     ),
                                                   ],
                                                 ),
@@ -389,7 +412,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                     ),
                                                     Icon(
                                                       Icons.insert_photo,
-                                                      color: Colors.grey[200],
+                                                      color: kPrimaryColor,
                                                     ),
                                                   ],
                                                 ),
@@ -575,7 +598,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 decoration:BoxDecoration(
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image : AssetImage("assets/images/ahmad_11.jpg" ,
+                                      image : AssetImage("assets/images/ahmad_13.jpg" ,
 
                                       ),
                                     )
@@ -620,11 +643,9 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                               child: ListTile(
 
                                                 title: Text(
-                                                  timesMapList[index]
-                                                          ['start_time'] +
-                                                      ' تا ' +
-                                                      timesMapList[index]
-                                                          ['end_time'],
+                                                  replaceFarsiNumber(timesMapList[index]['start_time']).substring(0,5)
+                                                      + ' تا ' +
+                                                  replaceFarsiNumber(timesMapList[index]['end_time']).substring(0,5),
                                                   style: PersianFonts.Shabnam.copyWith(
                                                     color: kPrimaryColor,
                                                   ),
@@ -666,7 +687,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                     }),
                               ),
                               SizedBox(
-                                height: 20,
+                                height: 60,
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 20, right: 20),
@@ -691,7 +712,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 ),
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 150,
                               ),
                             ],
                           ),
@@ -725,10 +746,12 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
         _showDialog(context, 'لطفا قیمت غذا را وارد کنید');
         return;
       }
+      /*
       if (imageFile == null) {
         _showDialog(context, 'لطفا عکسی برای غذای خود انتخاب کنید');
         return;
       }
+      */
     } else {
       if (selectedFoodId == null) {
         _showDialog(context, 'لطفا ابتدا یک غذا را انتخاب کنید');
@@ -854,14 +877,17 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
           Text(
             message,
             style: PersianFonts.Shabnam.copyWith(fontSize: 20),
+            textAlign: TextAlign.start,
+            textDirection: TextDirection.rtl,
           ),
           FlatButton(
             onPressed: () {
               Navigator.pop(context);
             },
             child: Text(
-              '!باشه',
+              'باشه!',
               style: PersianFonts.Shabnam.copyWith(color: kPrimaryColor),
+              textDirection: TextDirection.rtl,
             ),
           ),
         ],

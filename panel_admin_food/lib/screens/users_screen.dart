@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:persian_fonts/persian_fonts.dart';
 import 'dart:convert' as convert;
 
 import '../constants.dart';
@@ -29,7 +30,7 @@ class _UsersScreenState extends State<UsersScreen> {
   Widget build(BuildContext context) {
     args = ModalRoute.of(context).settings.arguments;
     token = args['token'];
-    token = 'Token dd324d7d0d603c13c34647ddf59ebb176db085c1';
+    //token = 'Token dd324d7d0d603c13c34647ddf59ebb176db085c1';
     return Scaffold(
       body: usersList(),
     );
@@ -106,11 +107,25 @@ class _UsersScreenState extends State<UsersScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       print(mapList[index]['user_id']);
                       return Card(
+                        shape:  RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        color: Color.fromRGBO(216, 228 , 240, 50),
+
+                        //color: Colors.white,
+                        margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                        elevation: 12,
+
                         child: ListTile(
-                          leading: Text('${mapList[index]['first_name']} ${mapList[index]['last_name']}'),
+                          leading: Text('${mapList[index]['first_name']} ${mapList[index]['last_name']}',
+                            style: PersianFonts.Shabnam.copyWith(
+                              fontSize: 16
+                            ),
+
+                          ),
                           trailing: FlatButton(
                             shape:
-                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                             color: mapList[index]['grant'] ? Colors.red : Colors.green,
                             onPressed: () {
                               print(mapList[index]['user_id']);
@@ -118,7 +133,11 @@ class _UsersScreenState extends State<UsersScreen> {
                             },
                             child: Text(
                               mapList[index]['grant'] ? 'گرفتن اجازه' : 'دادن اجازه',
-                              style: TextStyle(color: Colors.white, fontSize: 20),
+                              style: PersianFonts.Shabnam.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 16 ,
+
+                              ),
                             ),
                           ),
                         ),

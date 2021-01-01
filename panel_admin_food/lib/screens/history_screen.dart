@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jalali_calendar/jalali_calendar.dart';
 import 'package:panel_admin_food_origin/models/food.dart';
 import 'package:persian_fonts/persian_fonts.dart';
+import 'package:pie_chart/pie_chart.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import '../constants.dart';
+import 'package:persian_date/persian_date.dart';
 
 class HistoryScreen extends StatefulWidget {
   static String id = 'history_screen';
@@ -18,25 +22,48 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   String token,
-      date,
       url = '$baseUrl/api/food/admin/order_history/all',
       historyUrl = '$baseUrl/api/food/admin/order_history';
-  DateTime selectedDate = DateTime.now();
   int userId;
+  ////////////////////////////
+  DateTime selectedDate = DateTime.now();
+  PersianDate persianDate = PersianDate(format: "yyyy/mm/dd  \n DD  , d  MM  ");
+  String _datetime = '';
+  String _format = 'yyyy-mm-dd';
 
-  showCalendarDialog() async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        date = selectedDate.toString().substring(0, 10);
-        print(selectedDate);
-      });
+  get colorList => [Colors.red , Colors.green];
+  ////////////////////////////
+
+  showCalendarDialog()async{
+    final bool showTitleActions = false;
+    DatePicker.showDatePicker(context,
+        minYear: 1300,
+        maxYear: 1450,
+        confirm: Text(
+          'تایید',
+          style: TextStyle(color: Colors.red),
+        ),
+        cancel: Text(
+          'لغو',
+          style: TextStyle(color: Colors.cyan),
+        ),
+        dateFormat: _format, onChanged: (year, month, day) {
+          if (!showTitleActions) {
+            _datetime = '$year-$month-$day';
+          }
+        }, onConfirm: (year, month, day) {
+          setState(() {});
+          Jalali j = Jalali(year, month, day);
+          selectedDate = j.toDateTime();
+          print('dateTime is: $selectedDate');
+          _datetime = '$year-$month-$day';
+          setState(() {
+            _datetime = '$year-$month-$day';
+            print('time' + _datetime);
+          });
+        });
   }
+
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -50,13 +77,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    if (date == null) {
-      date = selectedDate.toString().substring(0, 10);
-    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "غذاهای فروخته شده",
+          textAlign: TextAlign.center,
           style: PersianFonts.Shabnam.copyWith(color: Colors.white, fontSize: 23.0),
         ),
         leading: IconButton(
@@ -87,7 +112,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               return Container(
                 margin: EdgeInsets.all(20),
                 child: FutureBuilder(
-                  future: http.get('$historyUrl?date=$date', headers: {
+                  future: http.get('$historyUrl?date=${selectedDate.toString().substring(0, 10)}', headers: {
                     HttpHeaders.authorizationHeader: token,
                   }),
                   builder: (context, snapshot) {
@@ -97,7 +122,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       if (response.statusCode >= 400) {
                         print(response.statusCode);
                         print(response.body);
-                        print('$historyUrl?date=$date');
+                        print('$historyUrl?date=${selectedDate.toString().substring(0, 10)}');
                         return Center(
                           child: Text(
                             'مشکلی درارتباط با سرور پیش آمد',
@@ -177,11 +202,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
                       return ListView.builder(
                         itemBuilder: (context, index) {
+                          Map<String , double> myMap = Map();
+
+                           myMap = {
+                            " فروش یافته": double.parse((listFood[index].totalCount - listFood[index].remainingCount).toString()),
+                            " باقی مانده": double.parse(listFood[index].remainingCount.toString()),
+                          };
+
+                           print("myMap : " + myMap.toString());
+
                           return Container(
                             margin: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
+                                horizontal: 5, vertical: 5),
                             padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
+                                horizontal: 5, vertical: 5),
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -191,43 +225,102 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  '${listFood[index].name}',
-                                  style: PersianFonts.Shabnam.copyWith(fontSize: 20),
-                                ),
-                                Text(
-                                  'تعداد کل: ${listFood[index].totalCount}',
-                                  style: PersianFonts.Shabnam.copyWith(),
-                                ),
-                                Text(
-                                  'فروش کل: ${(listFood[index].totalCount - listFood[index].remainingCount) * (listFood[index].cost)}تومان',
-                                  style: PersianFonts.Shabnam.copyWith(),
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'تعداد فروش یافته: ${listFood[index].totalCount - listFood[index].remainingCount}',
-                                        textDirection: TextDirection.rtl,
-                                        style: PersianFonts.Shabnam.copyWith(color: Colors.green),
+                            child: Card(
+                              shape:  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              color: Colors.white,
+
+                              margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                              elevation: 6,
+
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '${listFood[index].name}',
+                                      textDirection: TextDirection.rtl,
+                                      style: PersianFonts.Shabnam.copyWith(
+                                          fontSize: 20 ,
+                                          color: kPrimaryColor
                                       ),
-                                      SizedBox(
-                                        width: 10,
+                                    ),
+                                    Text(
+                                      'تعداد کل: ${replaceFarsiNumber(listFood[index].totalCount.toString())}',
+                                      textDirection: TextDirection.rtl,
+                                      style: PersianFonts.Shabnam.copyWith(
+                                        fontWeight: FontWeight.w600
                                       ),
-                                      Text(
-                                        'تعداد باقی مانده${listFood[index].remainingCount}',
-                                        textDirection: TextDirection.rtl,
-                                        style: PersianFonts.Shabnam.copyWith(color: Colors.red),
+                                    ),
+                                    Text(
+                                      'فروش کل: ${replaceFarsiNumber(((listFood[index].totalCount - listFood[index].remainingCount) * (listFood[index].cost)).toString())} تومان',
+                                      textDirection: TextDirection.rtl,
+                                      style: PersianFonts.Shabnam.copyWith(
+                                          fontWeight: FontWeight.w600
                                       ),
-                                    ],
-                                  ),
+                                    ),
+
+                                    PieChart(
+                                      dataMap: myMap,
+                                      legendFontColor: Colors.blueGrey[900],
+                                      legendFontSize: 11.0,
+                                      legendFontWeight: FontWeight.w900,
+                                      animationDuration: Duration(milliseconds: 800),
+                                      chartLegendSpacing: 7.0,
+                                      chartRadius: MediaQuery.of(context).size.width / 3,
+                                      showChartValuesInPercentage: true,
+                                      showChartValues: true,
+                                      //showChartValuesOutside: false,
+                                      chartValuesColor: Colors.blueGrey[900].withOpacity(0.9),
+                                      //colorList: colorList,
+                                      //showLegends: true,
+                                      //decimalPlaces: 1,
+                                      //showChartValueLabel: true,
+                                      //chartValueFontSize: 12.0,
+                                      //chartValueFontWeight: FontWeight.bold,
+                                      //chartValueLabelColor: Colors.grey[200],
+                                      //initialAngle: 0,
+                                    ),
+
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            ' فروش یافته: ${replaceFarsiNumber((listFood[index].totalCount - listFood[index].remainingCount).toString())}',
+                                            textDirection: TextDirection.rtl,
+                                            style: PersianFonts.Shabnam.copyWith(
+                                              color: Colors.green,
+                                                fontWeight: FontWeight.w900
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+
+                                          Text(
+                                            '  باقی مانده  ${replaceFarsiNumber( listFood[index].remainingCount.toString())} ',
+                                            textDirection: TextDirection.rtl,
+                                            style: PersianFonts.Shabnam.copyWith(
+                                                color: Colors.red,
+                                                fontWeight: FontWeight.w900
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+                                    ),
+
+
+
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           );
                         },
@@ -239,9 +332,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   },
                 ),
               );
-            } else {
-              return Center(child: CircularProgressIndicator());
             }
+
+            else
+              return Center(child: CircularProgressIndicator());
+
           }),
     );
   }

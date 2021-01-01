@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:persian_fonts/persian_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -77,7 +78,9 @@ class _RequestScreenState extends State<RequestScreen> {
                                   border: InputBorder.none,
                                   contentPadding:
                                   EdgeInsets.symmetric(horizontal: 15),
-                                  hintText: "Search..."),
+                                  hintText: "                                                   جستجو" ,
+
+                              ),
                             ),
                           ),
                           Material(
@@ -91,6 +94,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                 size: 20,
                               ),
                               onPressed: () {
+
                                 Navigator.pop(context);
                               },
                             ),
@@ -127,7 +131,7 @@ class _RequestScreenState extends State<RequestScreen> {
                           return Center(
                             child: Text(
                               'مشکلی درارتباط با سرور پیش آمد',
-                              style: TextStyle(fontSize: 20),
+                              style: PersianFonts.Shabnam.copyWith(fontSize: 20),
                             ),
                           );
                         }
@@ -145,7 +149,12 @@ class _RequestScreenState extends State<RequestScreen> {
                         if (count == 0) {
                           return Container(
                             child: Center(
-                              child: Text('درخواست غذایی وجود ندارد !!!', style: TextStyle(fontSize: 20), textDirection: TextDirection.rtl,),
+                              child: Text('درخواست غذایی وجود ندارد !!!',
+                                style: PersianFonts.Shabnam.copyWith(
+                                    fontSize: 20 ,
+                                    color: kPrimaryColor
+                                ),
+                                textDirection: TextDirection.rtl,),
                             ),
                           );
                         }
@@ -220,12 +229,21 @@ class _RequestScreenState extends State<RequestScreen> {
       bool result = await showDialog(
         context: context,
         child: AlertDialog(
-          title: Text('غذا فروخته شد', textDirection: TextDirection.rtl,),
+          title: Text('غذا فروخته شد', textDirection: TextDirection.rtl,
+            textAlign: TextAlign.center,
+            style: PersianFonts.Shabnam.copyWith(
+
+            ),
+          ),
           content: FlatButton(
             onPressed: () {
               Navigator.pop(context, true);
             },
-            child: Text('باشه!'),
+            child: Text('باشه!' ,
+              style: PersianFonts.Shabnam.copyWith(
+
+              ),
+            ),
           ),
         ),
       );

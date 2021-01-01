@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:panel_admin_food_origin/screens/event_details_screen.dart';
 import 'package:panel_admin_food_origin/screens/events_screen.dart';
+import 'package:persian_fonts/persian_fonts.dart';
 
 import '../screens/food_screen.dart';
 
@@ -19,13 +20,13 @@ class GridDashboard extends StatelessWidget {
 
   Items item1 = new Items(
     title: "سامانه تغذیه",
-    subtitle: "ایجاد تعداد غذا",
+    subtitle: "اتوماسیون سلف آزاد",
     img: "assets/images/food.png",
     dest: OrderPage.id,
   );
 
   Items item2 = new Items(
-    title: "ثبت نام در رویداد ها",
+    title: "ثبت نام در رویدادها",
     subtitle: "رویداد برای تحکیم فردا",
     img: "assets/images/Event.png",
     dest: EventScreen.id,
@@ -71,23 +72,24 @@ class GridDashboard extends StatelessWidget {
                     ),
                     Text(
                       data.title,
-                      style: GoogleFonts.openSans(
-                          textStyle: TextStyle(
+                        textAlign: TextAlign.center,
+                      style: PersianFonts.Shabnam.copyWith(
                               color: Colors.white,
                               fontSize: 16,
-                              fontWeight: FontWeight.w600)),
+                              fontWeight: FontWeight.w600)
                     ),
+
                     SizedBox(
                       height: 8,
                     ),
                     Text(
                       data.subtitle,
-                      style: GoogleFonts.openSans(
-                          textStyle: TextStyle(
+                          textAlign: TextAlign.center,
+                          style: PersianFonts.Shabnam.copyWith(
                               color: Colors.white38,
                               fontSize: 10,
-                              fontWeight: FontWeight.w600)
-                      ),
+                              fontWeight: FontWeight.w600
+                          )
                     ),
                     SizedBox(
                       height: 5,
