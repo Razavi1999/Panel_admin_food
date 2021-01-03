@@ -161,12 +161,15 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
             centerTitle: true,
           ),
           body: Container(
+            ///*
             decoration:BoxDecoration(
                 image: DecorationImage(
+                  colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
                   fit: BoxFit.fitHeight,
                   image : AssetImage("assets/images/ahmad_13.jpg"),
                 )
             ),
+            //*/
             child: FutureBuilder(
                 future: getToken(),
                 builder: (context, snapshot) {
@@ -181,27 +184,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
-                                height: 20,
-                              ),
-                              if (imageFile != null) ...[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    FlatButton(
-                                      onPressed: _cropImage,
-                                      child: Icon(Icons.crop),
-                                    ),
-                                    FlatButton(
-                                      onPressed: _clear,
-                                      child: Icon(Icons.refresh),
-                                    ),
-                                  ],
-                                ),
-                              ] else ...[
-                                SizedBox(),
-                              ],
-                              SizedBox(
-                                height: 1,
+                                height: 10,
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -250,7 +233,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                     child: Text(selectedFoodName ??
                                                         'غذایی انتخاب نشده' ,
                                                     style: PersianFonts.Shabnam.copyWith(
-                                                      color: kPrimaryColor
+                                                      color: kPrimaryColor ,
+                                                      fontWeight: FontWeight.w800,
                                                     ),
                                                     ),
                                                   ),
@@ -268,7 +252,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                         'نام غذا :',
                                         style: PersianFonts.Shabnam.copyWith(
                                           color: kPrimaryColor,
-                                          fontSize: 20
+                                          fontSize: 20 ,
+                                          fontWeight: FontWeight.w800,
                                         ),
                                         textDirection: TextDirection.rtl,
                                       ),
@@ -292,7 +277,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                         style: PersianFonts.Shabnam.copyWith(
                                             color: kPrimaryColor,
                                             fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                          fontWeight: FontWeight.w800,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -311,6 +297,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                         'افزودن عکس بازدید آگهی شما را تا سه برابر افزایش می دهد.',
                                         textDirection: TextDirection.rtl,
                                         style: PersianFonts.Shabnam.copyWith(
+                                          fontWeight: FontWeight.w700,
                                           color: kPrimaryColor
                                         ),
                                       ),
@@ -347,7 +334,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                             ),
 
                                             SizedBox(
-                                              height: 10,
+                                              height: 5,
                                             ),
                                             Container(
                                               height: 0.5,
@@ -439,22 +426,22 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                       ),
                                     ),
                                     child: Container(
-                                      height: 200,
-                                      width: 200,
+                                      height: (imageFile == null)  ? 100 : 150,
+                                      width: (imageFile == null)  ? 100 : 150,
                                       child: ListView(
                                         children: [
                                           if (imageFile != null) ...[
                                             Image.file(
                                               imageFile,
-                                              width: 200,
-                                              height: 200,
+                                              width: 150,
+                                              height: 150,
                                               fit: BoxFit.cover,
                                             ),
                                             // Uploader(file: _imageFile),
                                           ] else ...[
                                             Image(
-                                              width: 200,
-                                              height: 200,
+                                              width: 100,
+                                              height: 100,
                                               fit: BoxFit.cover,
                                               image: AssetImage(
                                                   'assets/images/add_image.png'
@@ -466,6 +453,26 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                     ),
                                   ),
                                 ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                if (imageFile != null) ...[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      FlatButton(
+                                        onPressed: _cropImage,
+                                        child: Icon(Icons.crop),
+                                      ),
+                                      FlatButton(
+                                        onPressed: _clear,
+                                        child: Icon(Icons.refresh),
+                                      ),
+                                    ],
+                                  ),
+                                ] else ...[
+                                  SizedBox(),
+                                ],
                                 SizedBox(
                                   height: 20,
                                 ),
@@ -595,14 +602,14 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 height: 20,
                               ),
                               Container(
+                                ///*
                                 decoration:BoxDecoration(
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image : AssetImage("assets/images/ahmad_13.jpg" ,
-
                                       ),
                                     )
-                                ),
+                                ),//*/
                                 child: FutureBuilder(
                                     future: http.get(timeUrl),
                                     builder: (context, snapshot) {

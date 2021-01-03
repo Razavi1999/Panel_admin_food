@@ -84,12 +84,14 @@ class _OrderPageState extends State<OrderPage> {
             _datetime = '$year-$month-$day';
             print('time' + _datetime);
           });
-        });
+        }
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(
           "لیست غذاهای موجود امروز",
@@ -119,11 +121,11 @@ class _OrderPageState extends State<OrderPage> {
         },
         child: Container(
           decoration:BoxDecoration(
-            image: DecorationImage(
+            /*image: DecorationImage(
               fit: BoxFit.cover,
               image : AssetImage("assets/images/ahmad_12.jpg",
               ),
-            )
+            )*/
           ),
           child: FutureBuilder(
             future: getToken(),

@@ -294,7 +294,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             ' فروش یافته: ${replaceFarsiNumber((listFood[index].totalCount - listFood[index].remainingCount).toString())}',
                                             textDirection: TextDirection.rtl,
                                             style: PersianFonts.Shabnam.copyWith(
-                                              color: Colors.green,
+                                              color: Colors.red,
                                                 fontWeight: FontWeight.w900
                                             ),
                                           ),
@@ -307,7 +307,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             '  باقی مانده  ${replaceFarsiNumber( listFood[index].remainingCount.toString())} ',
                                             textDirection: TextDirection.rtl,
                                             style: PersianFonts.Shabnam.copyWith(
-                                                color: Colors.red,
+                                                color: Colors.green,
                                                 fontWeight: FontWeight.w900
                                             ),
                                           ),

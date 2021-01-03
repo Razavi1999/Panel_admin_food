@@ -32,6 +32,7 @@ class _UsersScreenState extends State<UsersScreen> {
     token = args['token'];
     //token = 'Token dd324d7d0d603c13c34647ddf59ebb176db085c1';
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       body: usersList(),
     );
   }
@@ -110,7 +111,7 @@ class _UsersScreenState extends State<UsersScreen> {
                         shape:  RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
-                        color: Color.fromRGBO(216, 228 , 240, 50),
+                        //color: Color.fromRGBO(216, 228 , 240, 50),
 
                         //color: Colors.white,
                         margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),

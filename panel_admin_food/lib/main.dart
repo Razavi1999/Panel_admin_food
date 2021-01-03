@@ -11,6 +11,7 @@ import 'screens/registeration_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/food_screen.dart';
 import 'screens/request_screen.dart';
+import 'screens/guide_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: LoginScreen.id,
       routes: {
+        guide.id   :(context) => guide(),
         RegisterationScreen.id: (context) => RegisterationScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         HomeScreen.id :(context) => HomeScreen(),

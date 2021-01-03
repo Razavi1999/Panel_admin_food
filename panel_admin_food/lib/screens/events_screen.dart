@@ -40,6 +40,7 @@ class _EventScreenState extends State<EventScreen> {
     token = args['token'];
     //token = 'Token dd324d7d0d603c13c34647ddf59ebb176db085c1';
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       body: selectedBodyItem(),
       floatingActionButton: Visibility(
         child: FloatingActionButton(
@@ -294,7 +295,7 @@ class _EventScreenState extends State<EventScreen> {
   Widget eventBuilder(String imageUrl, String eventName, int remainingCapacity,
       int eventId, bool imageIsAvailable) {
     return Card(
-      color: Color.fromRGBO(216, 228 , 240, 50),
+      //color: Color.fromRGBO(216, 228 , 240, 50),
       shape:  RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -315,14 +316,23 @@ class _EventScreenState extends State<EventScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Text(
-                        eventName,
-                        textAlign: TextAlign.right,
-                        style: PersianFonts.Shabnam.copyWith(
-                                color: kPrimaryColor,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              )
+                    RichText(
+                      textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
+                      //textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                      strutStyle: StrutStyle(fontSize: 20.0),
+
+                        text: TextSpan(
+                            text: eventName ,
+                            style: PersianFonts.Shabnam.copyWith(
+                              color: kPrimaryColor,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            )
+                        ),
+
+
                     ),
 
                     SizedBox(
@@ -402,7 +412,7 @@ class _EventScreenState extends State<EventScreen> {
   Widget cartableBuilder(String imageUrl, String eventName,
       int remainingCapacity, int eventId, bool imageIsAvailable) {
     return Card(
-      color: Color.fromRGBO(216, 228 , 240, 50),
+      color: Colors.white,
       shape:  RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -414,7 +424,7 @@ class _EventScreenState extends State<EventScreen> {
         },
         child: Padding(
           padding:
-          const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          const EdgeInsets.symmetric(horizontal: 1.0, vertical: 10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -423,14 +433,21 @@ class _EventScreenState extends State<EventScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Text(
-                        eventName,
-                        textAlign: TextAlign.right,
-                        style: PersianFonts.Shabnam.copyWith(
-                          color: kPrimaryColor,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        )
+                    RichText(
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                      strutStyle: StrutStyle(fontSize: 20.0),
+                      text: TextSpan(
+                          text: eventName,
+                          style: PersianFonts.Shabnam.copyWith(
+                              //fontSize: 16.0,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 15,
+                              color: kPrimaryColor
+                          )
+                      ),
+
                     ),
 
                     SizedBox(
@@ -470,7 +487,7 @@ class _EventScreenState extends State<EventScreen> {
                 ),
               ),
               SizedBox(
-                width: 50.0,
+                width: 10.0,
               ),
               Container(
                 height: 110.0,
@@ -627,7 +644,7 @@ class _EventScreenState extends State<EventScreen> {
       ),
       elevation: 12,
       shadowColor: Colors.grey[400],
-      color: Color.fromRGBO(216, 228 , 240, 50),
+      //color: Color.fromRGBO(216, 228 , 240, 50),
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       //margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: Align(

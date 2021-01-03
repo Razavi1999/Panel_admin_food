@@ -65,10 +65,55 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+
+
               Column(
                 children: <Widget>[
                   SizedBox(
-                    height: size.height /9,
+                    height: size.height /19,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+
+                      Image.asset(
+                        "assets/images/elmos_3.png",
+                        width: 72,
+                      ),
+
+                      SizedBox(
+                        height: 4,
+                      ),
+
+                      Image.asset(
+                        "assets/images/logo.png",
+                        width: 72,
+
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 14,),
+
+                  Text(
+                    "اپلیکیشن جامع دانشگاه من" ,
+                      style: PersianFonts.Shabnam.copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white
+                    ),
+                  ),
+
+                  SizedBox(height: 14,),
+                  Text(
+                    " خوش آمدید " + lastName + " " + firstName,
+                    //textDirection: TextDirection.rtl,
+                    style: PersianFonts.Shabnam.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      //color: Colors.white
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 16, right: 16),
@@ -98,27 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-
-                        Row(
-                          children: [
-                            IconButton(
-                              alignment: Alignment.topCenter,
-                              icon: Image.asset(
-                                "assets/images/shut_down.png",
-                                width: size.width * 0.1,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  showlogoutDialog();
-                                });
-                              },
-                            ),
-
-
-
-
-                          ],
-                        )
                       ],
                     ),
                   ),

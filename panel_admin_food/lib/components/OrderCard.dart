@@ -29,11 +29,6 @@ class _OrderCardState extends State<OrderCard> {
       onTap: widget.onPressed,
       child: Container(
         decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey[200]
-            )
-          ]
         ),
         width: MediaQuery.of(context).size.width,
         child: Card(
@@ -99,9 +94,6 @@ class _OrderCardState extends State<OrderCard> {
                       SizedBox(
                         height: 5.0,
                       ),
-
-
-
 
 
                       SizedBox(

@@ -69,24 +69,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             Map result =
                 convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
             print(result);
-            //print(result[''])
 
-            // name = result['name'] ?? 'name';
-            // startTime = result['start_time'] ?? 's_time';
-            // endTime = result['end_time']  ?? 'e_time';
-            // organizer = result['organizer'] ?? 'organizer';
-            // description = result['description'] ?? 'desc';
-            // holdType = result['hold-type'] ?? 'h_type';
-            // cost = result['cost'] ?? 0;
-            // remainingCapacity = result['remaining_capacity'] ?? 0;
-            // location = result['location'] ?? 'loc';
-            // if(result['image'] == null){
-            //   print('hell');
-            // }
-            // else {
-            //   print('hell2');
-            // }
-            //var res = result['start_time'];
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -94,17 +77,19 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     child: Center(
                       child: Banner(
                         color: Colors.purple.shade300,
-                        message: result['cost'].toString(),
+                        message: replaceFarsiNumber(result['cost'].toString()),
                         location: BannerLocation.bottomEnd,
-                        child: FadeInImage(
-                          height: 150,
-                          width: 150,
-                          fit: BoxFit.cover,
-                          placeholder: AssetImage(
-                              'assets/images/book-1.png'),
-                          image: (result['image'] != null)?NetworkImage(
-                            '$baseUrl' + result['image']):AssetImage(
-                              'assets/images/book-1.png'),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: FadeInImage(
+                            height: 200,
+                            width: 200,
+                            fit: BoxFit.cover,
+                            placeholder: AssetImage('assets/images/book-1.png'),
+                            image: (result['image'] != null)
+                                ? NetworkImage('$baseUrl' + result['image'])
+                                : AssetImage('assets/images/book-1.png'),
+                          ),
                         ),
                       ),
                     ),
@@ -131,6 +116,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         Text(
                           'نام رویداد',
                           style: PersianFonts.Shabnam.copyWith(
+                              fontWeight: FontWeight.w900,
                               //color: kPrimaryColor,
                               fontSize: 28),
                           textDirection: TextDirection.rtl,
@@ -151,6 +137,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           result['name'],
                           textDirection: TextDirection.rtl,
                           style: PersianFonts.Shabnam.copyWith(
+                              fontWeight: FontWeight.bold,
                               color: kPrimaryColor,
                               fontSize: 15
                           ),
@@ -170,30 +157,120 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         SizedBox(
                           height: 20,
                         ),
-
                         Text(
-                          replaceFarsiNumber(result['cost'].toString()) + ' تومان',
+                          replaceFarsiNumber(result['cost'].toString()) +
+                              ' تومان',
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.right,
                           style: PersianFonts.Shabnam.copyWith(
+                              fontWeight: FontWeight.bold,
                               color: kPrimaryColor,
-                              fontSize: 15
-                          ),
+                              fontSize: 15),
                         ),
-
                         Text(
                           'هزینه شرکت در رویداد  ',
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.right,
                           style: PersianFonts.Shabnam.copyWith(
                               //color: kPrimaryColor,
-                              fontSize: 20
+                              fontSize: 18,
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
-
+                        SizedBox(
+                          height: 20,
+                        )
                       ],
                     ),
                   ),
+
+                  Padding(
+                    padding: EdgeInsets.only(right: 1, left: 5),
+                    child: Row(
+                      children: [
+                        Text(
+                          ' رویداد به صورت ${result['hold_type'] == 'Online' ? 'مجازی' : 'حضوری'} برگزار خواهد شد!  ',
+                          textDirection: TextDirection.rtl,
+                          style: PersianFonts.Shabnam.copyWith(
+                              fontWeight: FontWeight.bold,
+                              //color: kPrimaryColor,
+                              fontSize: 17),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Icon(
+                          Icons.accessibility,
+                          color: kPrimaryColor,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 15,
+                  ),
+
+                  ///*
+                  Padding(
+                    padding: EdgeInsets.only(
+                        right: 35 ,
+                        //left: 220
+                    ), //*/
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${replaceFarsiNumber(getTime(result['start_time']))}',
+                          textDirection: TextDirection.rtl,
+                          //textAlign: TextAlign.right,
+                          style: PersianFonts.Shabnam.copyWith(
+                              fontWeight: FontWeight.w100,
+                              //color: kPrimaryColor,
+                              fontSize: 17),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.access_alarm,
+                          color: kPrimaryColor,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: 35
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${result['location']}',
+                          textDirection: TextDirection.rtl,
+                          textAlign: TextAlign.end,
+                          style: PersianFonts.Shabnam.copyWith(
+                              fontWeight: FontWeight.w100,
+                              //color: kPrimaryColor,
+                              fontSize: 17),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.place,
+                          color: kPrimaryColor,
+                        ),
+                      ],
+                    ),
+                  ),
+
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 10,
@@ -211,19 +288,18 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             vertical: 5,
                           ),
                           child: Text(
-                            'درباره رویداد  ',
+                            'درباره رویداد',
                             style: PersianFonts.Shabnam.copyWith(
+                                fontWeight: FontWeight.w900,
                                 //color: kPrimaryColor,
                                 fontSize: 28),
                             textDirection: TextDirection.rtl,
                             textAlign: TextAlign.right,
                           ),
                         ),
-
                         SizedBox(
                           height: 10,
                         ),
-
                       ],
                     ),
                   ),
@@ -237,53 +313,35 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       children: [
                         Flexible(
                           child: RichText(
-                            overflow: TextOverflow.ellipsis,
+                            textDirection: TextDirection.rtl,
+                            //overflow: TextOverflow.ellipsis,
                             strutStyle: StrutStyle(fontSize: 12.0),
                             text: TextSpan(
                                 text: result['description'],
                                 style: PersianFonts.Shabnam.copyWith(
-                                  fontSize: 15,
-                                    color: kPrimaryColor
-                                )
-                            ),
+                                    fontSize: 15, color: kPrimaryColor)),
                           ),
                         ),
                       ],
                     ),
                   ),
 
-                  
                   SizedBox(
                     height: 50,
                   ),
 
                   Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 7.0),
-                      child: Text(
-                          ' منتظر حضور گرمتان هستیم در روز \n${replaceFarsiNumber(result['start_time']).substring(0,10)}',
-                          textDirection: TextDirection.rtl,
-
-                          style: PersianFonts.Shabnam.copyWith(
-                              color: kPrimaryColor,
-                              fontSize: 20
-                          )
-                      ),
-                    ),
-
-
-                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 7.0),
                     child: Text(
-                      ' رویداد به صورت ${result['hold_type'] == 'Online' ? 'مجازی' : 'حضوری'} برگزار خواهد شد!  ',
-                      textDirection: TextDirection.rtl,
-                      style: PersianFonts.Shabnam.copyWith(
-                          color: kPrimaryColor,
-                          fontSize: 20
-                      ),
-                    ),
+                        ' منتظر حضورتان هستیم در روز \n${replaceFarsiNumber(result['start_time']).substring(0, 10)}',
+                        textDirection: TextDirection.rtl,
+                        style: PersianFonts.Shabnam.copyWith(
+                            color: kPrimaryColor, fontSize: 20)),
                   ),
 
+                  SizedBox(
+                    height: 40,
+                  )
                 ],
               ),
             );
@@ -295,139 +353,25 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       ),
     );
   }
+  
+  String getTime(String date){
+    print("date : " + date);
+    date = date.substring(0,10);
+
+    List times = date.split('-');
+    Gregorian g = Gregorian(int.parse(times[0]) ,
+        int.parse(times[1]) ,
+        int.parse(times[2]));
+    Jalali j = g.toJalali();
+    print(j);
+
+    return '${j.day} / ${j.month} / ${j.year}';
+    
+    return j.toString().substring(7,19);
+  }
 
   Widget bodyContainer() {
     /*
-    // return SizedBox();
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Container(
-          //   child: Center(
-          //     child: FadeInImage(
-          //       height: 150,
-          //       width: 150,
-          //       fit: BoxFit.cover,
-          //       placeholder: AssetImage('assets/images/book-1.png'),
-          //       image: (image == null)
-          //           ? AssetImage('assets/images/book-1.png')
-          //           : NetworkImage(
-          //               '$baseUrl' + image,
-          //             ),
-          //     ),
-          //   ),
-          // ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 5,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'نام غذا',
-                  style: PersianFonts.Shabnam.copyWith(
-                      color: kPrimaryColor, fontSize: 28),
-                  textDirection: TextDirection.rtl,
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 30,
-              vertical: 0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  name,
-                  textDirection: TextDirection.rtl,
-                  style: PersianFonts.Shabnam.copyWith(
-                      color: kPrimaryColor, fontSize: 15),
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 30,
-              vertical: 0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  cost.toString() + ' تومان',
-                  textDirection: TextDirection.rtl,
-                  textAlign: TextAlign.right,
-                  style: PersianFonts.Shabnam.copyWith(
-                      color: kPrimaryColor, fontSize: 15),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 10,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 5,
-                  ),
-                  child: Text(
-                    'محتویات',
-                    style: PersianFonts.Shabnam.copyWith(
-                        color: kPrimaryColor, fontSize: 20),
-                    textDirection: TextDirection.rtl,
-                    textAlign: TextAlign.right,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 30,
-              vertical: 0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Flexible(
-                  child: RichText(
-                    overflow: TextOverflow.ellipsis,
-                    strutStyle: StrutStyle(fontSize: 12.0),
-                    text: TextSpan(
-                        text: description,
-                        style: PersianFonts.Shabnam.copyWith(
-                            color: kPrimaryColor)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 50,
-          ),
           ListView.builder(
             shrinkWrap: true,
             //itemCount: count,

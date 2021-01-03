@@ -220,6 +220,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
       'mobile_number': 091000000000,
       'role': 'manager',
     };
+
     try {
       http.Response result = await http.post(
         '$url/api/account/register',
@@ -313,7 +314,9 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
       prefs.setString('username', username);
       prefs.setString('first_name', last_name);
       prefs.setString('last_name', first_name);
-    } catch (e) {
+    }
+
+    catch (e) {
       print('error: ' + e);
     }
   }

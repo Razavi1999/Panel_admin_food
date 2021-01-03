@@ -74,16 +74,19 @@ class _RequestScreenState extends State<RequestScreen> {
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.search,
                               textDirection: TextDirection.rtl,
+                              textAlign: TextAlign.end,
+                              textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.search),
                                   border: InputBorder.none,
                                   contentPadding:
                                   EdgeInsets.symmetric(horizontal: 15),
-                                  hintText: "                                                   جستجو" ,
+                                  hintText: " جستجو" ,
 
                               ),
                             ),
                           ),
-                          Material(
+                          /*Material(
                             type: MaterialType.transparency,
                             shape: CircleBorder(),
                             child: IconButton(
@@ -98,7 +101,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                 Navigator.pop(context);
                               },
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
@@ -219,7 +222,9 @@ class _RequestScreenState extends State<RequestScreen> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('باشه!'),
+            child: Text('!باشه' ,
+              textDirection: TextDirection.rtl,
+            ),
           ),
         ),
       );
@@ -232,14 +237,14 @@ class _RequestScreenState extends State<RequestScreen> {
           title: Text('غذا فروخته شد', textDirection: TextDirection.rtl,
             textAlign: TextAlign.center,
             style: PersianFonts.Shabnam.copyWith(
-
+              color: kPrimaryColor
             ),
           ),
           content: FlatButton(
             onPressed: () {
               Navigator.pop(context, true);
             },
-            child: Text('باشه!' ,
+            child: Text('!باشه' ,
               style: PersianFonts.Shabnam.copyWith(
 
               ),
@@ -247,7 +252,10 @@ class _RequestScreenState extends State<RequestScreen> {
           ),
         ),
       );
-      Navigator.pop(context);
+      setState(() {
+
+      });
+
     } else {}
   }
 }
