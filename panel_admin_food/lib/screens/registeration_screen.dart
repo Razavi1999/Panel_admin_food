@@ -362,32 +362,5 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
     showDialog(context: context, child: dialog);
   }
 
-//   _showDialog(String message) {
-//     AlertDialog dialog = AlertDialog(
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(20),
-//       ),
-//       content: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           SizedBox(height: 20,),
-//           Text(message, style: TextStyle(fontSize: 25),),
-//           // Row(
-//           //   children: [
-//           //     Expanded(
-//           //       child: Text('Done!'),
-//           //     ),
-//           //   ],
-//           // ),
-//           FlatButton(
-//             onPressed: () {
-//               Navigator.pop(context);
-//             },
-//             child: Text('Done!', style: TextStyle(color: kPrimaryColor),),
-//           ),
-//         ],
-//       ),
-//     );
-//     showDialog(context: context, child: dialog);
-//   }
+
 }
