@@ -4,6 +4,7 @@ import 'package:awesome_card/credit_card.dart';
 import 'package:awesome_card/style/card_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
@@ -471,7 +472,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             );
           } else
             return Center(
-              child: CircularProgressIndicator(),
+              child: SpinKitWave(
+                color: kPrimaryColor,
+              ),
             );
         },
       ),

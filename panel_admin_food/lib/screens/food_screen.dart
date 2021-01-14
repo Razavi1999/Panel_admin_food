@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jalali_calendar/jalali_calendar.dart';
 import 'package:panel_admin_food_origin/components/brightness_switch.dart';
 import 'package:shamsi_date/shamsi_date.dart';
@@ -15,7 +16,7 @@ import 'new_food_screen.dart';
 import 'request_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:persian_date/persian_date.dart';
-
+import 'EmptyEffect.dart';
 
 
 class OrderPage extends StatefulWidget {
@@ -26,14 +27,15 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-
   String token, url = '$baseUrl/api/food/admin/serve/all/';
   int userId;
+
   ////////////////////////////
   DateTime selectedDate = DateTime.now();
   PersianDate persianDate = PersianDate(format: "yyyy/mm/dd  \n DD  , d  MM  ");
   String _datetime = '';
   String _format = 'yyyy-mm-dd';
+
   ////////////////////////////
 
   getToken() async {
@@ -50,7 +52,7 @@ class _OrderPageState extends State<OrderPage> {
     return true;
   }
 
-  saveToSharedPreferences(String foodName, int count) async{
+  saveToSharedPreferences(String foodName, int count) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map map = {
       'foodName': foodName,
@@ -72,21 +74,20 @@ class _OrderPageState extends State<OrderPage> {
           style: TextStyle(color: Colors.cyan),
         ),
         dateFormat: _format, onChanged: (year, month, day) {
-          if (!showTitleActions) {
-            _datetime = '$year-$month-$day';
-          }
-        }, onConfirm: (year, month, day) {
-          setState(() {});
-          Jalali j = Jalali(year, month, day);
-          selectedDate = j.toDateTime();
-          print('dateTime is: $selectedDate');
-          _datetime = '$year-$month-$day';
-          setState(() {
-            _datetime = '$year-$month-$day';
-            print('time' + _datetime);
-          });
-        }
-        );
+      if (!showTitleActions) {
+        _datetime = '$year-$month-$day';
+      }
+    }, onConfirm: (year, month, day) {
+      setState(() {});
+      Jalali j = Jalali(year, month, day);
+      selectedDate = j.toDateTime();
+      print('dateTime is: $selectedDate');
+      _datetime = '$year-$month-$day';
+      setState(() {
+        _datetime = '$year-$month-$day';
+        print('time' + _datetime);
+      });
+    });
   }
 
   @override
@@ -94,14 +95,12 @@ class _OrderPageState extends State<OrderPage> {
     return Scaffold(
       //backgroundColor: Colors.grey[200],
       appBar: AppBar(
-
         title: Text(
           "لیست غذاهای موجود",
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.center,
           style: PersianFonts.Shabnam.copyWith(
-              color: Colors.white, fontSize: 20.0
-          ),
+              color: Colors.white, fontSize: 20.0),
         ),
         leading: IconButton(
           icon: Icon(
@@ -113,7 +112,6 @@ class _OrderPageState extends State<OrderPage> {
             _showDatePicker();
           },
         ),
-
         backgroundColor: kPrimaryColor,
         elevation: 0.0,
         centerTitle: true,
@@ -124,13 +122,13 @@ class _OrderPageState extends State<OrderPage> {
           return _refresh();
         },
         child: Container(
-          decoration:BoxDecoration(
-            /*image: DecorationImage(
+          decoration: BoxDecoration(
+              /*image: DecorationImage(
               fit: BoxFit.cover,
               image : AssetImage("assets/images/ahmad_12.jpg",
               ),
             )*/
-          ),
+              ),
           child: FutureBuilder(
             future: getToken(),
             builder: (context, snapshot) {
@@ -159,18 +157,13 @@ class _OrderPageState extends State<OrderPage> {
                       var jsonResponse = convert
                           .jsonDecode(convert.utf8.decode(response.bodyBytes));
 
-
                       List<Map> mapList = [];
                       int count = 0;
 
-
-
-                      for (Map map in jsonResponse)
-                      {
+                      for (Map map in jsonResponse) {
                         count++;
                         mapList.add(map);
                       }
-
 
                       if (count == 0) {
                         return Center(
@@ -180,22 +173,27 @@ class _OrderPageState extends State<OrderPage> {
                             children: [
                               Text(
                                 'غذایی سرو نشده !!!',
-                                style: PersianFonts.Shabnam.copyWith(fontSize: 20),
+                                style:
+                                    PersianFonts.Shabnam.copyWith(fontSize: 20),
                                 textDirection: TextDirection.rtl,
                               ),
                               SizedBox(
                                 height: 10,
                               ),
                               FlatButton.icon(
-                                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 10),
                                 color: kPrimaryColor,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 onPressed: () {
                                   // showCalendarDialog();
                                   _showDatePicker();
                                 },
-                                label: Text('تقویم',
-                                  style: PersianFonts.Shabnam.copyWith(color: Colors.white),
+                                label: Text(
+                                  'تقویم',
+                                  style: PersianFonts.Shabnam.copyWith(
+                                      color: Colors.white),
                                 ),
                                 icon: Icon(
                                   Icons.calendar_today,
@@ -210,22 +208,21 @@ class _OrderPageState extends State<OrderPage> {
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: count,
-
                         itemBuilder: (context, index) {
                           //print("maplist : " + mapList.toString());
 
                           // print('salam : ${mapList[index]['start_serve_time']}');
 
-                          Map<String , double> my_map = Map();
+                          Map<String, double> my_map = Map();
 
-
-                            my_map['${mapList[index]['start_serve_time']}'] = double.parse(mapList[index]['remaining_count'].toString());
-                            print('my_map' + my_map.toString());
-                            print("Hi !!!");
-
+                          my_map['${mapList[index]['start_serve_time']}'] =
+                              double.parse(
+                                  mapList[index]['remaining_count'].toString());
+                          print('my_map' + my_map.toString());
+                          print("Hi !!!");
 
                           return OrderCard(
-                            data: my_map ,
+                            data: my_map,
                             name: mapList[index]['name'],
                             cost: mapList[index]['cost'],
                             description: mapList[index]['description'],
@@ -241,7 +238,10 @@ class _OrderPageState extends State<OrderPage> {
                       );
                       return SizedBox();
                     } else {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                          child: SpinKitWave(
+                        color: kPrimaryColor,
+                      ));
                     }
                   },
                 );
@@ -252,12 +252,24 @@ class _OrderPageState extends State<OrderPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          _navigateToNewFoodScreen();
-        },
+      floatingActionButton: EmptyEffect(
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _navigateToNewFoodScreen();
+          },
+        ),
+        borderColor: Colors.red,
+        outermostCircleStartRadius: 20,
+        outermostCircleEndRadius: 175,
+        numberOfCircles: 4,
+        animationTime: Duration(seconds: 5),
+        delay: Duration(seconds: 6),
+        gap: 30,
+        borderWidth: 20,
+        startOpacity: 0.3,
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         child: Row(
@@ -332,8 +344,5 @@ class _OrderPageState extends State<OrderPage> {
     await Navigator.pushNamed(context, NewFoodScreen.id);
     setState(() {});
   }
-
-
-
-
 }
+
