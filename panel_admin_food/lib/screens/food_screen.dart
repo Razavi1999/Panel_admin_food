@@ -17,6 +17,7 @@ import 'request_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:persian_date/persian_date.dart';
 import 'EmptyEffect.dart';
+import 'package:flutter_gifimage/flutter_gifimage.dart';
 
 
 class OrderPage extends StatefulWidget {
@@ -171,6 +172,11 @@ class _OrderPageState extends State<OrderPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              GifImage(
+                                controller: controller,
+                                image: AssetImage("images/animate.gif"),
+                              ),
+
                               Text(
                                 'غذایی سرو نشده !!!',
                                 style:
@@ -259,7 +265,7 @@ class _OrderPageState extends State<OrderPage> {
             _navigateToNewFoodScreen();
           },
         ),
-        borderColor: Colors.red,
+        borderColor: kPrimaryColor,
         outermostCircleStartRadius: 20,
         outermostCircleEndRadius: 175,
         numberOfCircles: 4,
