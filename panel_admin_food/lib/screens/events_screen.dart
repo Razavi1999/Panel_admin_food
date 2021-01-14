@@ -8,6 +8,7 @@ import 'package:panel_admin_food_origin/constants.dart';
 import 'package:panel_admin_food_origin/screens/event_details_screen.dart';
 import 'package:panel_admin_food_origin/screens/users_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 String usersUrl = '$baseUrl/api/event/admin/auth/all/';
 String eventsUrl = '$baseUrl/api/event/admin/requests/all/';
@@ -105,7 +106,8 @@ class _EventScreenState extends State<EventScreen> {
               },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                labelText: '                                                  جستجو',
+                labelText:
+                    '                                                  جستجو',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -188,8 +190,8 @@ class _EventScreenState extends State<EventScreen> {
             height: 40,
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: TextField(
-              textAlign: TextAlign.right,
-              textDirection: TextDirection.rtl,
+              //textAlign: TextAlign.right,
+              //textDirection: TextDirection.rtl,
               controller: eventController,
               onChanged: (value) {
                 eventSearch = eventController.text;
@@ -197,7 +199,8 @@ class _EventScreenState extends State<EventScreen> {
               },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                labelText: '                                                  جستجو',
+                labelText:
+                    '                                                  جستجو',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -252,6 +255,7 @@ class _EventScreenState extends State<EventScreen> {
                         '$baseUrl${mapList[index]['image']}',
                         mapList[index]['name'],
                         mapList[index]['remaining_capacity'],
+                        //mapList[index][''],
                         mapList[index]['event_id'],
                         (mapList[index]['image'] == null) ? false : true,
                       );
@@ -294,20 +298,26 @@ class _EventScreenState extends State<EventScreen> {
 
   Widget eventBuilder(String imageUrl, String eventName, int remainingCapacity,
       int eventId, bool imageIsAvailable) {
+    Map<String, double> eventMap = Map();
+
+    eventMap = {
+      "صندلی خالی": double.parse((200 - remainingCapacity).toString()),
+      " صندلی پر": double.parse(remainingCapacity.toString()),
+    };
+
     return Card(
-      //color: Color.fromRGBO(216, 228 , 240, 50),
-      shape:  RoundedRectangleBorder(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       elevation: 12,
       child: InkWell(
-        onTap: (){
+        onTap: () {
           _navigateToEventDetailScreen(eventId, token);
         },
         child: Padding(
-          padding:
-          const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -323,31 +333,37 @@ class _EventScreenState extends State<EventScreen> {
                       overflow: TextOverflow.ellipsis,
                       strutStyle: StrutStyle(fontSize: 20.0),
 
-                        text: TextSpan(
-                            text: eventName ,
-                            style: PersianFonts.Shabnam.copyWith(
-                              color: kPrimaryColor,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            )
-                        ),
-
-
+                      text: TextSpan(
+                          text: eventName,
+                          style: PersianFonts.Shabnam.copyWith(
+                            color: kPrimaryColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
-
                     SizedBox(
                       height: 20.0,
                     ),
-
                     Text(
-                      replaceFarsiNumber(remainingCapacity.toString()) + ' :ظرفیت ',
+                      replaceFarsiNumber(remainingCapacity.toString()) +
+                          ' :ظرفیت ',
                       textAlign: TextAlign.right,
                       style: PersianFonts.Shabnam.copyWith(
-                          fontSize: 16.0,
-                          color: Colors.black87
-                      ),
+                          fontSize: 16.0, color: Colors.black87),
                     ),
-
+                    PieChart(
+                      dataMap: eventMap,
+                      legendFontColor: Colors.blueGrey[900],
+                      legendFontSize: 11.0,
+                      legendFontWeight: FontWeight.w900,
+                      animationDuration: Duration(milliseconds: 800),
+                      chartLegendSpacing: 7.0,
+                      chartRadius: MediaQuery.of(context).size.width / 7,
+                      showChartValuesInPercentage: true,
+                      showChartValues: true,
+                      //showChartValuesOutside: false,
+                      chartValuesColor: Colors.blueGrey[900].withOpacity(0.9),
+                    ),
                     SizedBox(
                       height: 10.0,
                     ),
@@ -355,20 +371,18 @@ class _EventScreenState extends State<EventScreen> {
                 ),
               ),
               SizedBox(
-                width: 50.0,
+                width: 10.0,
               ),
               Container(
                 height: 110.0,
                 width: 90.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10)
-                ),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
-
                   child: FadeInImage(
                     fit: BoxFit.cover,
-                    height: 80,
+                    //height: 80,
                     //width: 100,
                     placeholder: AssetImage('assets/images/junk.jpeg'),
                     image: NetworkImage(imageUrl),
@@ -400,8 +414,6 @@ class _EventScreenState extends State<EventScreen> {
 
     if (response.statusCode == 200)
       setState(() {});
-
-
     else {
       _showDialog('مشکلی پیش آمد');
       print(response.statusCode);
@@ -413,18 +425,17 @@ class _EventScreenState extends State<EventScreen> {
       int remainingCapacity, int eventId, bool imageIsAvailable) {
     return Card(
       color: Colors.white,
-      shape:  RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
       elevation: 12,
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: InkWell(
-        onTap: (){
+        onTap: () {
           _navigateToEventDetailScreen(eventId, token);
         },
         child: Padding(
-          padding:
-          const EdgeInsets.symmetric(horizontal: 1.0, vertical: 10.0),
+          padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -444,45 +455,45 @@ class _EventScreenState extends State<EventScreen> {
                               //fontSize: 16.0,
                               fontWeight: FontWeight.w900,
                               fontSize: 15,
-                              color: kPrimaryColor
-                          )
-                      ),
-
+                              color: kPrimaryColor)),
                     ),
-
                     SizedBox(
                       height: 10.0,
                     ),
 
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          color: Colors.green,
-                          onPressed: () {
-                            acceptEvent(eventId);
-                          },
-
-                          child: Text(
-                             ' قبول درخواست ',
-                            textAlign: TextAlign.right,
-                            style: PersianFonts.Shabnam.copyWith(
-                                fontSize: 14.0,
-                                color: Colors.white
+                    Row(
+                      children: [
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Switch(
+                              activeTrackColor: Colors.green,
+                              activeColor: Colors.green,
+                              inactiveTrackColor: Colors.white,
+                              value: true,
+                              onChanged: (value) {
+                                acceptEvent(eventId);
+                                success(context, 'رویداد با موفقیت اضافه شد');
+                              },
                             ),
                           ),
                         ),
-                      ),
+
+                        Text(
+                          'قبول درخواست : ',
+                          textAlign: TextAlign.end,
+                          textDirection: TextDirection.rtl,
+                          style: PersianFonts.Shabnam.copyWith(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black87
+                          ),
+                        ),
+                      ],
                     ),
 
-                    SizedBox(
-                      height: 10.0,
-                    ),
+
                   ],
                 ),
               ),
@@ -492,12 +503,10 @@ class _EventScreenState extends State<EventScreen> {
               Container(
                 height: 110.0,
                 width: 90.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10)
-                ),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
-
                   child: FadeInImage(
                     fit: BoxFit.cover,
                     //height: 50,
@@ -531,7 +540,8 @@ class _EventScreenState extends State<EventScreen> {
               },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                labelText: '                                                  جستجو',
+                labelText:
+                    '                                                  جستجو',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -576,8 +586,7 @@ class _EventScreenState extends State<EventScreen> {
                   mapList.add(map);
                   // print(map.toString());
                 }
-                if (userCount == 0)
-                  errorWidget('شخصی دارای مجوز وجود ندارد.');
+                if (userCount == 0) errorWidget('شخصی دارای مجوز وجود ندارد.');
 
                 return Expanded(
                   child: ListView.builder(
@@ -597,9 +606,7 @@ class _EventScreenState extends State<EventScreen> {
                     itemCount: userCount,
                   ),
                 );
-              }
-
-              else {
+              } else {
                 return Center(
                   child: Container(
                     margin: EdgeInsets.only(top: 100),
@@ -628,8 +635,6 @@ class _EventScreenState extends State<EventScreen> {
 
     if (response.statusCode == 200)
       setState(() {});
-
-
     else {
       print(response.statusCode);
       print(response.body);
@@ -639,7 +644,7 @@ class _EventScreenState extends State<EventScreen> {
   Widget userAuthBuilder(String username, String firstName, String lastName,
       bool status, Function onPressed) {
     return Card(
-      shape:  RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 12,
@@ -649,13 +654,10 @@ class _EventScreenState extends State<EventScreen> {
       //margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: Align(
         child: ListTile(
-          leading:
-          Text('$firstName $lastName',
+          leading: Text(
+            '$firstName $lastName',
             textAlign: TextAlign.center,
-            style: PersianFonts.Shabnam.copyWith(
-              fontSize: 16
-            ),
-
+            style: PersianFonts.Shabnam.copyWith(fontSize: 16),
           ),
           trailing: FlatButton(
             shape:
@@ -664,7 +666,8 @@ class _EventScreenState extends State<EventScreen> {
             onPressed: onPressed,
             child: Text(
               status ? 'گرفتن اجازه' : 'دادن اجازه',
-              style: PersianFonts.Shabnam.copyWith(color: Colors.white, fontSize: 15),
+              style: PersianFonts.Shabnam.copyWith(
+                  color: Colors.white, fontSize: 15),
             ),
           ),
         ),

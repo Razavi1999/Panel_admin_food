@@ -62,10 +62,18 @@ class GridDashboard extends StatelessWidget {
     dest:guide.id
   );
 
+  Items item5 = new Items(
+      title: "اساتید دانشکده" ,
+      subtitle: "زمینه های تحقیقاتی اساتید",
+      img: "assets/images/professor.jfif",
+      b : false,
+      dest:guide.id
+  );
+
 
   @override
   Widget build(BuildContext context) {
-    List<Items> myList = [item1, item2 , item3 , item4];
+    List<Items> myList = [item1, item2 , item5 , item4 , item3];
     var color = 0xff453658;
     return Flexible(
       child: GridView.count(

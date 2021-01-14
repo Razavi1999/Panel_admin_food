@@ -275,14 +275,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       showChartValues: true,
                                       //showChartValuesOutside: false,
                                       chartValuesColor: Colors.blueGrey[900].withOpacity(0.9),
-                                      //colorList: colorList,
-                                      //showLegends: true,
-                                      //decimalPlaces: 1,
-                                      //showChartValueLabel: true,
-                                      //chartValueFontSize: 12.0,
-                                      //chartValueFontWeight: FontWeight.bold,
-                                      //chartValueLabelColor: Colors.grey[200],
-                                      //initialAngle: 0,
                                     ),
 
                                     SingleChildScrollView(

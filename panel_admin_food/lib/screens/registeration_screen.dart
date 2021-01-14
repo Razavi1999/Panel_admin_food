@@ -1,6 +1,7 @@
 
 import 'dart:io';
 import 'dart:math';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -130,6 +131,9 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
                               password = value;
                             },
                           ),
+
+
+
                           RoundedButton(
                             color: kPrimaryColor,
                             text: "ثبت نام",
@@ -159,36 +163,40 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
 
   checkValidation(BuildContext context) async {
     if (email.length == 0) {
-      _showDialog(context, 'ایمیل را پر کنید');
+      //_showDialog(context, 'ایمیل را پر کنید');
+      open(context , 'ایمیل را پر کنید');
       return;
     }
+
     if (firstName.length == 0) {
-      _showDialog(context, 'نام خود را وارد کنید');
-      return;
+      //_showDialog(context, 'نام خود را وارد کنید');
+      open(context , 'انام خود را وارد کنید');
     }
+
     if (lastName.length == 0) {
-      _showDialog(context, 'نام خانوادگی خود را وارد کنید');
+      //_showDialog(context, 'نام خانوادگی خود را وارد کنید');
+      open(context , 'نام خانوادگی خود را وارد کنید');
       return;
     }
     if (sid.length != 8) {
-      _showDialog(context, 'فرمت شماره دانشجویی اشتباه است');
+      open(context, 'فرمت شماره دانشجویی اشتباه است');
       return;
     }
     try {
       int.parse(sid);
     } catch (e) {
-      _showDialog(context, 'فرمت شماره دانشجویی اشتباه است');
+      open(context, 'فرمت شماره دانشجویی اشتباه است');
       return;
     }
     try {
       int.parse(sid);
     } catch (e) {
       print('My Error: $e');
-      _showDialog(context, 'فرمت شماره دانشجویی اشتباه است');
+      open(context, 'فرمت شماره دانشجویی اشتباه است');
       return;
     }
     if (password.length == 0) {
-      _showDialog(context, 'رمز را پر کنید');
+      open(context, 'رمز را پر کنید');
       return;
     }
     count++;

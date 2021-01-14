@@ -1,4 +1,6 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:persian_fonts/persian_fonts.dart';
 
 const kPrimaryColor = Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
@@ -37,6 +39,45 @@ String replaceFarsiNumber(String input)
 
   return input;
 }
+
+void open(BuildContext context, String message) {
+  AwesomeDialog dialog = AwesomeDialog(
+      context: context,
+      dialogType: DialogType.ERROR,
+      animType: AnimType.RIGHSLIDE,
+      headerAnimationLoop: false,
+      title: 'خطا',
+
+      desc: message,
+      btnOkOnPress: () {},
+      btnOkIcon: Icons.cancel,
+      btnOkColor: Colors.red)..show();
+}
+
+void success(BuildContext context, String message) {
+  AwesomeDialog dialog = AwesomeDialog(
+      context: context,
+      dialogType: DialogType.SUCCES,
+      animType: AnimType.RIGHSLIDE,
+      headerAnimationLoop: false,
+      title: 'موفق شدید',
+      desc: message,
+      btnOkOnPress: () {},
+      btnOkIcon: Icons.check_circle,
+      btnOkColor: Colors.green)..show();
+}
+
+void info(BuildContext context, String message){
+      AwesomeDialog(
+        context: context,
+        headerAnimationLoop: true,
+        animType: AnimType.BOTTOMSLIDE,
+        title: 'اطلاعات',
+        desc: message,
+      )..show();
+}
+
+
 
 
 

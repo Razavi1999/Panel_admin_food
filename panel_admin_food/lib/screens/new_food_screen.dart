@@ -128,6 +128,15 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
         });
   }
 
+  Future _selectDate() async {
+    String picked = await jalaliCalendarPicker(
+        context: context,
+        convertToGregorian: false,
+        showTimePicker: true,
+        hore24Format: true);
+    if (picked != null) setState(() => _datetime = picked);
+  }
+
   @override
   @override
   Widget build(BuildContext context) {
@@ -135,7 +144,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
       return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              showCalendarDialog();
+              _selectDate();
             },
             child: Icon(Icons.calendar_today),
           ),
@@ -605,7 +614,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 ///*
                                 decoration:BoxDecoration(
                                     image: DecorationImage(
-                                      fit: BoxFit.cover,
+                                      colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                                      fit: BoxFit.fitHeight,
                                       image : AssetImage("assets/images/ahmad_13.jpg" ,
                                       ),
                                     )
@@ -740,28 +750,25 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
     if (isAddingCompletelyNewFood == true) {
       String food_name = foodController.text;
       if (food_name.length == 0) {
-        _showDialog(context, 'لطفا نام غذا را وارد کنید');
+        open(context, 'لطفا نام غذا را وارد کنید');
         return;
       }
       String food_ingredient = ingredientController.text;
       if (food_ingredient.length == 0) {
-        _showDialog(context, 'لطفا مواد اولیه غذا را وارد کنید');
+        open(context, 'لطفا مواد اولیه غذا را وارد کنید');
         return;
       }
       String price = priceController.text;
       if (price.length == 0) {
-        _showDialog(context, 'لطفا قیمت غذا را وارد کنید');
+        open(context, 'لطفا قیمت غذا را وارد کنید');
         return;
       }
-      /*
-      if (imageFile == null) {
-        _showDialog(context, 'لطفا عکسی برای غذای خود انتخاب کنید');
-        return;
-      }
-      */
-    } else {
+
+    }
+
+    else {
       if (selectedFoodId == null) {
-        _showDialog(context, 'لطفا ابتدا یک غذا را انتخاب کنید');
+        open(context, 'لطفا ابتدا یک غذا را انتخاب کنید');
         return;
       }
     }
@@ -774,8 +781,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
       }
     }
     if (flag == false) {
-      _showDialog(
-          context, 'لطفا حداقل برای یک بازه ی ساعتی تعداد غذا را وارد کنید.');
+      open(context, 'لطفا حداقل برای یک بازه ی ساعتی تعداد غذا را وارد کنید.');
       return;
     }
     addingTimes();
@@ -825,7 +831,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
         }
         var jsonRes = convert.jsonDecode(response.body);
         if (response.statusCode >= 400) {
-          _showDialog(context, 'مشکلی پیش آمد');
+          open(context, 'مشکلی پیش آمد');
           return;
         }
         selectedFoodId = jsonRes['food_id'];
@@ -853,10 +859,10 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
         body: convert.jsonEncode(map),
       );
       if (response.statusCode == 201) {
-        _showDialog(context, "غذا سرو شد");
+        success(context, "غذا سرو شد");
       } else {
         print(response.body);
-        _showDialog(context, "متاسفانه مشکلی پیش آمد.");
+        open(context, "متاسفانه مشکلی پیش آمد.");
       }
       setState(() {
         showSpinner = false;
@@ -869,39 +875,6 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
     }
   }
 
-  _showDialog(BuildContext context, String message) {
-    // Scaffold.of(context).showSnackBar(SnackBar(content: Text(message)));
-    AlertDialog dialog = AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            message,
-            style: PersianFonts.Shabnam.copyWith(fontSize: 20),
-            textAlign: TextAlign.start,
-            textDirection: TextDirection.rtl,
-          ),
-          FlatButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              'باشه!',
-              style: PersianFonts.Shabnam.copyWith(color: kPrimaryColor),
-              textDirection: TextDirection.rtl,
-            ),
-          ),
-        ],
-      ),
-    );
-    showDialog(context: context, child: dialog);
-  }
 
   selectFromGallery() {
     _pickImage(ImageSource.gallery);

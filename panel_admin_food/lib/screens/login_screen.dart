@@ -145,15 +145,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   checkValidation(BuildContext context) async {
     if (email.length == 0) {
-      _showDialog(context, 'ایمیل را پر کنید');
+      open(context, 'ایمیل را پر کنید');
       return;
     }
     if (!email.contains('@')) {
-      _showDialog(context, 'فرمت ایمیل اشتباه است');
+      open(context, 'فرمت ایمیل اشتباه است');
       return;
     }
     if (password.length == 0) {
-      _showDialog(context, 'رمز را پر کنید');
+      open(context, 'رمز را پر کنید');
       return;
     }
     setState(() {
@@ -191,13 +191,14 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           showSpinner = false;
         });
-        _showDialog(
-            context, 'همچین ایمیلی موجود نیست و یا رمز اشتباه است');
-      } else {
+        open(context, 'همچین ایمیلی موجود نیست و یا رمز اشتباه است');
+      }
+
+      else {
         setState(() {
           showSpinner = false;
         });
-        _showDialog(context, result.body);
+        open(context, result.body);
         print(result.statusCode);
         print(result.body);
       }
@@ -205,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         showSpinner = false;
       });
-      _showDialog(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
+      open(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
       print("My Error: $e");
     }
   }
@@ -232,40 +233,5 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  _showDialog(BuildContext context, String message) {
-    // Scaffold.of(context).showSnackBar(SnackBar(content: Text(message)));
-    AlertDialog dialog = AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            message,
-            textDirection: TextDirection.rtl,
-            textAlign: TextAlign.start,
-            style: PersianFonts.Shabnam.copyWith(fontSize: 20),
-          ),
-          FlatButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              'باشه!',
-              textDirection: TextDirection.rtl,
-              style: PersianFonts.Shabnam.copyWith(
-                  color: kPrimaryColor ,
-                  fontWeight: FontWeight.w600
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-    showDialog(context: context, child: dialog);
-  }
+
 }

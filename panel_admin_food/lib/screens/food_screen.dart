@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:jalali_calendar/jalali_calendar.dart';
+import 'package:panel_admin_food_origin/components/brightness_switch.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -91,10 +92,11 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      //backgroundColor: Colors.grey[200],
       appBar: AppBar(
+
         title: Text(
-          "لیست غذاهای موجود امروز",
+          "لیست غذاهای موجود",
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.center,
           style: PersianFonts.Shabnam.copyWith(
@@ -111,10 +113,12 @@ class _OrderPageState extends State<OrderPage> {
             _showDatePicker();
           },
         ),
+
         backgroundColor: kPrimaryColor,
         elevation: 0.0,
         centerTitle: true,
       ),
+
       body: RefreshIndicator(
         onRefresh: () {
           return _refresh();
