@@ -9,6 +9,7 @@ import 'package:panel_admin_food_origin/screens/event_details_screen.dart';
 import 'package:panel_admin_food_origin/screens/users_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'EmptyEffect.dart';
 
 String usersUrl = '$baseUrl/api/event/admin/auth/all/';
 String eventsUrl = '$baseUrl/api/event/admin/requests/all/';
@@ -153,7 +154,37 @@ class _EventScreenState extends State<EventScreen> {
                   // print(map.toString());
                 }
                 if (cartableCount == 0) {
-                  return errorWidget('ایوندی وجود ندارد.');
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 40,
+                      ),
+                      EmptyEffect(
+                        child: Icon(
+                          Icons.folder,
+                          size: 45,
+                          color: Colors.purple,
+                        ),
+                        borderColor: kPrimaryColor,
+                        outermostCircleStartRadius: 15,
+                        outermostCircleEndRadius: 175,
+                        numberOfCircles: 4,
+                        animationTime: Duration(seconds: 5),
+                        delay: Duration(seconds: 1),
+                        gap: 30,
+                        borderWidth: 20,
+                        startOpacity: 0.3,
+                      ),
+                      Text('ایوندی وجود ندارد' ,
+                        style: PersianFonts.Shabnam.copyWith(
+                          color: kPrimaryColor,
+                          fontSize: 25,
+
+
+                        ),
+                      )
+                    ],
+                  );
                 }
                 return Expanded(
                   child: ListView.builder(
@@ -245,7 +276,37 @@ class _EventScreenState extends State<EventScreen> {
                   // print(map.toString());
                 }
                 if (eventCount == 0) {
-                  return errorWidget('ایوندی وجود ندارد.');
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 40,
+                      ),
+                      EmptyEffect(
+                        child: Icon(
+                          Icons.folder,
+                          size: 45,
+                          color: Colors.purple,
+                        ),
+                        borderColor: kPrimaryColor,
+                        outermostCircleStartRadius: 15,
+                        outermostCircleEndRadius: 175,
+                        numberOfCircles: 4,
+                        animationTime: Duration(seconds: 5),
+                        delay: Duration(seconds: 1),
+                        gap: 30,
+                        borderWidth: 20,
+                        startOpacity: 0.3,
+                      ),
+                      Text('ایوندی وجود ندارد' ,
+                        style: PersianFonts.Shabnam.copyWith(
+                          color: kPrimaryColor,
+                          fontSize: 25,
+
+
+                        ),
+                      )
+                    ],
+                  );
                 }
                 return Expanded(
                   child: ListView.builder(
@@ -460,13 +521,13 @@ class _EventScreenState extends State<EventScreen> {
                     SizedBox(
                       height: 10.0,
                     ),
-
                     Row(
                       children: [
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Switch(
                               activeTrackColor: Colors.green,
                               activeColor: Colors.green,
@@ -479,7 +540,6 @@ class _EventScreenState extends State<EventScreen> {
                             ),
                           ),
                         ),
-
                         Text(
                           'قبول درخواست : ',
                           textAlign: TextAlign.end,
@@ -487,13 +547,10 @@ class _EventScreenState extends State<EventScreen> {
                           style: PersianFonts.Shabnam.copyWith(
                               fontSize: 16.0,
                               fontWeight: FontWeight.normal,
-                              color: Colors.black87
-                          ),
+                              color: Colors.black87),
                         ),
                       ],
                     ),
-
-
                   ],
                 ),
               ),

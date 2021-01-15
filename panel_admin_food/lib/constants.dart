@@ -50,6 +50,7 @@ void open(BuildContext context, String message) {
       title: 'خطا',
 
       desc: message,
+
       btnOkOnPress: () {},
       btnOkIcon: Icons.cancel,
       btnOkColor: Colors.red)..show();

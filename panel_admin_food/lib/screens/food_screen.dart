@@ -30,6 +30,10 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   String token, url = '$baseUrl/api/food/admin/serve/all/';
   int userId;
+  /*GifController controller= GifController(
+    //vsync: 3,
+    //value:
+  );*/
 
   ////////////////////////////
   DateTime selectedDate = DateTime.now();
@@ -172,10 +176,26 @@ class _OrderPageState extends State<OrderPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              GifImage(
-                                controller: controller,
-                                image: AssetImage("images/animate.gif"),
+                              EmptyEffect(
+                                child: Icon(
+                                  Icons.folder,
+                                  size: 55,
+                                  color: kPrimaryColor,
+                                ),
+                                borderColor: kPrimaryColor,
+                                outermostCircleStartRadius: 20,
+                                outermostCircleEndRadius: 175,
+                                numberOfCircles: 4,
+                                animationTime: Duration(seconds: 5),
+                                delay: Duration(seconds: 6),
+                                gap: 30,
+                                borderWidth: 20,
+                                startOpacity: 0.3,
                               ),
+                              /*GifImage(
+                                controller: controller,
+                                image: AssetImage("images/giphy.webp"),
+                              ),*/
 
                               Text(
                                 'غذایی سرو نشده !!!',
