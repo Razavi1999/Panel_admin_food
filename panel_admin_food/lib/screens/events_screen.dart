@@ -159,22 +159,14 @@ class _EventScreenState extends State<EventScreen> {
                       SizedBox(
                         height: 40,
                       ),
-                      EmptyEffect(
-                        child: Icon(
+
+                      Icon(
                           Icons.folder,
                           size: 45,
                           color: Colors.purple,
                         ),
-                        borderColor: kPrimaryColor,
-                        outermostCircleStartRadius: 15,
-                        outermostCircleEndRadius: 175,
-                        numberOfCircles: 4,
-                        animationTime: Duration(seconds: 5),
-                        delay: Duration(seconds: 1),
-                        gap: 30,
-                        borderWidth: 20,
-                        startOpacity: 0.3,
-                      ),
+
+
                       Text('ایوندی وجود ندارد' ,
                         style: PersianFonts.Shabnam.copyWith(
                           color: kPrimaryColor,

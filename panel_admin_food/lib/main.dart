@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:panel_admin_food_origin/Professor/faculty.dart';
 import 'package:panel_admin_food_origin/screens/event_details_screen.dart';
 import 'package:panel_admin_food_origin/screens/events_screen.dart';
 import 'package:panel_admin_food_origin/screens/users_screen.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: LoginScreen.id,
       routes: {
+        Faculty.id : (context) => Faculty(),
         guide.id   :(context) => guide(),
         RegisterationScreen.id: (context) => RegisterationScreen(),
         LoginScreen.id: (context) => LoginScreen(),

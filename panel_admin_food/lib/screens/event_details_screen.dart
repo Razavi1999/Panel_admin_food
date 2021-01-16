@@ -118,15 +118,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          'نام رویداد',
-                          style: PersianFonts.Shabnam.copyWith(
-                              fontWeight: FontWeight.w900,
-                              //color: kPrimaryColor,
-                              fontSize: 28),
-                          textDirection: TextDirection.rtl,
-                          textAlign: TextAlign.right,
-                        ),
                       ],
                     ),
                   ),
@@ -144,7 +135,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           style: PersianFonts.Shabnam.copyWith(
                               fontWeight: FontWeight.bold,
                               color: kPrimaryColor,
-                              fontSize: 15
+                              fontSize: 28
                           ),
                           textAlign: TextAlign.right,
                         ),
@@ -198,7 +189,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       child: CreditCard(
                         cardExpiry: 'دیدار ما : ${replaceFarsiNumber(getTime(result['start_time']))}',
                         cvv: "cvv",
-                        showBackSide: false,
+                        showBackSide: true,
                         frontBackground: CardBackgrounds.black,
                         backBackground: CardBackgrounds.white,
                         showShadow: true,

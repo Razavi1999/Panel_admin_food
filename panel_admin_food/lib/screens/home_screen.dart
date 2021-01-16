@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: size.height * 0.05,
+                    height: size.height * 0.5 * 0.001,
                   ),
 
                   GridDashboard(context, userId, token, username, firstName, lastName),
