@@ -23,17 +23,25 @@ import 'package:flutter_gifimage/flutter_gifimage.dart';
 class OrderPage extends StatefulWidget {
   static String id = 'Order_screen';
 
+
+
   @override
   _OrderPageState createState() => _OrderPageState();
 }
 
-class _OrderPageState extends State<OrderPage> {
+class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixin{
   String token, url = '$baseUrl/api/food/admin/serve/all/';
   int userId;
-  /*GifController controller= GifController(
-    //vsync: 3,
-    //value:
-  );*/
+  GifController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = GifController(
+      vsync: this, // the SingleTickerProviderStateMixin
+      duration: Duration(milliseconds: 1000)
+    );
+  }
 
   ////////////////////////////
   DateTime selectedDate = DateTime.now();
@@ -41,7 +49,11 @@ class _OrderPageState extends State<OrderPage> {
   String _datetime = '';
   String _format = 'yyyy-mm-dd';
 
+  //GifController gf = GifController(vsync: this);
+
   ////////////////////////////
+
+
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -94,6 +106,8 @@ class _OrderPageState extends State<OrderPage> {
       });
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -192,11 +206,11 @@ class _OrderPageState extends State<OrderPage> {
                                 borderWidth: 20,
                                 startOpacity: 0.3,
                               ),
-                              /*GifImage(
-                                controller: controller,
-                                image: AssetImage("images/giphy.webp"),
-                              ),*/
 
+                              GifImage(
+                                controller: _controller,
+                                image: AssetImage("assets/images/folder_gif.gif"),
+                              ),
                               Text(
                                 'غذایی سرو نشده !!!',
                                 style:

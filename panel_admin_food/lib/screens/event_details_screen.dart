@@ -189,7 +189,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       child: CreditCard(
                         cardExpiry: 'دیدار ما : ${replaceFarsiNumber(getTime(result['start_time']))}',
                         cvv: "cvv",
-                        showBackSide: true,
+                        showBackSide: false,
                         frontBackground: CardBackgrounds.black,
                         backBackground: CardBackgrounds.white,
                         showShadow: true,
