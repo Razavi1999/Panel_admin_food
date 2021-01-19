@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       vsync: this,
     // )..repeat(reverse: true);
     );
+    _controller.forward();
     _animation1 = CurvedAnimation(
       parent: _controller,
       curve: Curves.ease
@@ -56,13 +57,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         parent: _controller,
         curve: Interval(0.8 ,1.0, curve: Curves.ease)
     );
-    _controller.forward();
   }
 
   @override
   void dispose() {
-    super.dispose();
+    print('here');
+    print('*****************************************');
+    _controller.stop(canceled: true);
     _controller.dispose();
+    print('*****************************************');
+    super.dispose();
   }
 
   getToken() async {
@@ -74,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     userId = prefs.getInt('user_id');
     role = prefs.getString('role');
     print(token);
-    return prefs.getString('token');
+    return token;
   }
 
   @override
@@ -164,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   bodyContainer(){
-    if(role == null || role.toLowerCase() == 'admin'){
+    if(role == null || role.toLowerCase() == 'admin-all'){
       return Container(
         height: size.height * 0.7,
         child: Column(

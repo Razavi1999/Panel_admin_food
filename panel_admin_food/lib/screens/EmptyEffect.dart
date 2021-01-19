@@ -57,6 +57,7 @@ class _EmptyEffectState extends State<EmptyEffect>
   AnimationController _radiusOpacityController;
   Animation _radiusAnimation;
   Animation _opacityAnimation;
+  Timer _timer;
 
   @override
   void initState() {
@@ -69,10 +70,19 @@ class _EmptyEffectState extends State<EmptyEffect>
       setState(() {});
     });
 
-    Timer.periodic(widget._delay, (_) {
-      _radiusOpacityController.reset();
-      _radiusOpacityController.forward();
-    });
+    // Timer.periodic(widget._delay, (_) {
+    //   _radiusOpacityController.reset();
+    //   _radiusOpacityController.forward();
+    // });
+
+    _timer = Timer.periodic(
+        widget._delay,
+            (timer) {
+          if(mounted) {
+            _radiusOpacityController.reset();
+            _radiusOpacityController.forward();          }
+        }
+    );
 
     _radiusAnimation = Tween(
         begin: widget._outermostCircleStartRadius,
@@ -88,8 +98,10 @@ class _EmptyEffectState extends State<EmptyEffect>
 
   @override
   void dispose() {
-    super.dispose();
+    _radiusOpacityController.stop(canceled: true);
     _radiusOpacityController.dispose();
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
