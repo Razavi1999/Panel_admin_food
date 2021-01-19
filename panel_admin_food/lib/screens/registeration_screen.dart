@@ -226,7 +226,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           lastName.trim() +
           random.nextInt(9999999).toString(),
       'mobile_number': 091000000000,
-      'role': 'manager',
+      'role': 'admin',
     };
 
     try {
