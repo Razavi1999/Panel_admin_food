@@ -276,7 +276,6 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
                           );
                         },
                       );
-                      return SizedBox();
                     } else {
                       return Center(
                           child: SpinKitWave(
@@ -286,7 +285,10 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
                   },
                 );
               } else {
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                    child: SpinKitWave(
+                      color: kPrimaryColor,
+                    ));
               }
             },
           ),

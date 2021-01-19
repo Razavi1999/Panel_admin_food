@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -189,11 +190,17 @@ class _RequestScreenState extends State<RequestScreen> {
                           itemCount: count,
                         );
                       } else {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                            child: SpinKitWave(
+                              color: kPrimaryColor,
+                            ));
                       }
                     });
               } else {
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                    child: SpinKitWave(
+                      color: kPrimaryColor,
+                    ));
               }
             }),
       ),

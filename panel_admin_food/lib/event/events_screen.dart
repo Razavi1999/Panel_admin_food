@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
@@ -195,8 +196,10 @@ class _EventScreenState extends State<EventScreen> {
                 );
               } else {
                 return Center(
-                  child: CircularProgressIndicator(),
-                );
+                    child: SpinKitWave(
+                      color: kPrimaryColor,
+                    ));
+
               }
             },
           ),
@@ -318,8 +321,10 @@ class _EventScreenState extends State<EventScreen> {
                 );
               } else {
                 return Center(
-                  child: CircularProgressIndicator(),
-                );
+                    child: SpinKitWave(
+                      color: kPrimaryColor,
+                    ));
+
               }
             },
           ),
@@ -657,11 +662,10 @@ class _EventScreenState extends State<EventScreen> {
                 );
               } else {
                 return Center(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 100),
-                    child: CircularProgressIndicator(),
-                  ),
-                );
+                    child: SpinKitWave(
+                      color: kPrimaryColor,
+                    ));
+
               }
             },
           ),

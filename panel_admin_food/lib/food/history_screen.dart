@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jalali_calendar/jalali_calendar.dart';
 import 'package:panel_admin_food_origin/models/food.dart';
 import 'package:persian_fonts/persian_fonts.dart';
@@ -321,7 +322,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         itemCount: listFood.length,
                       );
                     } else {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                          child: SpinKitWave(
+                            color: kPrimaryColor,
+                          ));
                     }
                   },
                 ),
@@ -329,7 +333,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
             }
 
             else
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                  child: SpinKitWave(
+                    color: kPrimaryColor,
+                  ));
 
           }),
     );

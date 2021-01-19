@@ -575,8 +575,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.popAndPushNamed(context, LoginScreen.id);
                     logoutApp();
                   },
                   child: Padding(
@@ -603,7 +601,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 InkWell(
                   onTap: () {
                     Navigator.pop(context);
-                    //selectFromGallery();
                   },
                   child: Padding(
                     padding: EdgeInsets.only(left: 10),
@@ -633,19 +630,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void logoutApp() async {
-    http.Response response;
-    response = await http.post(
-      "http://danibazi9.pythonanywhere.com/api/account/logout",
-      headers: {
-        HttpHeaders.authorizationHeader: token,
-        "Accept": "application/json",
-        "content-type": "application/json",
-      },
-    );
-    print(response.statusCode);
-    print(token);
+    // http.Response response;
+    // response = await http.post(
+    //   "http://danibazi9.pythonanywhere.com/api/account/logout",
+    //   headers: {
+    //     HttpHeaders.authorizationHeader: token,
+    //     "Accept": "application/json",
+    //     "content-type": "application/json",
+    //   },
+    // );
+    // print(response.statusCode);
+    // print(token);
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
+    Navigator.pop(context);
+    Navigator.popAndPushNamed(context, LoginScreen.id);
   }
 }
