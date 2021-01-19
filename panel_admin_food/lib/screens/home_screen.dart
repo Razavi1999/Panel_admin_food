@@ -307,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: (){
-                          showlogoutDialog();
+                          showLogoutDialog();
                         },
                         child: Container(
                           height: size.height * 0.18,
@@ -339,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ScaleTransition(
-                  scale: _animation1,
+                  scale: _animation2,
                   child: Container(
                     decoration: kHomeDecoration,
                     child: Material(
@@ -368,7 +368,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 ),
                 ScaleTransition(
-                  scale: _animation1,
+                  scale: _animation2,
                   child: Container(
                     decoration: kHomeDecoration,
                     child: Material(
@@ -402,14 +402,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ScaleTransition(
-                  scale: _animation1,
+                  scale: _animation3,
                   child: Container(
                     decoration: kHomeDecoration,
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: (){
-                          showlogoutDialog();
+                          showLogoutDialog();
                         },
                         child: Container(
                           height: size.height * 0.18,
@@ -441,7 +441,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ScaleTransition(
-                  scale: _animation1,
+                  scale: _animation2,
                   child: Container(
                     decoration: kHomeDecoration,
                     child: Material(
@@ -470,7 +470,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 ),
                 ScaleTransition(
-                  scale: _animation1,
+                  scale: _animation2,
                   child: Container(
                     decoration: kHomeDecoration,
                     child: Material(
@@ -504,14 +504,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ScaleTransition(
-                  scale: _animation1,
+                  scale: _animation3,
                   child: Container(
                     decoration: kHomeDecoration,
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: (){
-                          showlogoutDialog();
+                          showLogoutDialog();
                         },
                         child: Container(
                           height: size.height * 0.18,
@@ -535,7 +535,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     }
   }
 
-  showlogoutDialog() {
+  showLogoutDialog() {
     showDialog(
       context: context,
       child: AlertDialog(
