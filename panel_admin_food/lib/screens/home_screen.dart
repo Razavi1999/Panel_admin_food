@@ -11,7 +11,7 @@ import 'dart:convert' as convert;
 
 import '../components/grid_dashboard.dart';
 import '../constants.dart';
-import 'food_screen.dart';
+import '../food/food_screen.dart';
 import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {

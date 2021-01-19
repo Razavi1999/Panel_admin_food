@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:panel_admin_food_origin/Professor/faculty.dart';
-import 'package:panel_admin_food_origin/screens/event_details_screen.dart';
-import 'package:panel_admin_food_origin/screens/events_screen.dart';
+import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/event_details_screen.dart';
+import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/events_screen.dart';
 import 'package:panel_admin_food_origin/screens/guide_screen.dart';
 import 'package:panel_admin_food_origin/screens/login_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
 import '../constants.dart';
-import '../screens/food_screen.dart';
+import '../food/food_screen.dart';
 import '../screens/home_screen.dart';
 
 

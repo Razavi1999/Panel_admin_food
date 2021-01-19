@@ -16,7 +16,7 @@ import 'new_food_screen.dart';
 import 'request_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:persian_date/persian_date.dart';
-import 'EmptyEffect.dart';
+import '../screens/EmptyEffect.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 
 
