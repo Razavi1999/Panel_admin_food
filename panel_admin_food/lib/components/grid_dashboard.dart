@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:panel_admin_food_origin/Professor/faculty.dart';
+import 'package:panel_admin_food_origin/Professor/faculty_screen.dart';
 import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/event_details_screen.dart';
 import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/events_screen.dart';
 import 'package:panel_admin_food_origin/screens/guide_screen.dart';
@@ -68,7 +68,7 @@ class GridDashboard extends StatelessWidget {
       subtitle: "زمینه های تحقیقاتی اساتید",
       img: "assets/images/professor.jfif",
       b : false,
-      dest:Faculty.id
+      dest:FacultyScreen.id
   );
 
 

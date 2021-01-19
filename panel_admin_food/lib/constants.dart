@@ -80,7 +80,12 @@ void info(BuildContext context, String message){
 }
 
 
-
+final kHomeDecoration = BoxDecoration(
+  color: Color(
+    0xff453658,
+  ),
+  borderRadius: BorderRadius.circular(20),
+);
 
 
 final kShadowColor = Color(0xFFD3D3D3).withOpacity(.84);

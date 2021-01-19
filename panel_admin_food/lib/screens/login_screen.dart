@@ -52,94 +52,98 @@ class _LoginScreenState extends State<LoginScreen> {
         .of(context)
         .size;
     return Scaffold(
-      body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        color: Colors.purple.shade200,
-        child: Builder(builder: (context) {
-          return Container(
-            decoration: new BoxDecoration(
-                color: darkGrey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    bottomLeft: Radius.circular(8.0)),
-                boxShadow: [
-                  BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.16),
-                      offset: Offset(0, 3),
-                      blurRadius: 6.0),
-                ]),
+      body: FutureBuilder(builder: (context, snapshot){
+        return ModalProgressHUD(
+          inAsyncCall: showSpinner,
+          color: Colors.purple.shade200,
+          child: Builder(builder: (context) {
+            return Container(
+              decoration: new BoxDecoration(
+                  color: darkGrey,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      bottomLeft: Radius.circular(8.0)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.16),
+                        offset: Offset(0, 3),
+                        blurRadius: 6.0),
+                  ]),
 
-            width: double.infinity,
-            height: size.height,
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Image.asset(
-                    //"assets/images/photo_2.jpeg",
-                    "assets/images/asli_8.jpg",
-                    width: size.width  * 1.5,
-                    height: size.height * 1.1,
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      //color: Colors.blue
+              width: double.infinity,
+              height: size.height,
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Image.asset(
+                      //"assets/images/photo_2.jpeg",
+                      "assets/images/asli_8.jpg",
+                      width: size.width  * 1.5,
+                      height: size.height * 1.1,
                     ),
+                  ),
+                  SingleChildScrollView(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        //color: Colors.blue
+                      ),
 
-                    child: Column(
+                      child: Column(
 
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        RichText(
-                          text: TextSpan(
-                            text : "به مدیریت دانشگاه من خوش آمدید",
-                            style: TextStyle(fontWeight: FontWeight.bold ,
-                            color: kPrimaryColor ,
-                              fontSize: 20
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          RichText(
+                            text: TextSpan(
+                              text : "به مدیریت دانشگاه من خوش آمدید",
+                              style: TextStyle(fontWeight: FontWeight.bold ,
+                                  color: kPrimaryColor ,
+                                  fontSize: 20
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: size.height * 0.03),
-                        RoundedInputField(
-                          hintText: "پست الکترونیکی",
-                          onChanged: (value) {
-                            email = value;
-                          },
-                        ),
-                        RoundedPasswordField(
-                          isObscured: isObscured,
-                          onPressed: onEyePressed,
-                          onChanged: (value) {
-                            password = value;
-                          },
-                        ),
-                        RoundedButton(
-                          text: "ورود",
-                          color: kPrimaryColor,
-                          press: () {
-                            checkValidation(context);
-                          },
-                        ),
-                        SizedBox(height: size.height * 0.03),
-                        AlreadyHaveAnAccountCheck(
-                          press: () {
-                            Navigator.popAndPushNamed(
-                                context, RegisterationScreen.id);
-                          },
-                        ),
-                      ],
+                          SizedBox(height: size.height * 0.03),
+                          RoundedInputField(
+                            hintText: "پست الکترونیکی",
+                            onChanged: (value) {
+                              email = value;
+                            },
+                          ),
+                          RoundedPasswordField(
+                            isObscured: isObscured,
+                            onPressed: onEyePressed,
+                            onChanged: (value) {
+                              password = value;
+                            },
+                          ),
+                          RoundedButton(
+                            text: "ورود",
+                            color: kPrimaryColor,
+                            press: () {
+                              checkValidation(context);
+                            },
+                          ),
+                          SizedBox(height: size.height * 0.03),
+                          AlreadyHaveAnAccountCheck(
+                            press: () {
+                              Navigator.popAndPushNamed(
+                                  context, RegisterationScreen.id);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        }),
-      ),
+                ],
+              ),
+            );
+          }),
+        );
+      },
+      future: checkStringValueExistence(),
+      )
     );
   }
 
@@ -186,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
         print(jsonResponse['token']);
         print(jsonResponse);
         addStringToSF(jsonResponse['token'], jsonResponse['user_id'],
-            jsonResponse['username'], jsonResponse['first_name'], jsonResponse['last_name']);
+            jsonResponse['username'], jsonResponse['first_name'], jsonResponse['last_name'], jsonResponse['role']);
       } else if (result.statusCode == 400) {
         setState(() {
           showSpinner = false;
@@ -212,13 +216,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   addStringToSF(String token, int user_id, String username, String first_name,
-      String last_name) async {
+      String last_name, String role) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', 'Token $token');
     prefs.setInt('user_id', user_id);
     prefs.setString('username', username);
     prefs.setString('first_name', last_name);
     prefs.setString('last_name', first_name);
+    prefs.setString('role', role);
     print(prefs.getString('last_name'));
     Navigator.popAndPushNamed(context, HomeScreen.id);
   }

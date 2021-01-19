@@ -258,8 +258,11 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           String last_name = jsonBody['last_name'];
           int user_id = jsonBody['user_id'];
           String token = jsonBody['token'];
+          //TODO:
+          String role = jsonBody['role'];
+          //
           print(token);
-          await addStringToSF(token, user_id, username, first_name, last_name);
+          await addStringToSF(token, user_id, username, first_name, last_name, role);
           setState(() {
             showSpinner = false;
           });
@@ -313,7 +316,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
   }
 
   addStringToSF(String token, int user_id, String username, String first_name,
-      String last_name) async {
+      String last_name, String role) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       print(prefs.getString('token'));
@@ -322,6 +325,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
       prefs.setString('username', username);
       prefs.setString('first_name', last_name);
       prefs.setString('last_name', first_name);
+      prefs.setString('role', role);
     }
 
     catch (e) {

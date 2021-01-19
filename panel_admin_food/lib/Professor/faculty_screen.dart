@@ -15,14 +15,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 
-class Faculty extends StatefulWidget {
+class FacultyScreen extends StatefulWidget {
   static String id = "Faculty_screen";
 
   @override
-  _FacultyState createState() => _FacultyState();
+  _FacultyScreenState createState() => _FacultyScreenState();
 }
 
-class _FacultyState extends State<Faculty> {
+class _FacultyScreenState extends State<FacultyScreen> {
   String token , url = "$baseUrl/api/food/admin/serve/all/";
   int userId;
 
