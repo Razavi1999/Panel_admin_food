@@ -333,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       );
     }
-    else if(role.toLowerCase() == 'food_manager'){
+    else if(role.toLowerCase() == 'food-manager'){
       return Container(
         height: size.height * 0.7,
         child: Column(
@@ -435,7 +435,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       );
     }
-    else if(role.toLowerCase() == 'event_manager'){
+    else if(role.toLowerCase() == 'culture-deputy'){
       return Container(
         height: size.height * 0.7,
         child: Column(
