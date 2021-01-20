@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jalali_calendar/jalali_calendar.dart';
 import 'package:panel_admin_food_origin/components/brightness_switch.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -59,12 +60,31 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
     return true;
   }
 
-  saveToSharedPreferences(String foodName, int count) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map map = {
-      'foodName': foodName,
-      'count': count,
-    };
+  void  _showDateTimePicker() {
+    showDialog(
+      context: context,
+      builder: (BuildContext _) {
+        return  PersianDateTimePicker(
+          // initial: '1399/12/20 19:50',
+          // initial: '1399/12/20',
+          // type: 'datetime',
+          color: kPrimaryColor,
+          type: 'date',
+          onSelect: (date) {
+            print(date);
+            List times = date.toString().split('/');
+            int year = int.parse(times[0]);
+            int month = int.parse(times[1]);
+            int day = int.parse(times[2]);
+            Jalali j = Jalali(year, month, day);
+            Gregorian g =  j.toGregorian();
+            selectedDate = g.toDateTime();
+            print(selectedDate);
+            setState(() {});
+          },
+        );
+      },
+    );
   }
 
   void _showDatePicker() {
@@ -81,23 +101,30 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
           style: TextStyle(color: Colors.cyan),
         ),
         dateFormat: _format, onChanged: (year, month, day) {
-      if (!showTitleActions) {
-        _datetime = '$year-$month-$day';
-      }
-    }, onConfirm: (year, month, day) {
-      setState(() {});
-      Jalali j = Jalali(year, month, day);
-      selectedDate = j.toDateTime();
-      print('dateTime is: $selectedDate');
-      _datetime = '$year-$month-$day';
-      setState(() {
-        _datetime = '$year-$month-$day';
-        print('time' + _datetime);
-      });
-    });
+          if (!showTitleActions) {
+            _datetime = '$year-$month-$day';
+          }
+        }, onConfirm: (year, month, day) {
+          setState(() {});
+          Jalali j = Jalali(year, month, day);
+          selectedDate = j.toDateTime();
+          print('dateTime is: $selectedDate');
+          _datetime = '$year-$month-$day';
+          setState(() {
+            _datetime = '$year-$month-$day';
+            print('time' + _datetime);
+          });
+        });
   }
 
 
+  saveToSharedPreferences(String foodName, int count) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map map = {
+      'foodName': foodName,
+      'count': count,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +145,8 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
           ),
           onPressed: () {
             // showCalendarDialog();
-            _showDatePicker();
+            // _showDatePicker();
+            _showDateTimePicker();
           },
         ),
         backgroundColor: kPrimaryColor,
@@ -215,7 +243,8 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
                                     borderRadius: BorderRadius.circular(10)),
                                 onPressed: () {
                                   // showCalendarDialog();
-                                  _showDatePicker();
+                                  // _showDatePicker();
+                                  _showDateTimePicker();
                                 },
                                 label: Text(
                                   'تقویم',

@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +28,8 @@ class NewFoodScreen extends StatefulWidget {
   _NewFoodScreenState createState() => _NewFoodScreenState();
 }
 
-class _NewFoodScreenState extends State<NewFoodScreen> {
+class _NewFoodScreenState extends State<NewFoodScreen>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   String serveUrl = '$baseUrl/api/food/admin/serve/';
   String foodUrl = '$baseUrl/api/food/all/';
@@ -44,11 +48,15 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
   int userId;
   bool showSpinner = false, isAddingCompletelyNewFood = false;
   String base64Image;
+
   ////////////////////////////
   DateTime selectedDate = DateTime.now();
+  Jalali date = Jalali.now();
   PersianDate persianDate = PersianDate(format: "yyyy/mm/dd  \n DD  , d  MM  ");
   String _datetime = '';
   String _format = 'yyyy-mm-dd';
+  Timer _timer;
+
   ////////////////////////////
   Future<String> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -56,6 +64,41 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
     // token = 'Token 965eee7f0022dc5726bc4d03fca6bd3ffe756a1f';
     userId = prefs.getInt('user_id');
     return prefs.getString('token');
+  }
+
+  AnimationController _controller;
+  Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..addListener(() {
+        // setState(() {});
+      });
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.bounceInOut,
+    );
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      if (mounted) {
+        _controller.reset();
+        _controller.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    print('here');
+    print('*****************************************');
+    _controller.stop(canceled: true);
+    _controller.dispose();
+    _timer?.cancel();
+    print('*****************************************');
+    super.dispose();
   }
 
   File imageFile;
@@ -98,53 +141,43 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
     });
   }
 
-  showCalendarDialog()async{
-    final bool showTitleActions = false;
-    DatePicker.showDatePicker(context,
-        minYear: 1300,
-        maxYear: 1450,
-        confirm: Text(
-          'تایید',
-          style: TextStyle(color: Colors.red),
-        ),
-        cancel: Text(
-          'لغو',
-          style: TextStyle(color: Colors.cyan),
-        ),
-        dateFormat: _format, onChanged: (year, month, day) {
-          if (!showTitleActions) {
-            _datetime = '$year-$month-$day';
-          }
-        }, onConfirm: (year, month, day) {
-          setState(() {});
-          Jalali j = Jalali(year, month, day);
-          selectedDate = j.toDateTime();
-          print('dateTime is: $selectedDate');
-          _datetime = '$year-$month-$day';
-          setState(() {
-            _datetime = '$year-$month-$day';
-            print('time' + _datetime);
-          });
-        });
+  void showCalendarDialog() {
+    String dateToShow = '${date.year}/${date.month}/${date.day}';
+    showDialog(
+      context: context,
+      builder: (BuildContext _) {
+        return PersianDateTimePicker(
+          // initial: '1399/12/20 19:50',
+          // initial: '1399/12/20',
+          // type: 'datetime',
+          initial: dateToShow,
+          color: kPrimaryColor,
+          type: 'date',
+          onSelect: (date) {
+            print(date);
+            List times = date.toString().split('/');
+            int year = int.parse(times[0]);
+            int month = int.parse(times[1]);
+            int day = int.parse(times[2]);
+            Jalali j = Jalali(year, month, day);
+            this.date = j;
+            Gregorian g = j.toGregorian();
+            selectedDate = g.toDateTime();
+            print(selectedDate);
+            setState(() {});
+          },
+        );
+      },
+    );
   }
 
-  Future _selectDate() async {
-    String picked = await jalaliCalendarPicker(
-        context: context,
-        convertToGregorian: false,
-        showTimePicker: true,
-        hore24Format: true);
-    if (picked != null) setState(() => _datetime = picked);
-  }
-
-  @override
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              _selectDate();
+              showCalendarDialog();
             },
             child: Icon(Icons.calendar_today),
           ),
@@ -171,13 +204,13 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
           ),
           body: Container(
             ///*
-            decoration:BoxDecoration(
+            decoration: BoxDecoration(
                 image: DecorationImage(
-                  colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                  fit: BoxFit.fitHeight,
-                  image : AssetImage("assets/images/ahmad_13.jpg"),
-                )
-            ),
+              colorFilter: new ColorFilter.mode(
+                  Colors.black.withOpacity(0.5), BlendMode.dstATop),
+              fit: BoxFit.fitHeight,
+              image: AssetImage("assets/images/ahmad_13.jpg"),
+            )),
             //*/
             child: FutureBuilder(
                 future: getToken(),
@@ -200,54 +233,38 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Expanded(
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.purple.shade300,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
                                       child: Material(
+                                        color: Colors.transparent,
                                         child: InkWell(
-                                          highlightColor: Colors.black,
                                           onTap: () {
-                                            // _openDialog();
-                                            // openBooksNameDialog();
                                             _showFoodsDialog();
-                                            // _showFacultiesDialog();
                                           },
                                           child: Container(
-
                                             padding: EdgeInsets.only(
-                                                right: 10,
-                                                left: 10,
-                                                top: 10,
-                                                bottom: 10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey[200],
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
+                                                right: 20,
+                                                left: 20,
+                                                top: 15,
+                                                bottom: 15),
                                             margin: EdgeInsets.only(
                                               left: 5,
                                               right: 5,
                                               top: 2,
                                               bottom: 2,
                                             ),
-                                            child: Container(
-
-                                              color: Colors.grey[200],
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Icon(Icons.arrow_drop_down),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(right: 10),
-                                                    child: Text(selectedFoodName ??
-                                                        'غذایی انتخاب نشده' ,
-                                                    style: PersianFonts.Shabnam.copyWith(
-                                                      color: kPrimaryColor ,
-                                                      fontWeight: FontWeight.w800,
-                                                    ),
-                                                    ),
-                                                  ),
-                                                ],
+                                            child: Text(
+                                              selectedFoodName ??
+                                                  'غذایی انتخاب نشده',
+                                              textAlign: TextAlign.center,
+                                              textDirection: TextDirection.rtl,
+                                              style:
+                                                  PersianFonts.Shabnam.copyWith(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w800,
                                               ),
                                             ),
                                           ),
@@ -261,8 +278,53 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                         'نام غذا :',
                                         style: PersianFonts.Shabnam.copyWith(
                                           color: kPrimaryColor,
-                                          fontSize: 20 ,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.w800,
+                                        ),
+                                        textDirection: TextDirection.rtl,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.calendar_today),
+                                      onPressed: () {
+                                        showCalendarDialog();
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      '${date.year}-${date.month}-${date.day}',
+                                      textAlign: TextAlign.center,
+                                      textDirection: TextDirection.rtl,
+                                      style: PersianFonts.Shabnam.copyWith(
+                                        color: kPrimaryColor,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Container(
+                                      // width: 80,
+                                      padding: EdgeInsets.only(right: 10),
+                                      child: Text(
+                                        'تاریخ سرو غذا :',
+                                        style: PersianFonts.Shabnam.copyWith(
+                                          color: kPrimaryColor,
+                                          fontSize: 14,
+                                          // fontWeight: FontWeight.w800,
                                         ),
                                         textDirection: TextDirection.rtl,
                                       ),
@@ -284,30 +346,9 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                       child: Text(
                                         'عکس غذا',
                                         style: PersianFonts.Shabnam.copyWith(
-                                            color: kPrimaryColor,
-                                            fontSize: 20,
+                                          color: kPrimaryColor,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                SizedBox(
-                                  height: 15,
-                                ),
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 10),
-                                      child: Text(
-                                        'افزودن عکس بازدید آگهی شما را تا سه برابر افزایش می دهد.',
-                                        textDirection: TextDirection.rtl,
-                                        style: PersianFonts.Shabnam.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          color: kPrimaryColor
                                         ),
                                       ),
                                     ),
@@ -325,7 +366,8 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.only(right: 10),
+                                              padding:
+                                                  EdgeInsets.only(right: 10),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
@@ -334,14 +376,14 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                     'انتخاب عکس : ',
                                                     textDirection:
                                                         TextDirection.rtl,
-                                                    style: PersianFonts.Shabnam.copyWith(
-                                                        color: kPrimaryColor
-                                                    ),
+                                                    style: PersianFonts.Shabnam
+                                                        .copyWith(
+                                                            color:
+                                                                kPrimaryColor),
                                                   ),
                                                 ],
                                               ),
                                             ),
-
                                             SizedBox(
                                               height: 5,
                                             ),
@@ -368,8 +410,11 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                       'از دوربین‌',
                                                       textDirection:
                                                           TextDirection.rtl,
-                                                      style: PersianFonts.Shabnam.copyWith(
-                                                          color: Colors.black),
+                                                      style: PersianFonts
+                                                              .Shabnam
+                                                          .copyWith(
+                                                              color:
+                                                                  Colors.black),
                                                     ),
                                                     SizedBox(
                                                       width: 20,
@@ -400,8 +445,11 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                                       'از گالری',
                                                       textDirection:
                                                           TextDirection.rtl,
-                                                      style: PersianFonts.Shabnam.copyWith(
-                                                          color: Colors.black),
+                                                      style: PersianFonts
+                                                              .Shabnam
+                                                          .copyWith(
+                                                              color:
+                                                                  Colors.black),
                                                     ),
                                                     SizedBox(
                                                       width: 20,
@@ -420,13 +468,9 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                     );
                                   },
                                   child: Container(
-
-
                                     decoration: BoxDecoration(
                                       boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey[200]
-                                        )
+                                        BoxShadow(color: Colors.grey[200])
                                       ],
                                       borderRadius: BorderRadius.circular(5),
                                       border: Border.all(
@@ -435,9 +479,10 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                       ),
                                     ),
                                     child: Container(
-                                      height: (imageFile == null)  ? 100 : 150,
-                                      width: (imageFile == null)  ? 100 : 150,
-                                      child: ListView(
+                                      height: (imageFile == null) ? 120 : 150,
+                                      width: (imageFile == null) ? 120 : 150,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
                                           if (imageFile != null) ...[
                                             Image.file(
@@ -448,12 +493,16 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                             ),
                                             // Uploader(file: _imageFile),
                                           ] else ...[
-                                            Image(
-                                              width: 100,
-                                              height: 100,
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  'assets/images/add_image.png'
+                                            ScaleTransition(
+                                              scale: _animation,
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 10),
+                                                child: Icon(
+                                                  Icons.cloud_upload,
+                                                  color: kPrimaryColor,
+                                                  size: 100,
+                                                ),
                                               ),
                                             ),
                                           ]
@@ -504,13 +553,11 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                   height: 10,
                                 ),
                                 Container(
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey[200],
-                                        )
-                                      ]
-                                  ),
+                                  decoration: BoxDecoration(boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey[200],
+                                    )
+                                  ]),
                                   height: 45,
                                   margin: EdgeInsets.only(left: 15, right: 15),
                                   child: TextField(
@@ -537,8 +584,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                         style: PersianFonts.Shabnam.copyWith(
                                             color: kPrimaryColor,
                                             fontSize: 20,
-                                            fontWeight: FontWeight.bold
-                                        ),
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ],
@@ -575,11 +621,12 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                         color: kPrimaryLightColor,
                                         height: 45,
                                         width: 100,
-                                        margin:
-                                            EdgeInsets.only(left: 15, right: 15),
+                                        margin: EdgeInsets.only(
+                                            left: 15, right: 15),
                                         child: TextField(
                                           textAlign: TextAlign.center,
-                                          textAlignVertical: TextAlignVertical.center,
+                                          textAlignVertical:
+                                              TextAlignVertical.center,
                                           textDirection: TextDirection.rtl,
                                           keyboardType: TextInputType.number,
                                           controller: priceController,
@@ -594,10 +641,9 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                       Text(
                                         'قیمت',
                                         style: PersianFonts.Shabnam.copyWith(
-                                          fontSize: 20,
-                                          color: kPrimaryColor,
-                                            fontWeight: FontWeight.bold
-                                        ),
+                                            fontSize: 20,
+                                            color: kPrimaryColor,
+                                            fontWeight: FontWeight.bold),
                                         textDirection: TextDirection.rtl,
                                       ),
                                     ],
@@ -607,19 +653,38 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                   height: 10,
                                 ),
                               ],
+                              Padding(
+                                padding: EdgeInsets.only(right: 20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'زمان های سرو',
+                                      style: PersianFonts.Shabnam.copyWith(
+                                        color: kPrimaryColor,
+                                        fontSize: 20,
+                                        // fontWeight: FontWeight.w800,
+                                      ),
+                                      textDirection: TextDirection.rtl,
+                                    ),
+                                  ],
+                                ),
+                              ),
                               SizedBox(
                                 height: 20,
                               ),
                               Container(
                                 ///*
-                                decoration:BoxDecoration(
+                                decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                                      fit: BoxFit.fitHeight,
-                                      image : AssetImage("assets/images/ahmad_13.jpg" ,
-                                      ),
-                                    )
-                                ),//*/
+                                  colorFilter: new ColorFilter.mode(
+                                      Colors.black.withOpacity(0.5),
+                                      BlendMode.dstATop),
+                                  fit: BoxFit.fitHeight,
+                                  image: AssetImage(
+                                    "assets/images/ahmad_13.jpg",
+                                  ),
+                                )), //*/
                                 child: FutureBuilder(
                                     future: http.get(timeUrl),
                                     builder: (context, snapshot) {
@@ -640,66 +705,85 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
                                         }
                                         if (timesCount == 0) {
                                           return Center(
-                                            child: Text('بازه ی زمانی وجود ندارد'),
+                                            child:
+                                                Text('بازه ی زمانی وجود ندارد'),
                                           );
                                         }
                                         return ListView.builder(
-
                                           shrinkWrap: true,
                                           itemCount: timesCount,
                                           itemBuilder: (context, index) {
                                             return Card(
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(15.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
                                               ),
-
                                               margin: EdgeInsets.only(
-                                                  bottom: 10, left: 20, right: 20),
+                                                  bottom: 10,
+                                                  left: 20,
+                                                  right: 20),
                                               color: Colors.purple.shade50,
                                               elevation: 4,
                                               child: ListTile(
-
-                                                title: Text(
-                                                  replaceFarsiNumber(timesMapList[index]['start_time']).substring(0,5)
-                                                      + ' تا ' +
-                                                  replaceFarsiNumber(timesMapList[index]['end_time']).substring(0,5),
-                                                  style: PersianFonts.Shabnam.copyWith(
-                                                    color: kPrimaryColor,
+                                                  title: Text(
+                                                    replaceFarsiNumber(
+                                                                timesMapList[
+                                                                        index][
+                                                                    'start_time'])
+                                                            .substring(0, 5) +
+                                                        ' تا ' +
+                                                        replaceFarsiNumber(
+                                                                timesMapList[
+                                                                        index][
+                                                                    'end_time'])
+                                                            .substring(0, 5),
+                                                    style: PersianFonts.Shabnam
+                                                        .copyWith(
+                                                      color: kPrimaryColor,
+                                                    ),
+                                                    textDirection:
+                                                        TextDirection.rtl,
                                                   ),
-                                                  textDirection: TextDirection.rtl,
-                                                ),
-                                                leading: Container(
-                                                  color: kPrimaryLightColor,
-                                                  width: 60,
-                                                  height: 30,
-                                                  child: Align(
-                                                    alignment: Alignment.center,
-                                                    child: TextField(
-                                                          textAlign:TextAlign.center ,
-                                                          textAlignVertical: TextAlignVertical.center,
-                                                          controller:
-                                                          controllersList[index],
-                                                          keyboardType:
-                                                          TextInputType.number,
-                                                          decoration: InputDecoration(
-                                                            border: OutlineInputBorder(
-                                                              borderRadius:
-                                                              BorderRadius.circular(10),
-                                                            ),
+                                                  leading: Container(
+                                                    color: kPrimaryLightColor,
+                                                    width: 60,
+                                                    height: 30,
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: TextField(
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        textAlignVertical:
+                                                            TextAlignVertical
+                                                                .center,
+                                                        controller:
+                                                            controllersList[
+                                                                index],
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
                                                           ),
                                                         ),
-                                                  ),
-                                                  )
-                                                ),
+                                                      ),
+                                                    ),
+                                                  )),
                                             );
                                           },
                                         );
-                                      }
-
-                                      else {
+                                      } else {
                                         return Center(
-                                          child: CircularProgressIndicator(),
-                                        );
+                                            child: SpinKitWave(
+                                          color: kPrimaryColor,
+                                        ));
                                       }
                                     }),
                               ),
@@ -763,10 +847,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
         open(context, 'لطفا قیمت غذا را وارد کنید');
         return;
       }
-
-    }
-
-    else {
+    } else {
       if (selectedFoodId == null) {
         open(context, 'لطفا ابتدا یک غذا را انتخاب کنید');
         return;
@@ -791,11 +872,11 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
     for (int i = 0; i < timesMapList.length; i++) {
       if (controllersList[i].text.length > 0) {
         serveTimesList.add(ServeTime(
-            timesMapList[i]['time_id'],
-            timesMapList[i]['start_time'],
-            timesMapList[i]['end_time'],
-            int.parse(controllersList[i].text),
-          selectedDate.toString().substring(0,10),
+          timesMapList[i]['time_id'],
+          timesMapList[i]['start_time'],
+          timesMapList[i]['end_time'],
+          int.parse(controllersList[i].text),
+          selectedDate.toString().substring(0, 10),
         ));
       }
     }
@@ -840,7 +921,7 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
 
       map['food_id'] = selectedFoodId;
       map['seller_id'] = userId;
-      map['date'] = selectedDate.toString().substring(0,10);
+      map['date'] = selectedDate.toString().substring(0, 10);
       print('date: ${map['date']}');
 
       List maps = [];
@@ -875,7 +956,6 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
     }
   }
 
-
   selectFromGallery() {
     _pickImage(ImageSource.gallery);
     Navigator.pop(context);
@@ -908,16 +988,40 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                   Text('غذایی وجود ندارد'),
+                    Text('غذایی وجود ندارد'),
                     SizedBox(
                       height: 10,
                     ),
-                    TextButton.icon(
-                      onPressed: () {
-                        _newBookDialog();
-                      },
-                      icon: Icon(Icons.add, color: kPrimaryColor),
-                      label: Text('اضافه کردن غذای جدید', style: PersianFonts.Shabnam.copyWith(color: kPrimaryColor),),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: kPrimaryColor,
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            // _newFoodDialog();
+                            isAddingCompletelyNewFood = true;
+                            print(isAddingCompletelyNewFood);
+                            print(
+                                '*************************************************');
+                            setState(() {});
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            child: Text(
+                              'اضافه کردن غذای جدید',
+                              style: PersianFonts.Shabnam.copyWith(
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 10,
@@ -934,71 +1038,100 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
         context: context,
         child: AlertDialog(
           content: Container(
-            color: kPrimaryLightColor,
-            height: 450,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            // color: kPrimaryLightColor,
+            height: 460,
             width: 250,
             child: SingleChildScrollView(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: count,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          selectedFoodId = mapList[index]['food_id'];
-                          isAddingCompletelyNewFood = false;
-                          setState(() {
-                            selectedFoodName = mapList[index]['name'];
-                            foodController.text = selectedFoodName;
-                          });
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.purple.shade100,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  mapList[index]['name'],
-                                  textDirection: TextDirection.rtl,
-                                  style: PersianFonts.Shabnam.copyWith(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextButton.icon(
-                    onPressed: () {
-                      _newBookDialog();
-                    },
-                    icon: Icon(Icons.add),
-                    label: Text('اضافه کردن غذای جدید' ,
-                      style: PersianFonts.Shabnam.copyWith(
-                        fontSize: 14
-                      ),
+                  Text(
+                    'انتخاب غذا',
+                    style: PersianFonts.Shabnam.copyWith(
+                      fontSize: 20,
+                      color: kPrimaryColor,
                     ),
                   ),
                   SizedBox(
                     height: 10,
+                  ),
+                  Container(
+                    height: 340,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: count,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.purple.shade200,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                selectedFoodId = mapList[index]['food_id'];
+                                isAddingCompletelyNewFood = false;
+                                print(mapList[index]);
+                                setState(() {
+                                  selectedFoodName = mapList[index]['name'];
+                                  foodController.text = selectedFoodName;
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 5),
+                                child: Text(
+                                  mapList[index]['name'],
+                                  textDirection: TextDirection.rtl,
+                                  textAlign: TextAlign.center,
+                                  style: PersianFonts.Shabnam.copyWith(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.purple,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          _newFoodDialog();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          child: Text(
+                            'اضافه کردن غذای جدید',
+                            style: PersianFonts.Shabnam.copyWith(
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -1011,11 +1144,11 @@ class _NewFoodScreenState extends State<NewFoodScreen> {
 
   String timeUrl = '$baseUrl/api/food/times/';
 
-  _newBookDialog() {
+  _newFoodDialog() {
     Navigator.pop(context);
-    setState(() {
-      isAddingCompletelyNewFood = true;
-    });
+    isAddingCompletelyNewFood = true;
+    setState(() {});
+    print('***************');
   }
 
   onPressed(String name) {

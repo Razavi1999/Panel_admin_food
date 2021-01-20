@@ -39,12 +39,10 @@ class _RequestScreenState extends State<RequestScreen> {
     return true;
   }
 
-  onChanged(){
+  onChanged() {
     print(url);
     setState(() {});
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +77,10 @@ class _RequestScreenState extends State<RequestScreen> {
                               textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
                                 prefixIcon: Icon(Icons.search),
-                                  border: InputBorder.none,
-                                  contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 15),
-                                  hintText: " جستجو" ,
-
+                                border: InputBorder.none,
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 15),
+                                hintText: " جستجو",
                               ),
                             ),
                           ),
@@ -113,7 +110,7 @@ class _RequestScreenState extends State<RequestScreen> {
           ),
           preferredSize: Size.fromHeight(80)),
       body: RefreshIndicator(
-        onRefresh: (){
+        onRefresh: () {
           return _refresh();
         },
         child: FutureBuilder(
@@ -135,12 +132,13 @@ class _RequestScreenState extends State<RequestScreen> {
                           return Center(
                             child: Text(
                               'مشکلی درارتباط با سرور پیش آمد',
-                              style: PersianFonts.Shabnam.copyWith(fontSize: 20),
+                              style:
+                                  PersianFonts.Shabnam.copyWith(fontSize: 20),
                             ),
                           );
                         }
-                        var jsonResponse = convert
-                            .jsonDecode(convert.utf8.decode(response.bodyBytes));
+                        var jsonResponse = convert.jsonDecode(
+                            convert.utf8.decode(response.bodyBytes));
                         print(jsonResponse);
                         List<Map> mapList = [];
                         int count = 0;
@@ -153,12 +151,16 @@ class _RequestScreenState extends State<RequestScreen> {
                         if (count == 0) {
                           return Container(
                             child: Center(
-                              child: Text('درخواست غذایی وجود ندارد !!!',
-                                style: PersianFonts.Shabnam.copyWith(
-                                    fontSize: 20 ,
-                                    color: kPrimaryColor
-                                ),
-                                textDirection: TextDirection.rtl,),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'درخواست غذایی برای امروز وجود ندارد !!!',
+                                    style: PersianFonts.Shabnam.copyWith(
+                                        fontSize: 20, color: kPrimaryColor),
+                                    textDirection: TextDirection.rtl,
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         }
@@ -192,15 +194,15 @@ class _RequestScreenState extends State<RequestScreen> {
                       } else {
                         return Center(
                             child: SpinKitWave(
-                              color: kPrimaryColor,
-                            ));
+                          color: kPrimaryColor,
+                        ));
                       }
                     });
               } else {
                 return Center(
                     child: SpinKitWave(
-                      color: kPrimaryColor,
-                    ));
+                  color: kPrimaryColor,
+                ));
               }
             }),
       ),
@@ -220,16 +222,20 @@ class _RequestScreenState extends State<RequestScreen> {
         'done': true,
       }),
     );
-    if(response.statusCode >= 400){
-     showDialog(
+    if (response.statusCode >= 400) {
+      showDialog(
         context: context,
         child: AlertDialog(
-          title: Text('مشکلی پیش آمد.', textDirection: TextDirection.rtl,),
+          title: Text(
+            'مشکلی پیش آمد.',
+            textDirection: TextDirection.rtl,
+          ),
           content: FlatButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('!باشه' ,
+            child: Text(
+              '!باشه',
               textDirection: TextDirection.rtl,
             ),
           ),
@@ -241,28 +247,24 @@ class _RequestScreenState extends State<RequestScreen> {
       bool result = await showDialog(
         context: context,
         child: AlertDialog(
-          title: Text('غذا فروخته شد', textDirection: TextDirection.rtl,
+          title: Text(
+            'غذا فروخته شد',
+            textDirection: TextDirection.rtl,
             textAlign: TextAlign.center,
-            style: PersianFonts.Shabnam.copyWith(
-              color: kPrimaryColor
-            ),
+            style: PersianFonts.Shabnam.copyWith(color: kPrimaryColor),
           ),
           content: FlatButton(
             onPressed: () {
               Navigator.pop(context, true);
             },
-            child: Text('!باشه' ,
-              style: PersianFonts.Shabnam.copyWith(
-
-              ),
+            child: Text(
+              '!باشه',
+              style: PersianFonts.Shabnam.copyWith(),
             ),
           ),
         ),
       );
-      setState(() {
-
-      });
-
+      setState(() {});
     } else {}
   }
 }

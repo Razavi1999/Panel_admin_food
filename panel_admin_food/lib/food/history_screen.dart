@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jalali_calendar/jalali_calendar.dart';
 import 'package:panel_admin_food_origin/models/food.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shamsi_date/shamsi_date.dart';
@@ -35,38 +36,32 @@ class _HistoryScreenState extends State<HistoryScreen> {
   get colorList => [Colors.red , Colors.green];
   ////////////////////////////
 
-  showCalendarDialog()async{
-    final bool showTitleActions = false;
-    DatePicker.showDatePicker(context,
-        minYear: 1300,
-        maxYear: 1450,
-        confirm: Text(
-          'تایید',
-          style: TextStyle(color: Colors.red),
-        ),
-        cancel: Text(
-          'لغو',
-          style: TextStyle(color: Colors.cyan),
-        ),
-        dateFormat: _format, onChanged: (year, month, day) {
-          if (!showTitleActions) {
-            _datetime = '$year-$month-$day';
-          }
-        }, onConfirm: (year, month, day) {
-          setState(() {});
-          Jalali j = Jalali(year, month, day);
-          selectedDate = j.toDateTime();
-          print('dateTime is: $selectedDate');
-          _datetime = '$year-$month-$day';
-          setState(() {
-            _datetime = '$year-$month-$day';
-            print('time' + _datetime);
-          });
-        });
+  void  _showDateTimePicker() {
+    showDialog(
+      context: context,
+      builder: (BuildContext _) {
+        return  PersianDateTimePicker(
+          // initial: '1399/12/20 19:50',
+          // initial: '1399/12/20',
+          // type: 'datetime',
+          color: kPrimaryColor,
+          type: 'date',
+          onSelect: (date) {
+            print(date);
+            List times = date.toString().split('/');
+            int year = int.parse(times[0]);
+            int month = int.parse(times[1]);
+            int day = int.parse(times[2]);
+            Jalali j = Jalali(year, month, day);
+            Gregorian g =  j.toGregorian();
+            selectedDate = g.toDateTime();
+            print(selectedDate);
+            setState(() {});
+          },
+        );
+      },
+    );
   }
-
-
-
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -93,7 +88,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            showCalendarDialog();
+            _showDateTimePicker();
           },
         ),
         actions: [
@@ -189,7 +184,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 color: kPrimaryColor,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 onPressed: () {
-                                  showCalendarDialog();
+                                  _showDateTimePicker();
                                 },
                                 label: Text('تقویم',
                                   style: PersianFonts.Shabnam.copyWith(color: Colors.white),),
