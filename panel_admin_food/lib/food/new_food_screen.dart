@@ -241,6 +241,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                                       child: Material(
                                         color: Colors.transparent,
                                         child: InkWell(
+                                          borderRadius: BorderRadius.circular(20),
                                           onTap: () {
                                             _showFoodsDialog();
                                           },
@@ -1004,6 +1005,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
+                          borderRadius: BorderRadius.circular(10),
                           onTap: () {
                             // _newFoodDialog();
                             isAddingCompletelyNewFood = true;
@@ -1074,6 +1076,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
+                              borderRadius: BorderRadius.circular(10),
                               onTap: () {
                                 selectedFoodId = mapList[index]['food_id'];
                                 isAddingCompletelyNewFood = false;
@@ -1116,6 +1119,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                        borderRadius: BorderRadius.circular(10),
                         onTap: () {
                           _newFoodDialog();
                         },

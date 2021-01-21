@@ -184,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
                         onTap: (){
                           Navigator.pushNamed(context, OrderPage.id, arguments: {
                             'token': token,
@@ -213,6 +214,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
                         onTap: (){
                           Navigator.pushNamed(context, EventScreen.id, arguments: {
                             'token': token,
@@ -247,6 +249,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
                         onTap: (){
                           Navigator.pushNamed(context, guide.id, arguments: {
                             'token': token,
@@ -276,6 +279,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
                         onTap: (){
                           Navigator.pushNamed(context, FacultyScreen.id, arguments: {
                             'token': token,
@@ -310,6 +314,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
                         onTap: (){
                           showLogoutDialog();
                         },
