@@ -24,11 +24,12 @@ class _UsersScreenState extends State<UsersScreen> {
   bool visible = true;
   String token;
   Map args = Map();
-
+  Size size;
   TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     args = ModalRoute.of(context).settings.arguments;
     token = args['token'];
     //token = 'Token dd324d7d0d603c13c34647ddf59ebb176db085c1';
@@ -148,10 +149,14 @@ class _UsersScreenState extends State<UsersScreen> {
                     itemCount: userCount,
                   );
                 } else {
-                  return Center(
+                  return Container(
+                    height: size.height*0.8,
+                    child: Center(
                       child: SpinKitWave(
                         color: kPrimaryColor,
-                      ));
+                      ),
+                    ),
+                  );
 
                 }
               },
@@ -216,7 +221,7 @@ class _UsersScreenState extends State<UsersScreen> {
   Widget errorWidget(String message) {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 100),
+        margin: EdgeInsets.only(top: 300),
         child: Text(
           message,
           textDirection: TextDirection.rtl,

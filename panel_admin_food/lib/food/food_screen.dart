@@ -160,12 +160,12 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
         },
         child: Container(
           decoration: BoxDecoration(
-              /*image: DecorationImage(
+            /*image: DecorationImage(
               fit: BoxFit.cover,
               image : AssetImage("assets/images/ahmad_12.jpg",
               ),
             )*/
-              ),
+          ),
           child: FutureBuilder(
             future: getToken(),
             builder: (context, snapshot) {
@@ -229,7 +229,7 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
                               Text(
                                 'غذایی سرو نشده !!!',
                                 style:
-                                    PersianFonts.Shabnam.copyWith(fontSize: 20),
+                                PersianFonts.Shabnam.copyWith(fontSize: 20),
                                 textDirection: TextDirection.rtl,
                               ),
                               SizedBox(
@@ -295,8 +295,8 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
                     } else {
                       return Center(
                           child: SpinKitWave(
-                        color: kPrimaryColor,
-                      ));
+                            color: kPrimaryColor,
+                          ));
                     }
                   },
                 );
@@ -403,4 +403,3 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
     setState(() {});
   }
 }
-

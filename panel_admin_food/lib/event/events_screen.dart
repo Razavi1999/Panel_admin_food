@@ -31,6 +31,7 @@ class _EventScreenState extends State<EventScreen> {
   bool visible = true;
   String token;
   Map args = Map();
+  Size size;
   String eventSearch = '', cartableSearch = '';
 
   TextEditingController userController = TextEditingController();
@@ -39,6 +40,7 @@ class _EventScreenState extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     args = ModalRoute.of(context).settings.arguments;
     token = args['token'];
     //token = 'Token dd324d7d0d603c13c34647ddf59ebb176db085c1';
@@ -195,10 +197,14 @@ class _EventScreenState extends State<EventScreen> {
                   ),
                 );
               } else {
-                return Center(
+                return Container(
+                  height: size.height*0.8,
+                  child: Center(
                     child: SpinKitWave(
                       color: kPrimaryColor,
-                    ));
+                    ),
+                  ),
+                );
 
               }
             },
@@ -320,10 +326,14 @@ class _EventScreenState extends State<EventScreen> {
                   ),
                 );
               } else {
-                return Center(
-                    child: SpinKitWave(
-                      color: kPrimaryColor,
-                    ));
+                return Container(
+                height: size.height*0.8,
+                child: Center(
+                  child: SpinKitWave(
+                    color: kPrimaryColor,
+                  ),
+                ),
+              );
 
               }
             },
@@ -661,11 +671,14 @@ class _EventScreenState extends State<EventScreen> {
                   ),
                 );
               } else {
-                return Center(
+                return Container(
+                  height: size.height*0.8,
+                  child: Center(
                     child: SpinKitWave(
                       color: kPrimaryColor,
-                    ));
-
+                    ),
+                  ),
+                );
               }
             },
           ),
@@ -749,7 +762,7 @@ class _EventScreenState extends State<EventScreen> {
   Widget errorWidget(String message) {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 100),
+        margin: EdgeInsets.only(top: 300),
         child: Text(
           message,
           textDirection: TextDirection.rtl,
