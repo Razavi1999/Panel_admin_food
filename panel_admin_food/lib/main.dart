@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:panel_admin_food_origin/Professor/faculty_screen.dart';
-import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/event_details_screen.dart';
-import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/events_screen.dart';
-import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/users_screen.dart';
+
+import 'event/event_details_screen.dart';
+import 'event/events_screen.dart';
+import 'event/users_screen.dart';
 import 'food/food_details_screen.dart';
 import 'food/history_screen.dart';
 import 'screens/login_screen.dart';

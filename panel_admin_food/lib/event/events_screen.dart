@@ -6,11 +6,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 import 'package:panel_admin_food_origin/constants.dart';
-import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/event_details_screen.dart';
-import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/users_screen.dart';
+import 'package:panel_admin_food_origin/event/users_screen.dart';
+
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:pie_chart/pie_chart.dart';
 import '../screens/EmptyEffect.dart';
+import 'event_details_screen.dart';
 
 String usersUrl = '$baseUrl/api/event/admin/auth/all/';
 String eventsUrl = '$baseUrl/api/event/admin/requests/all/';
