@@ -1,7 +1,10 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:panel_admin_food_origin/screens/login_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 const kPrimaryColor = Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
@@ -48,12 +51,32 @@ void open(BuildContext context, String message) {
       animType: AnimType.RIGHSLIDE,
       headerAnimationLoop: false,
       title: 'خطا',
-
       desc: message,
-
       btnOkOnPress: () {},
       btnOkIcon: Icons.cancel,
       btnOkColor: Colors.red)..show();
+}
+
+void warning_logout(BuildContext context, String message){
+  AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      headerAnimationLoop: false,
+      animType: AnimType.TOPSLIDE,
+      showCloseIcon: true,
+      closeIcon: Icon(Icons.close_fullscreen_outlined),
+      title: 'اخطار',
+      desc: message,
+      btnCancelOnPress: () {
+        //Navigator.pop(context);
+      },
+      btnOkOnPress: () async {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.clear();
+        //Navigator.pop(context);
+        Navigator.popAndPushNamed(context, LoginScreen.id);
+      }
+      )..show();
 }
 
 void success(BuildContext context, String message) {

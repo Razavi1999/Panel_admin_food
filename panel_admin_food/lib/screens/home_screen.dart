@@ -14,6 +14,7 @@ import 'package:http_parser/http_parser.dart';
 import 'dart:convert' as convert;
 
 import '../components/grid_dashboard.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import '../constants.dart';
 import '../food/food_screen.dart';
 import 'login_screen.dart';
@@ -316,7 +317,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(20),
                         onTap: (){
-                          showLogoutDialog();
+                          warning_logout(context , "خارج می شوید ؟");
+                          //showLogoutDialog();
                         },
                         child: Container(
                           height: size.height * 0.18,
@@ -418,7 +420,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: (){
-                          showLogoutDialog();
+                          warning_logout(context, "خارج می شوید؟ ");
+                          //showLogoutDialog();
                         },
                         child: Container(
                           height: size.height * 0.18,
@@ -520,7 +523,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: (){
-                          showLogoutDialog();
+                          warning_logout(context , "خارج می شوید ؟");
+                          //showLogoutDialog();
                         },
                         child: Container(
                           height: size.height * 0.18,
@@ -637,6 +641,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
   }
+
+
 
   void logoutApp() async {
     // http.Response response;

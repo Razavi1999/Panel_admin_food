@@ -23,7 +23,7 @@ class FacultyScreen extends StatefulWidget {
 }
 
 class _FacultyScreenState extends State<FacultyScreen> {
-  String token , url = "$baseUrl/api/food/admin/serve/all/";
+  String token , url = "$baseUrl/api/professors/faculties/";
   int userId;
 
   ///*********************************/
@@ -48,35 +48,6 @@ class _FacultyScreenState extends State<FacultyScreen> {
     return true;
   }
 
-  void _showDatePicker() {
-    final bool showTitleActions = false;
-    DatePicker.showDatePicker(context,
-        minYear: 1300,
-        maxYear: 1450,
-        confirm: Text(
-          'تایید',
-          style: TextStyle(color: Colors.red),
-        ),
-        cancel: Text(
-          'لغو',
-          style: TextStyle(color: Colors.cyan),
-        ),
-        dateFormat: _format, onChanged: (year, month, day) {
-          if (!showTitleActions) {
-            _datetime = '$year-$month-$day';
-          }
-        }, onConfirm: (year, month, day) {
-          setState(() {});
-          Jalali j = Jalali(year, month, day);
-          selectedDate = j.toDateTime();
-          print('dateTime is: $selectedDate');
-          _datetime = '$year-$month-$day';
-          setState(() {
-            _datetime = '$year-$month-$day';
-            print('time' + _datetime);
-          });
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +87,7 @@ class _FacultyScreenState extends State<FacultyScreen> {
                 //return SizedBox(height: 10,);
                 return FutureBuilder(
                   future: http.get(
-                      '${url}?date=${selectedDate.toString().substring(0, 10)}',
+                      '${url}',
                       headers: {
                         HttpHeaders.authorizationHeader: token,
                       }),
@@ -125,6 +96,7 @@ class _FacultyScreenState extends State<FacultyScreen> {
                         snapshot.connectionState == ConnectionState.done) {
                       http.Response response = snapshot.data;
                       if (response.statusCode >= 400) {
+
                         return Center(
                           child: Text(
                             'مشکلی درارتباط با سرور پیش آمد',
@@ -186,7 +158,7 @@ class _FacultyScreenState extends State<FacultyScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 onPressed: () {
-                                  _showDatePicker();
+                                  //_showDatePicker();
                                 },
                                 label: Text(
                                   'تقویم',
@@ -216,8 +188,7 @@ class _FacultyScreenState extends State<FacultyScreen> {
                           my_map['${mapList[index]['start_serve_time']}'] =
                               double.parse(
                                   mapList[index]['remaining_count'].toString());
-                          print('my_map' + my_map.toString());
-                          print("Hi !!!");
+
 
                           return OrderCard(
                             data: my_map,
