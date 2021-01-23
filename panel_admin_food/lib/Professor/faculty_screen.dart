@@ -179,23 +179,14 @@ class _FacultyScreenState extends State<FacultyScreen> {
                         shrinkWrap: true,
                         itemCount: count,
                         itemBuilder: (context, index) {
-                          //print("maplist : " + mapList.toString());
 
-                          // print('salam : ${mapList[index]['start_serve_time']}');
-
-                          Map<String, double> my_map = Map();
-
-                          my_map['${mapList[index]['start_serve_time']}'] =
-                              double.parse(
-                                  mapList[index]['remaining_count'].toString());
-
+                          print( mapList[index]['image']);
 
                           return OrderCard(
-                            data: my_map,
                             name: mapList[index]['name'],
-                            cost: mapList[index]['cost'],
+                            //cost: mapList[index]['cost'],
                             description: mapList[index]['description'],
-                            image: '$baseUrl${mapList[index]['image']}',
+                            image: mapList[index]['image'],
                             onPressed: () {
                               /*navigateToFoodDetailScreen(
                                 mapList[index]['serve_id'],
