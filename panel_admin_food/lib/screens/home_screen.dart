@@ -645,17 +645,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
 
   void logoutApp() async {
-    // http.Response response;
-    // response = await http.post(
-    //   "http://danibazi9.pythonanywhere.com/api/account/logout",
-    //   headers: {
-    //     HttpHeaders.authorizationHeader: token,
-    //     "Accept": "application/json",
-    //     "content-type": "application/json",
-    //   },
-    // );
-    // print(response.statusCode);
-    // print(token);
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();

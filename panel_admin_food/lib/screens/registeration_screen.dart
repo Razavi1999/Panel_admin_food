@@ -163,18 +163,15 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
 
   checkValidation(BuildContext context) async {
     if (email.length == 0) {
-      //_showDialog(context, 'ایمیل را پر کنید');
       open(context , 'ایمیل را پر کنید');
       return;
     }
 
     if (firstName.length == 0) {
-      //_showDialog(context, 'نام خود را وارد کنید');
       open(context , 'انام خود را وارد کنید');
     }
 
     if (lastName.length == 0) {
-      //_showDialog(context, 'نام خانوادگی خود را وارد کنید');
       open(context , 'نام خانوادگی خود را وارد کنید');
       return;
     }
@@ -226,7 +223,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           lastName.trim() +
           random.nextInt(9999999).toString(),
       'mobile_number': 091000000000,
-      'role': 'admin',
+      'role': 'admin-all',
     };
 
     try {
@@ -271,7 +268,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           });
         } else {
           resetCounter();
-          _showDialog(context, 'ارسال ایمیل ناموفق بود');
+          open(context, 'ارسال ایمیل ناموفق بود');
           setState(() {
             showSpinner = false;
           });
@@ -283,27 +280,26 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           showSpinner = false;
         });
         resetCounter();
-        print(result.body.toString());
-        _showDialog(context, 'لطفا ایمیل دانشجویی وارد کنید');
+        open(context, 'لطفا ایمیل دانشجویی وارد کنید');
       } else if (result.statusCode == 500) {
         setState(() {
           showSpinner = false;
         });
         resetCounter();
-        _showDialog(context, 'این ایمیل توسط کاربر دیگری در مورد استفاده است');
+        open(context, 'این ایمیل توسط کاربر دیگری در مورد استفاده است');
       } else {
         setState(() {
           showSpinner = false;
         });
         resetCounter();
-        _showDialog(context, result.body);
+        open(context, result.body);
         print(result.statusCode);
         print(result.body);
       }
     } catch (e) {
       showSpinner = false;
       resetCounter();
-      _showDialog(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
+      open(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
       print("My Error: $e");
     }
   }
