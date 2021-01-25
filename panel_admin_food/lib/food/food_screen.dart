@@ -88,36 +88,6 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
     );
   }
 
-  void _showDatePicker() {
-    final bool showTitleActions = false;
-    DatePicker.showDatePicker(context,
-        minYear: 1300,
-        maxYear: 1450,
-        confirm: Text(
-          'تایید',
-          style: TextStyle(color: Colors.red),
-        ),
-        cancel: Text(
-          'لغو',
-          style: TextStyle(color: Colors.cyan),
-        ),
-        dateFormat: _format, onChanged: (year, month, day) {
-          if (!showTitleActions) {
-            _datetime = '$year-$month-$day';
-          }
-        }, onConfirm: (year, month, day) {
-          setState(() {});
-          Jalali j = Jalali(year, month, day);
-          selectedDate = j.toDateTime();
-          print('dateTime is: $selectedDate');
-          _datetime = '$year-$month-$day';
-          setState(() {
-            _datetime = '$year-$month-$day';
-            print('time' + _datetime);
-          });
-        });
-  }
-
 
   saveToSharedPreferences(String foodName, int count) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

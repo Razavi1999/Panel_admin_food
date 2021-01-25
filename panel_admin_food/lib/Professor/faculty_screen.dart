@@ -16,6 +16,8 @@ import '../constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
+import 'Professor_screen.dart';
+
 var COLORS = [
   Color(0xFFB892FF),
   Color(0xFFB892FF),
@@ -37,12 +39,7 @@ class _FacultyScreenState extends State<FacultyScreen> {
   int userId;
 
   ///*********************************/
-  DateTime selectedDate = DateTime.now();
-  PersianDate persianDate = PersianDate(format: "yyyy/mm/dd  \n DD  , d  MM  ");
-  String _datetime = '';
-  String _format = 'yyyy-mm-dd';
 
-  /*************************************/
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -126,65 +123,6 @@ class _FacultyScreenState extends State<FacultyScreen> {
                         mapList.add(map);
                       }
 
-                      if (count == 0) {
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              EmptyEffect(
-                                child: Icon(
-                                  Icons.folder,
-                                  size: 55,
-                                  color: kPrimaryColor,
-                                ),
-                                borderColor: kPrimaryColor,
-                                outermostCircleStartRadius: 20,
-                                outermostCircleEndRadius: 175,
-                                numberOfCircles: 4,
-                                animationTime: Duration(seconds: 5),
-                                delay: Duration(seconds: 6),
-                                gap: 30,
-                                borderWidth: 20,
-                                startOpacity: 0.3,
-                              ),
-                              /*GifImage(
-                                controller: controller,
-                                image: AssetImage("images/giphy.webp"),
-                              ),*/
-
-                              Text(
-                                'غذایی سرو نشده !!!',
-                                style:
-                                PersianFonts.Shabnam.copyWith(fontSize: 20),
-                                textDirection: TextDirection.rtl,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              FlatButton.icon(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 10),
-                                color: kPrimaryColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                onPressed: () {
-                                  //_showDatePicker();
-                                },
-                                label: Text(
-                                  'تقویم',
-                                  style: PersianFonts.Shabnam.copyWith(
-                                      color: Colors.white),
-                                ),
-                                icon: Icon(
-                                  Icons.calendar_today,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
 
                       return ListView.builder(
                         shrinkWrap: true,
@@ -202,10 +140,7 @@ class _FacultyScreenState extends State<FacultyScreen> {
                             image: mapList[index]['image'],
                             color: COLORS[Random().nextInt(5)],
                             onPressed: () {
-                              /*navigateToFoodDetailScreen(
-                                mapList[index]['serve_id'],
-                                mapList[index]['food_id'],
-                              );*/
+                              _navigateToProfessorListScreen(mapList[index]['id']);
                             },
                           );
                         },
@@ -233,6 +168,14 @@ class _FacultyScreenState extends State<FacultyScreen> {
         ),
       ),
 
+    );
+  }
+
+  _navigateToProfessorListScreen(int facultyid) {
+    Navigator.pushNamed(context, ProfessorList.id ,
+      arguments: {
+        'facultyid': facultyid,
+      },
     );
   }
 }

@@ -19,9 +19,6 @@ class FoodDetailsScreen extends StatefulWidget {
 }
 
 class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
-
-
-
   int count = 0;
   bool isVisible;
   TextEditingController controller = TextEditingController();
