@@ -54,7 +54,7 @@ class _AwesomeListItemState extends State<AwesomeListItem> {
                         //widget.content,
                         style: PersianFonts.Shabnam.copyWith(
                             color: Colors.grey.shade500,
-                            fontSize: 12.0,
+                            fontSize: 16.0,
                             fontWeight: FontWeight.bold,
                         ),
                       ),

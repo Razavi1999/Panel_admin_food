@@ -21,15 +21,14 @@ class ProfessorList extends StatelessWidget {
     int facultyid = args['facultyid'];
 
     return  Scaffold(
-      body:  SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-             GradientAppBar("اساتید دانشکده"),
-             HomePageBody(facultyid),
-          ],
-        ),
-      ),
+      body: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+               GradientAppBar("اساتید دانشکده"),
+               HomePageBody(facultyid),
+            ],
+          ),
+      //),
     );
 
   }
@@ -62,7 +61,7 @@ class GradientAppBar extends StatelessWidget {
           style: PersianFonts.Shabnam.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w600,
-              fontSize: 36.0
+              fontSize: 18.0
           ),
         ),
       ),

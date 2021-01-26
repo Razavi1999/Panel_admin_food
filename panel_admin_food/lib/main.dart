@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: LoginScreen.id,
       routes: {
-        DetailPageProfessor.id : (context) => DetailPageProfessor(),
+        //DetailPageProfessor.id : (context) => DetailPageProfessor(),
         ProfessorList.id : (context) => ProfessorList(),
         FacultyScreen.id : (context) => FacultyScreen(),
         guide.id   :(context) => guide(),

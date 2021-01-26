@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:panel_admin_food_origin/models/plants.dart';
 import 'package:panel_admin_food_origin/models/separator.dart';
 import 'package:panel_admin_food_origin/models/text_style.dart';
+import 'package:persian_fonts/persian_fonts.dart';
 
 import 'detailProfessor.dart';
 
 
 class PlanetSummary extends StatelessWidget {
 
-  final Planet planet;
+  final Professor planet;
   final bool horizontal;
 
   PlanetSummary(this.planet, {this.horizontal = true});
@@ -19,28 +20,25 @@ class PlanetSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final planetThumbnail = new Container(
-      margin: new EdgeInsets.symmetric(
+    final planetThumbnail =  Container(
+      margin:  EdgeInsets.symmetric(
           vertical: 16.0
       ),
       alignment: horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
-      child: new Hero(
+      child: Hero(
         tag: "planet-hero-${planet.id}",
-        child:  FadeInImage(
-              image:  NetworkImage(planet.image),
-              placeholder: AssetImage('assets/images/food.png'),
-            height: 92.0,
-            width: 92.0,
-        ),
+        child:  CircleAvatar(
+            maxRadius: 50,
+          backgroundImage: NetworkImage(
+              planet.image ,
+          ),
+
+          ),
       ),
     );
 
-
-
     Widget _planetValue({String value, String image}) {
-      //return Text("Ahmad Ahmad");
       return  Container(
-        //height: 100,
         child:  Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -50,45 +48,54 @@ class PlanetSummary extends StatelessWidget {
                    height: 12.0
                ),
                Container(width: 8.0),
-               Text(planet.gravity, style: Style.smallTextStyle),
+               Text(planet.gravity,
+                   textDirection: TextDirection.rtl,
+                   style: Style.smallTextStyle),
             ]
         ),
       );
     }
 
 
-    final planetCardContent = new Container(
-      margin: new EdgeInsets.fromLTRB(horizontal ? 76.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),
-      constraints: new BoxConstraints.expand(),
-      child: new Column(
+    final planetCardContent =  Container(
+      //height: 300,
+      margin:  EdgeInsets.fromLTRB(horizontal ? 76.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),
+      constraints:  BoxConstraints.expand(),
+      child:  Column(
         crossAxisAlignment: horizontal ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: <Widget>[
           new Container(height: 4.0),
-          new Text(planet.name, style: Style.titleTextStyle),
+          new Text(planet.name,
+              textDirection: TextDirection.rtl,
+              style: Style.titleTextStyle),
           new Container(height: 10.0),
-          new Text(planet.location, style: Style.commonTextStyle),
+          new Text(planet.location,
+              textDirection: TextDirection.rtl,
+              style: PersianFonts.Shabnam.copyWith(
+                color: Colors.white
+              )),
           new Separator(),
-          new Row(
+           /*Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Expanded(
+               Expanded(
                   flex: horizontal ? 1 : 0,
                   child: _planetValue(
                       value: planet.distance,
                       image: 'assets/images/ic_distance.png')
 
               ),
-              new Container(
+               Container(
                 width: horizontal ? 8.0 : 32.0,
               ),
-              new Expanded(
+               Expanded(
                   flex: horizontal ? 1 : 0,
                   child: _planetValue(
                       value: planet.gravity,
                       image: 'assets/images/ic_gravity.png')
               )
             ],
-          ),
+          ),*/
         ],
       ),
     );

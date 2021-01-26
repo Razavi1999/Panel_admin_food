@@ -10,7 +10,7 @@ import 'PlanetSummary.dart';
 class DetailPageProfessor extends StatelessWidget {
   static String id = "Professor_Details";
 
-  final Planet planet;
+  final Professor planet;
 
   DetailPageProfessor(this.planet);
 

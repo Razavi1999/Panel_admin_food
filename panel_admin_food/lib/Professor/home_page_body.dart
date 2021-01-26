@@ -20,7 +20,6 @@ class HomePageBody extends StatefulWidget {
 
   HomePageBody(this.faculty_id);
 
-
   @override
   _HomePageBodyState createState() => _HomePageBodyState();
 }
@@ -48,11 +47,7 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   @override
   Widget build(BuildContext context) {
-
     print("url : " + url + widget.faculty_id.toString());
-
-
-
 
     return Container(
       child: FutureBuilder(
@@ -60,8 +55,8 @@ class _HomePageBodyState extends State<HomePageBody> {
         builder: (context, snapshot) {
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
-            print(url);
-            //return SizedBox(height: 10,);
+            print("I m connectionState !!!");
+            //print(url);
             return FutureBuilder(
               future: http.get(
                   '$url${widget.faculty_id}',
@@ -86,54 +81,65 @@ class _HomePageBodyState extends State<HomePageBody> {
                       .jsonDecode(convert.utf8.decode(response.bodyBytes));
 
                   List<Map> mapList = [];
-                  List<Planet> planets = [];
-
+                  List<Professor> P = [];
                   int count = 0;
 
                   for (Map map in jsonResponse)
                   {
                     count++;
                     mapList.add(map);
+                  }
 
+                  for(int i = 0 ; i < count ; i++){
+                     Professor professor = Professor(
+                        id: mapList[i]['professor_id'],
+                        name: mapList[i]['first_name'] + " " + mapList[i]['last_name'],
+                        location: "مرتبه علمی : " + mapList[i]['academic_rank'] ,
+                        distance: "54.6m Km",
+                        gravity: "3.711 m/s ",
+                        description: "Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System after Mercury. In English, Mars carries a name of the Roman god of war, and is often referred to as the 'Red Planet' because the reddish iron oxide prevalent on its surface gives it a reddish appearance that is distinctive among the astronomical bodies visible to the naked eye. Mars is a terrestrial planet with a thin atmosphere, having surface features reminiscent both of the impact craters of the Moon and the valleys, deserts, and polar ice caps of Earth.",
+                        image: baseUrl + mapList[i]['image'],
+                    );
+
+                     P.add(professor);
+                     print("professor name" + mapList[i]['first_name'] + mapList[i]['last_name']);
                   }
 
                   print("jsonresponse : " +  jsonResponse.toString());
+                  print("maplist.length : " + mapList.length.toString());
+                  print("count : " + count.toString());
 
-                 // return Text("دانیال خر است");
+
+                  //return Text("heig you",);
 
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: count,
                     itemBuilder: (context, index) {
 
-                      print( "image : " + mapList[index]['image']);
+                     print( "image : " + P[index].image);
+                     print("p.length : " + P.length.toString());
+                     print("p[0] : " + P[0].name);
 
-                      Planet P = Planet(
-                          id: "2",
-                          name: "mapList[index]",
-                          location: "Milkyway Galaxy",
-                          distance: "54.6m Km",
-                          gravity: "3.711 m/s ",
-                          description: "Neptune is the eighth and farthest known planet from the Sun in the Solar System. In the Solar System, it is the fourth-largest planet by diameter, the third-most-massive planet, and the densest giant planet. Neptune is 17 times the mass of Earth and is slightly more massive than its near-twin Uranus, which is 15 times the mass of Earth and slightly larger than Neptune. Neptune orbits the Sun once every 164.8 years at an average distance of 30.1 astronomical units (4.50×109 km). It is named after the Roman god of the sea and has the astronomical symbol ♆, a stylised version of the god Neptune's trident",
-                          image: "$baseUrl${mapList[index]['image']}",
-                          picture: "https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/images/110411main_Voyager2_280_yshires.jpg"
-                      );
 
-                      return Container(
-                        child: CustomScrollView(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          slivers: <Widget>[
-                            SliverPadding(
-                              padding: const EdgeInsets.symmetric(vertical: 24.0),
-                              sliver:  SliverList(
-                                delegate:  SliverChildBuilderDelegate(
-                                      (context, index) =>  PlanetSummary(P),
-                                  childCount: planets.length,
+                      return Expanded(
+                        child: Container(
+                          color: Color(0xFF736AB7),
+                          child: CustomScrollView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            slivers: <Widget>[
+                              SliverPadding(
+                                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                                sliver:  SliverList(
+                                  delegate:  SliverChildBuilderDelegate(
+                                        (context, index) =>  new PlanetSummary(P[index]),
+                                    childCount: 1,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
