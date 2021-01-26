@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:panel_admin_food_origin/models/PlanetSummary.dart';
+import 'package:panel_admin_food_origin/models/detailProfessor.dart';
 import 'package:panel_admin_food_origin/models/plants.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import '../components/OrderCard2.dart';
+import 'Detail_Professor.dart';
 
 
 class HomePageBody extends StatefulWidget {
@@ -98,7 +101,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                         distance: "54.6m Km",
                         gravity: "3.711 m/s ",
                         description: "Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System after Mercury. In English, Mars carries a name of the Roman god of war, and is often referred to as the 'Red Planet' because the reddish iron oxide prevalent on its surface gives it a reddish appearance that is distinctive among the astronomical bodies visible to the naked eye. Mars is a terrestrial planet with a thin atmosphere, having surface features reminiscent both of the impact craters of the Moon and the valleys, deserts, and polar ice caps of Earth.",
-                        image: baseUrl + mapList[i]['image'],
+                        image: mapList[i]['image'],
                     );
 
                      P.add(professor);
@@ -121,27 +124,16 @@ class _HomePageBodyState extends State<HomePageBody> {
                      print("p.length : " + P.length.toString());
                      print("p[0] : " + P[0].name);
 
+                     return OrderCard2(
+                       name: P[index].name,
+                      // cost: mapList[index]['cost'],
+                       //description: mapList[index]['description'],
+                       image: '$baseUrl${P[index].image}',
+                       onPressed: () {
+                         //navigateToProfessorDetailScreen(P[index].id);
+                       },
+                     );
 
-                      return Expanded(
-                        child: Container(
-                          color: Color(0xFF736AB7),
-                          child: CustomScrollView(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            slivers: <Widget>[
-                              SliverPadding(
-                                padding: const EdgeInsets.symmetric(vertical: 24.0),
-                                sliver:  SliverList(
-                                  delegate:  SliverChildBuilderDelegate(
-                                        (context, index) =>  new PlanetSummary(P[index]),
-                                    childCount: 1,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
                     },
                   );
                 }
@@ -167,5 +159,18 @@ class _HomePageBodyState extends State<HomePageBody> {
       ),
     );
   }
+
+  void navigateToProfessorDetailScreen(int professor_id) {
+    Navigator.pushNamed(
+      context,
+      DetailPageProfessor.id,
+      arguments: {
+        'id': professor_id,
+      },
+    );
+
+  }
 }
+
+
 

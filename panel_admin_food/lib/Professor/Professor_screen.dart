@@ -25,7 +25,9 @@ class ProfessorList extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
                GradientAppBar("اساتید دانشکده"),
-               HomePageBody(facultyid),
+               SingleChildScrollView(
+                   child: HomePageBody(facultyid)
+               ),
             ],
           ),
       //),

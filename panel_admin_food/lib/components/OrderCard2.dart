@@ -7,22 +7,22 @@ import 'package:pie_chart/pie_chart.dart';
 
 
 
-class OrderCard extends StatefulWidget {
+class OrderCard2 extends StatefulWidget {
   String name, image, description;
   Map<String , double> data;
   int cost;
   final Function onPressed;
 
-  OrderCard({
+  OrderCard2({
     this.name, this.image, this.onPressed, this.cost,this.description ,
     this.data
   });
 
   @override
-  _OrderCardState createState() => _OrderCardState();
+  _OrderCard2State createState() => _OrderCard2State();
 }
 
-class _OrderCardState extends State<OrderCard> {
+class _OrderCard2State extends State<OrderCard2> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -35,12 +35,12 @@ class _OrderCardState extends State<OrderCard> {
           shape:  RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          color: Colors.purple.shade50,
+          color: Colors.white,
           margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           elevation: 6,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -50,10 +50,10 @@ class _OrderCardState extends State<OrderCard> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                            widget.name,
-                            textAlign: TextAlign.right,
-                            style: PersianFonts.Shabnam.copyWith(
-                                fontSize: 16.0, fontWeight: FontWeight.bold),
+                        widget.name,
+                        textAlign: TextAlign.right,
+                        style: PersianFonts.Shabnam.copyWith(
+                            fontSize: 16.0, fontWeight: FontWeight.bold),
                       ),
 
                       SizedBox(
@@ -63,7 +63,7 @@ class _OrderCardState extends State<OrderCard> {
 
 
                       Text(
-                           replaceFarsiNumber(widget.cost.toString()) + ' ریال  ' ,
+                        replaceFarsiNumber(widget.cost.toString()) + ' ریال  ' ,
                         textDirection: TextDirection.rtl,
                         style: PersianFonts.Shabnam.copyWith(
                             fontSize: 16.0,
@@ -82,10 +82,10 @@ class _OrderCardState extends State<OrderCard> {
                         strutStyle: StrutStyle(fontSize: 12.0),
                         textAlign: TextAlign.right,
                         text: TextSpan(
-                          text: widget.description,
-                          style: PersianFonts.Shabnam.copyWith(
-                            color: kPrimaryColor
-                          )
+                            text: widget.description,
+                            style: PersianFonts.Shabnam.copyWith(
+                                color: kPrimaryColor
+                            )
                         ),
                       ),
 
@@ -105,19 +105,19 @@ class _OrderCardState extends State<OrderCard> {
                 SizedBox(
                   width: 50.0,
                 ),
+
                 Container(
                   height: 95.0,
                   width: 70.0,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10)
+                      borderRadius: BorderRadius.circular(10)
                   ),
-                  child: FadeInImage(
-                    fit: BoxFit.cover,
-                    //height: 50,
-                    placeholder: AssetImage('assets/images/food.png'),
-                    image: NetworkImage(widget.image),
+                  child:  CircleAvatar(
+                    maxRadius: 50,
+                    backgroundImage: NetworkImage( widget.image , ),
                   ),
                 ),
+
                 SizedBox(
                   width: 10.0,
                 ),

@@ -128,7 +128,7 @@ class PlanetSummary extends StatelessWidget {
         onTap: horizontal
             ? () => Navigator.of(context).push(
           new PageRouteBuilder(
-            pageBuilder: (_, __, ___) =>  DetailPageProfessor(planet),
+           // pageBuilder: (_, __, ___) =>  DetailPageProfessor(planet),
             transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             new FadeTransition(opacity: animation, child: child),
           ) ,

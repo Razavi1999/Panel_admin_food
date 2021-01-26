@@ -7,13 +7,18 @@ import 'package:panel_admin_food_origin/models/text_style.dart';
 import 'PlanetSummary.dart';
 
 
-class DetailPageProfessor extends StatelessWidget {
+class DetailPageProfessor extends StatefulWidget {
   static String id = "Professor_Details";
 
   final Professor planet;
 
-  DetailPageProfessor(this.planet);
+  const DetailPageProfessor({Key key, this.planet}) : super(key: key);
 
+  @override
+  _DetailPageProfessorState createState() => _DetailPageProfessorState();
+}
+
+class _DetailPageProfessorState extends State<DetailPageProfessor> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -34,7 +39,7 @@ class DetailPageProfessor extends StatelessWidget {
 
   Container _getBackground () {
     return new Container(
-      child: new Image.network(planet.picture,
+      child: new Image.network(widget.planet.picture,
         fit: BoxFit.cover,
         height: 300.0,
       ),
@@ -66,7 +71,7 @@ class DetailPageProfessor extends StatelessWidget {
       child: new ListView(
         padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 32.0),
         children: <Widget>[
-          new PlanetSummary(planet,
+          new PlanetSummary(widget.planet,
             horizontal: false,
           ),
           new Container(
@@ -78,7 +83,7 @@ class DetailPageProfessor extends StatelessWidget {
                   style: Style.headerTextStyle,),
                 new Separator(),
                 new Text(
-                    planet.description, style: Style.commonTextStyle),
+                    widget.planet.description, style: Style.commonTextStyle),
               ],
             ),
           ),
