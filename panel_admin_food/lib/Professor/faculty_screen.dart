@@ -130,8 +130,8 @@ class _FacultyScreenState extends State<FacultyScreen> {
                         itemBuilder: (context, index) {
                           // mapList[index]['image'] =   mapList[index]['image'];
 
-                          print( "image : " + mapList[index]['image']);
-                          print( "name : " + mapList[index]['name']);
+                          //print( "image : " + mapList[index]['image']);
+                          //print( "name : " + mapList[index]['name']);
 
                           return AwesomeListItem(
                             title: mapList[index]['name'],

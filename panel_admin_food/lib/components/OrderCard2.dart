@@ -10,7 +10,7 @@ import 'package:pie_chart/pie_chart.dart';
 class OrderCard2 extends StatefulWidget {
   String name, image, description;
   Map<String , double> data;
-  int cost;
+  String cost;
   final Function onPressed;
 
   OrderCard2({
@@ -63,7 +63,7 @@ class _OrderCard2State extends State<OrderCard2> {
 
 
                       Text(
-                        replaceFarsiNumber(widget.cost.toString()) + ' ریال  ' ,
+                        replaceFarsiNumber(widget.cost.toString()) ,
                         textDirection: TextDirection.rtl,
                         style: PersianFonts.Shabnam.copyWith(
                             fontSize: 16.0,

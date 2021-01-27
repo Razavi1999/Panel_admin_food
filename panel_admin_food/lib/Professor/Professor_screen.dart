@@ -21,15 +21,37 @@ class ProfessorList extends StatelessWidget {
     int facultyid = args['facultyid'];
 
     return  Scaffold(
-      body: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-               GradientAppBar("اساتید دانشکده"),
-               SingleChildScrollView(
-                   child: HomePageBody(facultyid)
-               ),
-            ],
+      appBar: PreferredSize(
+        preferredSize: Size( double.infinity , 100),
+        child: Container(
+          padding:  EdgeInsets.only(top: 20),
+          height: 100,
+          child:  Center(
+            child: Text("title",
+              style: PersianFonts.Shabnam.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.0
+              ),
+            ),
           ),
+          decoration:  BoxDecoration(
+            gradient:  LinearGradient(
+                colors: [
+                  const Color(0xFF3366FF),
+                  const Color(0xFF00CCFF)
+                ],
+                begin: const FractionalOffset(0.0, 0.0),
+                end: const FractionalOffset(1.0, 0.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp
+            ),
+          ),
+        ),
+      ),
+
+      body: HomePageBody(facultyid)
+
       //),
     );
 

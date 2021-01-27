@@ -81,294 +81,294 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
       ),
 
       body: FutureBuilder(
-        future: getToken(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            print('${url}/?food_id=$foodId');
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  FutureBuilder(
-                    future: http.get('${url}/?food_id=$foodId&date=$date',
-                        headers: {HttpHeaders.authorizationHeader: token}),
+      future: getToken(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.done) {
+          print('${url}/?food_id=$foodId');
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                FutureBuilder(
+                  future: http.get('${url}/?food_id=$foodId&date=$date',
+                      headers: {HttpHeaders.authorizationHeader: token}),
 
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData &&
-                          snapshot.connectionState == ConnectionState.done) {
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData &&
+                        snapshot.connectionState == ConnectionState.done) {
 
-                        http.Response response = snapshot.data;
-                        print('***************************');
-                        print(response.body);
-                        print('***************************');
+                      http.Response response = snapshot.data;
+                      print('***************************');
+                      print(response.body);
+                      print('***************************');
 
-                        List result = convert.jsonDecode(
-                            convert.utf8.decode(response.bodyBytes));
-                        price = result[0]['cost'];
-                        count = 0;
+                      List result = convert.jsonDecode(
+                          convert.utf8.decode(response.bodyBytes));
+                      price = result[0]['cost'];
+                      count = 0;
 
-                        final Map<String , double> my_map = Map() ;
+                      final Map<String , double> my_map = Map() ;
 
-                        for(int i = 0 ; i < result.length ; i++)
+                      for(int i = 0 ; i < result.length ; i++)
                         my_map[replaceFarsiNumber( result[i]['start_serve_time'].toString().substring(0,5) )]
-                          = double.parse( result[i]['remaining_count'].toString());
+                        = double.parse( result[i]['remaining_count'].toString());
 
-                        print('my_map' + my_map.toString());
+                      print('my_map' + my_map.toString());
 
-                        for (var each in result)
-                          count++;
+                      for (var each in result)
+                        count++;
 
 
 
-                        return SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Center(
-                                  child: Banner(
-                                    color: Colors.purple.shade300,
-                                    message: result[0]['food']['cost'].toString(),
-                                    location: BannerLocation.bottomEnd,
-                                    child: FadeInImage(
-                                      height: 150,
-                                      width: 150,
-                                      fit: BoxFit.cover,
-                                      placeholder: AssetImage(
-                                          'assets/images/book-1.png'),
-                                      image: NetworkImage(
-                                        '$baseUrl' + result[0]['food']['image'],
-                                      ),
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Center(
+                                child: Banner(
+                                  color: Colors.purple.shade300,
+                                  message: result[0]['food']['cost'].toString(),
+                                  location: BannerLocation.bottomEnd,
+                                  child: FadeInImage(
+                                    height: 150,
+                                    width: 150,
+                                    fit: BoxFit.cover,
+                                    placeholder: AssetImage(
+                                        'assets/images/book-1.png'),
+                                    image: NetworkImage(
+                                      '$baseUrl' + result[0]['food']['image'],
                                     ),
                                   ),
                                 ),
-                                height: 200,
-                                decoration: BoxDecoration(
-                                  color: kPrimaryColor,
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(40),
-                                    bottomRight: Radius.circular(40),
+                              ),
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: kPrimaryColor,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(40),
+                                  bottomRight: Radius.circular(40),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 5,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'نام غذا',
+                                    style: PersianFonts.Shabnam.copyWith(
+                                        color: kPrimaryColor,
+                                        fontSize: 28),
+                                    textDirection: TextDirection.rtl,
+                                    textAlign: TextAlign.right,
                                   ),
-                                ),
+                                ],
                               ),
-                              SizedBox(
-                                height: 20,
+                            ),
+
+
+
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 30,
+                                vertical: 0,
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 5,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'نام غذا',
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    result[0]['food']['name'],
+                                    textDirection: TextDirection.rtl,
+                                    style: PersianFonts.Shabnam.copyWith(
+                                        fontWeight: FontWeight.w800,
+                                        color: kPrimaryColor,
+                                        fontSize: 15
+                                    ),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 30,
+                                vertical: 0,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    replaceFarsiNumber(result[0]['food']['cost'].toString()) + ' تومان',
+                                    textDirection: TextDirection.rtl,
+                                    textAlign: TextAlign.right,
+                                    style: PersianFonts.Shabnam.copyWith(
+                                        fontWeight: FontWeight.w800,
+                                        color: kPrimaryColor,
+                                        fontSize: 15
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+
+
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 10,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 5,
+                                    ),
+                                    child: Text(
+                                      'محتویات',
                                       style: PersianFonts.Shabnam.copyWith(
                                           color: kPrimaryColor,
                                           fontSize: 28),
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.right,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-
-
-
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 30,
-                                  vertical: 0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      result[0]['food']['name'],
-                                      textDirection: TextDirection.rtl,
-                                      style: PersianFonts.Shabnam.copyWith(
-                                        fontWeight: FontWeight.w800,
-                                        color: kPrimaryColor,
-                                        fontSize: 15
-                                      ),
-                                      textAlign: TextAlign.right,
-                                    ),
-                                  ],
-                                ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 30,
+                                vertical: 0,
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 30,
-                                  vertical: 0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text(
-                                      replaceFarsiNumber(result[0]['food']['cost'].toString()) + ' تومان',
-                                      textDirection: TextDirection.rtl,
-                                      textAlign: TextAlign.right,
-                                      style: PersianFonts.Shabnam.copyWith(
-                                          fontWeight: FontWeight.w800,
-                                        color: kPrimaryColor,
-                                          fontSize: 15
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-
-
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 10,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 5,
-                                        ),
-                                        child: Text(
-                                          'محتویات',
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Flexible(
+                                    child: RichText(
+                                      overflow: TextOverflow.ellipsis,
+                                      strutStyle: StrutStyle(fontSize: 12.0),
+                                      text: TextSpan(
+                                          text: result[0]['food']['description'],
                                           style: PersianFonts.Shabnam.copyWith(
-                                              color: kPrimaryColor,
-                                              fontSize: 28),
-                                          textDirection: TextDirection.rtl,
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 30,
-                                  vertical: 0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Flexible(
-                                      child: RichText(
-                                        overflow: TextOverflow.ellipsis,
-                                        strutStyle: StrutStyle(fontSize: 12.0),
-                                        text: TextSpan(
-                                            text: result[0]['food']['description'],
-                                            style: PersianFonts.Shabnam.copyWith(
-                                                fontWeight: FontWeight.w800,
-                                                color: kPrimaryColor
-                                            )
-                                        ),
+                                              fontWeight: FontWeight.w800,
+                                              color: kPrimaryColor
+                                          )
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                height: 50,
-                              ),
+                            ),
+                            SizedBox(
+                              height: 50,
+                            ),
 
-                              PieChart(
-                                dataMap: my_map,
-                                legendFontColor: Colors.blueGrey[900],
-                                legendFontSize: 22.0,
-                                legendFontWeight: FontWeight.w800,
-                                animationDuration: Duration(milliseconds: 800),
-                                chartLegendSpacing: 25.0,
-                                chartRadius: MediaQuery.of(context).size.width / 2,
-                                showChartValuesInPercentage: true,
-                                //showChartValues: true,
-                                //showChartValuesOutside: false,
-                                chartValuesColor: Colors.blueGrey[900].withOpacity(0.9),
-                                //colorList: colorList,
-                                //showLegends: true,
-                                //decimalPlaces: 1,
-                                //showChartValueLabel: true,
-                                //chartValueFontSize: 12,
-                                //chartValueFontWeight: FontWeight.bold,
-                                //chartValueLabelColor: Colors.grey[200],
-                                //initialAngle: 0,
-                              ),
-
-
-
-
-
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: count,
-                                itemBuilder: (context, index) {
+                            PieChart(
+                              dataMap: my_map,
+                              legendFontColor: Colors.blueGrey[900],
+                              legendFontSize: 22.0,
+                              legendFontWeight: FontWeight.w800,
+                              animationDuration: Duration(milliseconds: 800),
+                              chartLegendSpacing: 25.0,
+                              chartRadius: MediaQuery.of(context).size.width / 2,
+                              showChartValuesInPercentage: true,
+                              //showChartValues: true,
+                              //showChartValuesOutside: false,
+                              chartValuesColor: Colors.blueGrey[900].withOpacity(0.9),
+                              //colorList: colorList,
+                              //showLegends: true,
+                              //decimalPlaces: 1,
+                              //showChartValueLabel: true,
+                              //chartValueFontSize: 12,
+                              //chartValueFontWeight: FontWeight.bold,
+                              //chartValueLabelColor: Colors.grey[200],
+                              //initialAngle: 0,
+                            ),
 
 
 
-                                  return Card(
-                                    shape:  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
+
+
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: count,
+                              itemBuilder: (context, index) {
+
+
+
+                                return Card(
+                                  shape:  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  color: Colors.white,
+                                  margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                  elevation: 6,
+
+
+                                  child: ListTile(
+                                    title: Text(
+                                      replaceFarsiNumber(result[index]['start_serve_time']).substring(0,5)
+                                          + ' تا ' +
+                                          replaceFarsiNumber(result[index]['end_serve_time']).substring(0,5),
+
+                                      style: PersianFonts.Shabnam.copyWith(
+                                          fontWeight: FontWeight.w700
+                                      ),
+                                      textDirection: TextDirection.rtl,
                                     ),
-                                    color: Colors.white,
-                                    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                                    elevation: 6,
+                                    leading: Text(
+                                      'تعداد باقیمانده: ${replaceFarsiNumber(result[index]['remaining_count'].toString())}',
+                                      style: PersianFonts.Shabnam.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
 
-
-                                      child: ListTile(
-                                          title: Text(
-                                              replaceFarsiNumber(result[index]['start_serve_time']).substring(0,5)
-                                                  + ' تا ' +
-                                                replaceFarsiNumber(result[index]['end_serve_time']).substring(0,5),
-                                                
-                                            style: PersianFonts.Shabnam.copyWith(
-                                              fontWeight: FontWeight.w700
-                                            ),
-                                            textDirection: TextDirection.rtl,
-                                          ),
-                                          leading: Text(
-                                            'تعداد باقیمانده: ${replaceFarsiNumber(result[index]['remaining_count'].toString())}',
-                                            style: PersianFonts.Shabnam.copyWith(
-                                                fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ),
-
-                                  );
-                                  return SizedBox();
-                                },
-                              ),
+                                );
+                                return SizedBox();
+                              },
+                            ),
 
 
 
 
 
-                            ],
-                          ),
-                        );
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    ),
     );
   }
 
