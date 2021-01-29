@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:panel_admin_food_origin/components/EmptyEffect.dart';
 import 'package:panel_admin_food_origin/constants.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 
@@ -80,25 +81,27 @@ class _AwesomeListItemState extends State<AwesomeListItem> {
                   new Transform.translate(
                     offset: Offset(10.0, 20.0),
                     child: Material(
-                      color: Colors.black,
+                      //color: Colors.black,
                       child: InkWell(
                         onTap: widget.onPressed,
                         highlightColor: Colors.transparent,
                         child: new Card(
                           elevation: 20.0,
-                          child: new Container(
-                            height: 120.0,
-                            width: 120.0,
-                            decoration: new BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    width: 10.0,
-                                    color: Colors.white,
-                                    style: BorderStyle.solid),
-                                image: DecorationImage(
-                                  image: NetworkImage(baseUrl +"/media/" + widget.image),
-                                )),
-                          ),
+                            child: new Container(
+                              height: 120.0,
+                              width: 120.0,
+                              decoration: new BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      width: 10.0,
+                                      color: Colors.white,
+                                      style: BorderStyle.solid),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(baseUrl +"/media/" + widget.image),
+                                  )),
+                            ),
+
                         ),
                       ),
                     ),

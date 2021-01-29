@@ -1,19 +1,26 @@
 
 import 'package:flutter/material.dart';
+import 'package:panel_admin_food_origin/components/EmptyEffect.dart';
+import 'package:panel_admin_food_origin/food/new_food_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 
 import '../constants.dart';
+import 'NewProfessorScreen.dart';
 import 'home_page_body.dart';
 
-class ProfessorList extends StatelessWidget {
+
+class ProfessorList extends StatefulWidget {
   static String id = "Professor_list";
+
+  @override
+  _ProfessorListState createState() => _ProfessorListState();
+}
+
+class _ProfessorListState extends State<ProfessorList> {
   int facultyid;
+
   Map args;
-
-
-  //ProfessorList(this.facultyid);
-
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,7 @@ class ProfessorList extends StatelessWidget {
           padding:  EdgeInsets.only(top: 20),
           height: 100,
           child:  Center(
-            child: Text("title",
+            child: Text("اساتید دانشکده",
               style: PersianFonts.Shabnam.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -50,16 +57,34 @@ class ProfessorList extends StatelessWidget {
         ),
       ),
 
-      body: HomePageBody(facultyid)
+      body: HomePageBody(facultyid),
+
+      floatingActionButton: EmptyEffect(
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _navigateToNewProfessorScreen();
+          },
+        ),
+        borderColor: kPrimaryColor,
+        outermostCircleStartRadius: 20,
+        outermostCircleEndRadius: 175,
+        numberOfCircles: 4,
+        animationTime: Duration(seconds: 5),
+        delay: Duration(seconds: 6),
+        gap: 30,
+        borderWidth: 20,
+        startOpacity: 0.3,
+      ),
 
       //),
     );
-
   }
 
-
-
-
+  _navigateToNewProfessorScreen()  {
+     Navigator.pushNamed(context, NewProfessorScreen.id);
+     setState(() {});
+  }
 }
 
 class GradientAppBar extends StatelessWidget {

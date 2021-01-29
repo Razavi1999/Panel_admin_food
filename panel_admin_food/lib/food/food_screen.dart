@@ -57,6 +57,7 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
   }
 
   Future<bool> _refresh() async {
+
     setState(() {});
     return true;
   }
@@ -115,8 +116,6 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
             color: Colors.white,
           ),
           onPressed: () {
-            // showCalendarDialog();
-            // _showDatePicker();
             _showDateTimePicker();
           },
         ),

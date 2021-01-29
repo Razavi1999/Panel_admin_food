@@ -16,6 +16,7 @@ import '../constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
+import 'NewProfessorScreen.dart';
 import 'Professor_screen.dart';
 
 var COLORS = [
@@ -178,4 +179,6 @@ class _FacultyScreenState extends State<FacultyScreen> {
       },
     );
   }
+
+
 }

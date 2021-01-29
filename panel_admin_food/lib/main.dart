@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:panel_admin_food_origin/Professor/NewProfessorScreen.dart';
 import 'package:panel_admin_food_origin/Professor/faculty_screen.dart';
 
 import 'Professor/Professor_screen.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: LoginScreen.id,
       routes: {
+        NewProfessorScreen.id : (context) => NewProfessorScreen(),
         DetailPageProfessor.id : (context) => DetailPageProfessor(),
         ProfessorList.id : (context) => ProfessorList(),
         FacultyScreen.id : (context) => FacultyScreen(),
