@@ -24,6 +24,7 @@ class CustomColumnImageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.grey[100],
       elevation: 5,
       margin: EdgeInsets.only(
         left: 20,
@@ -43,32 +44,28 @@ class CustomColumnImageCard extends StatelessWidget {
           children: [
             if (imageFile != null) ...[
               Material(
+                color: Colors.grey[100],
                 child: InkWell(
                   highlightColor: Colors.transparent,
                   onTap: onImageTapped,
                   child: Center(
                     child: CircleAvatar(
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Image.file(
-                          imageFile,
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      backgroundColor: Colors.blueGrey[200],
+                      radius: 80,
+                      backgroundImage: FileImage(imageFile),
                     ),
                   ),
                 ),
               ),
             ] else ...[
               Material(
+                color: Colors.grey[100],
                 child: InkWell(
                   highlightColor: Colors.transparent,
                   onTap: onImageTapped,
                   child: Center(
                     child: CircleAvatar(
-                      backgroundColor: Colors.blueGrey[100],
+                      backgroundColor: Colors.blueGrey[200],
                       radius: 60,
                       child: Padding(
                         padding: EdgeInsets.all(10),
@@ -135,7 +132,7 @@ class CustomColumnImageCard extends StatelessWidget {
               child: Text(
                 'راه ارتباطی(تلفن)',
                 style: PersianFonts.Shabnam.copyWith(
-                  fontSize: 20,
+                  fontSize: 15,
                   color: kPrimaryColor,
                 ),
               ),
@@ -153,7 +150,7 @@ class CustomColumnImageCard extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 cursorColor: kPrimaryColor,
                 style: PersianFonts.Shabnam.copyWith(
-                  fontSize: 18,
+                  fontSize: 15,
                   color: Colors.black,
                 ),
                 decoration: InputDecoration(

@@ -19,14 +19,14 @@ class ProfessorList extends StatefulWidget {
 
 class _ProfessorListState extends State<ProfessorList> {
   int facultyid;
-
+  String token;
   Map args;
 
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context).settings.arguments;
     int facultyid = args['facultyid'];
-
+    token = args['token'];
     return  Scaffold(
       appBar: PreferredSize(
         preferredSize: Size( double.infinity , 100),
@@ -82,7 +82,9 @@ class _ProfessorListState extends State<ProfessorList> {
   }
 
   _navigateToNewProfessorScreen()  {
-     Navigator.pushNamed(context, NewProfessorScreen.id);
+     Navigator.pushNamed(context, NewProfessorScreen.id,arguments: {
+       'token': token,
+     });
      setState(() {});
   }
 }

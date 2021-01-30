@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         accentColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: NewProfessorScreen.id,
+      initialRoute: LoginScreen.id,
       routes: {
         NewProfessorScreen.id : (context) => NewProfessorScreen(),
         DetailPageProfessor.id : (context) => DetailPageProfessor(),

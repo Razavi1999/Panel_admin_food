@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:panel_admin_food_origin/constants.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 
-class CustomColumnCard extends StatelessWidget {
+class CustomNameAndResearchFieldsCard extends StatelessWidget {
   final TextEditingController controller1, controller2;
   final String text1, text2, text3, text4;
   final node;
   final double width;
   final Function onPressed;
 
-  CustomColumnCard({
+  CustomNameAndResearchFieldsCard({
     @required this.controller1,
     @required this.controller2,
     this.text1,
@@ -24,6 +24,7 @@ class CustomColumnCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.grey[100],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -49,7 +50,7 @@ class CustomColumnCard extends StatelessWidget {
               Text(
                 text1,
                 style: PersianFonts.Shabnam.copyWith(
-                  fontSize: 20,
+                  fontSize: 15,
                   color: kPrimaryColor,
                 ),
               ),
@@ -112,7 +113,7 @@ class CustomColumnCard extends StatelessWidget {
               Text(
                 text2,
                 style: PersianFonts.Shabnam.copyWith(
-                  fontSize: 20,
+                  fontSize: 15,
                   color: kPrimaryColor,
                 ),
               ),
@@ -194,6 +195,7 @@ class CustomColumnCard extends StatelessWidget {
                           child: Center(
                             child: Text(
                               text4,
+                              textAlign: TextAlign.center,
                               style: PersianFonts.Shabnam.copyWith(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -210,7 +212,7 @@ class CustomColumnCard extends StatelessWidget {
                   Text(
                     text3,
                     style: PersianFonts.Shabnam.copyWith(
-                      fontSize: 20,
+                      fontSize: 15,
                       color: kPrimaryColor,
                     ),
                   ),

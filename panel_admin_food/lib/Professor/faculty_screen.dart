@@ -176,6 +176,7 @@ class _FacultyScreenState extends State<FacultyScreen> {
     Navigator.pushNamed(context, ProfessorList.id ,
       arguments: {
         'facultyid': facultyid,
+        'token': token,
       },
     );
   }
