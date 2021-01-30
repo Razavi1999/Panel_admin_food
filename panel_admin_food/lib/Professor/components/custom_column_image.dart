@@ -79,8 +79,9 @@ class CustomColumnImageCard extends StatelessWidget {
               ),
             ],
             Padding(
-              padding: EdgeInsets.only(right: 20, left: 20, top: 20),
+              padding: EdgeInsets.only(right: 40, left: 20, top: 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
                     height: 50,

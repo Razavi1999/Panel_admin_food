@@ -50,19 +50,24 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       academicRank = 'رنکی مشخص نکرده اید';
   int facultyId, academicRankId;
   String base64Image, token;
-  String facultiesUrl = '$baseUrl/api/bookbse/faculties';
-  String academicRanksUrl = '$baseUrl/api/professor/ranks';
-  String professorUrl = '$baseUrl/api/professor/';
-  String timesUrl = '$baseUrl/api/professor/times/';
-  String researchFieldsUrl = '$baseUrl/api/professor/research_fields/';
+  String facultiesUrl = '$baseUrl/api/professors/faculties';
+
+  // String academicRanksUrl = '$baseUrl/api/professors/research-axes';
+  String professorUrl = '$baseUrl/api/professors/admin/';
+  String timesUrl = '$baseUrl/api/professors/times/';
+  String researchFieldsUrl = '$baseUrl/api/professors/research-axes';
   File imageFile;
   Map args;
   bool showSpinner = false;
-
   List listSelectedTimeIds = [];
   List listSelectedTimeNames = [];
   List listSelectedResearchFieldIds = [];
   List listSelectedResearchFieldNames = [];
+  List listRanks = [
+    'Professor',
+    'Assistant Professor',
+    'Associate Professor',
+  ];
 
   Future<void> _pickImage(ImageSource source) async {
     try {
@@ -114,6 +119,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
   Widget build(BuildContext context) {
     args = ModalRoute.of(context).settings.arguments;
     token = args['token'];
+    facultyId = args['faculty_id'];
     final node = FocusScope.of(context);
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
@@ -192,6 +198,8 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
                   text2: 'زمان ها',
                   text3: 'زمینه های تحقیقاتی',
                   text4: 'زمینه ها',
+                  researchFields: listSelectedResearchFieldNames,
+                  times: listSelectedTimeNames,
                   onPressed: () {
                     onTimesPressed();
                   },
@@ -417,64 +425,47 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     }
   }
 
-  onAcademicRankPressed() async {
-    http.Response response = await http.get(academicRanksUrl,
-        headers: {HttpHeaders.authorizationHeader: token});
-    var jsonResponse =
-        convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-    List<Map> mapList = [];
-    int count = 0;
-    for (Map each in jsonResponse) {
-      count++;
-      mapList.add(each);
-    }
-    if (count == 0) {
-      showDialog(
-        context: context,
-        child: AlertDialog(
-          content: Center(
-            child: Text('رنکی وجود ندارد'),
-          ),
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        child: AlertDialog(
-          content: Container(
-            height: 400,
-            width: 200,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: count,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    academicRankId = mapList[index]['id'];
-                    setState(() {
-                      academicRank = mapList[index]['name'];
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        mapList[index]['name'],
-                        // textDirection: TextDirection.rtl,
-                        style: PersianFonts.Shabnam.copyWith(
-                          fontSize: 20,
-                        ),
+  onAcademicRankPressed() {
+    List listPersianRanks = [
+      'استاد',
+      'استادیار',
+      'دانشیار',
+    ];
+
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Container(
+          height: 100,
+          width: 200,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  academicRankId = index;
+                  academicRank = listPersianRanks[index];
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      listPersianRanks[index],
+                      // textDirection: TextDirection.rtl,
+                      style: PersianFonts.Shabnam.copyWith(
+                        fontSize: 20,
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 
   onTimesPressed() async {
@@ -482,6 +473,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
         .get(timesUrl, headers: {HttpHeaders.authorizationHeader: token});
     var jsonResponse =
         convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+    print(jsonResponse);
     List<Map> mapList = [];
     int count = 0;
     for (Map each in jsonResponse) {
@@ -503,80 +495,102 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
         child: AlertDialog(
           content: Container(
             height: 400,
-            width: 200,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: count,
-              itemBuilder: (context, index) {
-                int id = mapList[index]['id'];
-                String name = mapList[index]['name'];
-                if (listSelectedTimeIds.contains(id)) {
-                  return ListTile(
-                    leading: IconButton(
-                      icon: Icon(
-                        Icons.clear,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        listSelectedTimeIds.remove(id);
-                        listSelectedTimeNames.remove(name);
-                        setState(() {
-
-                        });
-                      },
-                    ),
-                    title: Text(
-                      name,
-                      style: PersianFonts.Shabnam.copyWith(
-                        fontSize: 15,
-                      ),
-                    ),
-                  );
-                } else {
-                  return ListTile(
-                    leading: IconButton(
-                      icon: Icon(
-                        Icons.done,
-                        color: Colors.green,
-                      ),
-                      onPressed: () {
-                        listSelectedTimeIds.add(id);
-                        listSelectedTimeNames.add(name);
-                        setState(() {
-
-                        });
-                      },
-                    ),
-                    title: Text(
-                      name,
-                      style: PersianFonts.Shabnam.copyWith(
-                        fontSize: 15,
-                      ),
-                    ),
-                  );
-                }
-                return InkWell(
-                  onTap: () {
-                    facultyId = mapList[index]['id'];
-                    setState(() {
-                      facultyName = mapList[index]['name'];
-                    });
-                    // Navigator.pop(context);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        mapList[index]['name'],
-                        // textDirection: TextDirection.rtl,
-                        style: PersianFonts.Shabnam.copyWith(
-                          fontSize: 20,
+            width: 150,
+            child: Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: count,
+                  itemBuilder: (context, index) {
+                    int id = mapList[index]['time_id'];
+                    String name =
+                        '${mapList[index]['weekday']} ${mapList[index]['time']}';
+                    if (listSelectedTimeIds.contains(id)) {
+                      return ListTile(
+                        leading: IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            color: Colors.red,
+                          ),
+                          onPressed: () {
+                            listSelectedTimeIds.remove(id);
+                            listSelectedTimeNames.remove(name);
+                            setState(() {});
+                            Navigator.pop(context);
+                            onTimesPressed();
+                          },
                         ),
+                        title: Text(
+                          name,
+                          style: PersianFonts.Shabnam.copyWith(
+                            fontSize: 15,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListTile(
+                        leading: IconButton(
+                          icon: Icon(
+                            Icons.done,
+                            color: Colors.green,
+                          ),
+                          onPressed: () {
+                            listSelectedTimeIds.add(id);
+                            listSelectedTimeNames.add(name);
+                            setState(() {});
+                            Navigator.pop(context);
+                            onTimesPressed();
+                          },
+                        ),
+                        title: Text(
+                          name,
+                          style: PersianFonts.Shabnam.copyWith(
+                            fontSize: 15,
+                          ),
+                        ),
+                      );
+                    }
+                    return InkWell(
+                      onTap: () {
+                        facultyId = mapList[index]['id'];
+                        setState(() {
+                          facultyName = mapList[index]['name'];
+                        });
+                        // Navigator.pop(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            mapList[index]['name'],
+                            // textDirection: TextDirection.rtl,
+                            style: PersianFonts.Shabnam.copyWith(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                );
-              },
+                  color: kPrimaryColor,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'باشه',
+                    textAlign: TextAlign.center,
+                    style: PersianFonts.Shabnam.copyWith(color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -584,11 +598,16 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     }
   }
 
-  onResearchFieldsPressed() async{
-    http.Response response = await http
-        .get(researchFieldsUrl, headers: {HttpHeaders.authorizationHeader: token});
+  onResearchFieldsPressed() async {
+    http.Response response = await http.get("$researchFieldsUrl/?faculty_id=$facultyId",
+        headers: {HttpHeaders.authorizationHeader: token});
+    print(response.body);
+    print('------------------------');
+    print('$researchFieldsUrl/?faculty_id=$facultyId');
     var jsonResponse =
-    convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+        convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+    print('***********************');
+    // print(jsonResponse);
     List<Map> mapList = [];
     int count = 0;
     for (Map each in jsonResponse) {
@@ -600,7 +619,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
         context: context,
         child: AlertDialog(
           content: Center(
-            child: Text('دانشکده ای وجود ندارد'),
+            child: Text('فیلد تحقیقاتی وجود ندارد'),
           ),
         ),
       );
@@ -611,63 +630,91 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
           content: Container(
             height: 400,
             width: 200,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: count,
-              itemBuilder: (context, index) {
-                int id = mapList[index]['id'];
-                String name = mapList[index]['name'];
-                if (listSelectedResearchFieldIds.contains(id)) {
-                  return ListTile(
-                    leading: IconButton(
-                      icon: Icon(
-                        Icons.clear,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        listSelectedResearchFieldIds.remove(id);
-                        listSelectedResearchFieldNames.remove(name);
-                        setState(() {
-
-                        });
-                      },
-                    ),
-                    title: Text(
-                      name,
-                      style: PersianFonts.Shabnam.copyWith(
-                        fontSize: 15,
-                      ),
-                    ),
-                  );
-                } else {
-                  return ListTile(
-                    leading: IconButton(
-                      icon: Icon(
-                        Icons.done,
-                        color: Colors.green,
-                      ),
-                      onPressed: () {
-                        listSelectedResearchFieldIds.add(id);
-                        listSelectedResearchFieldNames.add(name);
-                        setState(() {
-
-                        });
-                      },
-                    ),
-                    title: Text(
-                      name,
-                      style: PersianFonts.Shabnam.copyWith(
-                        fontSize: 15,
-                      ),
-                    ),
-                  );
-                }
-              },
+            child: Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: count,
+                  itemBuilder: (context, index) {
+                    int id = mapList[index]['research_axis_id'];
+                    String name = mapList[index]['subject'];
+                    if (listSelectedResearchFieldIds.contains(id)) {
+                      return ListTile(
+                        leading: IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            color: Colors.red,
+                          ),
+                          onPressed: () {
+                            listSelectedResearchFieldIds.remove(id);
+                            listSelectedResearchFieldNames.remove(name);
+                            setState(() {});
+                            Navigator.pop(context);
+                            onResearchFieldsPressed();
+                          },
+                        ),
+                        title: Text(
+                          name,
+                          style: PersianFonts.Shabnam.copyWith(
+                            fontSize: 15,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListTile(
+                        leading: IconButton(
+                          icon: Icon(
+                            Icons.done,
+                            color: Colors.green,
+                          ),
+                          onPressed: () {
+                            listSelectedResearchFieldIds.add(id);
+                            listSelectedResearchFieldNames.add(name);
+                            setState(() {});
+                            Navigator.pop(context);
+                            onResearchFieldsPressed();
+                          },
+                        ),
+                        title: Text(
+                          name,
+                          style: PersianFonts.Shabnam.copyWith(
+                            fontSize: 15,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  color: kPrimaryColor,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'باشه',
+                    textAlign: TextAlign.center,
+                    style: PersianFonts.Shabnam.copyWith(color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ),
-         ),
+        ),
       );
     }
+  }
+
+  onResearchRemovePressed (){
+
+  }
+  onTimesRemovePressed (){
+
   }
 
   onSubmitPressed() {
@@ -680,7 +727,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     String email = emailController.text;
     String address = addressController.text;
     int facultyId = this.facultyId;
-    int academicId = this.academicRankId;
+    String academicRank = listRanks[academicRankId];
     String phone = phoneController.text;
     String bachelor = bachelorController.text;
     String master = masterController.text;
@@ -705,7 +752,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       open(context, 'آدرس را وارد کنید');
       return;
     }
-    if (academicId == null) {
+    if (academicRank == null) {
       open(context, 'رنک آموزشی را وارد کنید');
       return;
     }
@@ -717,6 +764,14 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       open(context, 'عکسی انتخاب کنید');
       return;
     }
+    if (listSelectedTimeIds.length == 0) {
+      open(context, 'زمان های خالی استاد را وارد کنید');
+      return;
+    }
+    if (listSelectedResearchFieldIds.length == 0) {
+      open(context, 'فیلد های تبلیغاتی استاد را وارد کنید');
+      return;
+    }
 
     postInformation(
       firstName: firstName,
@@ -724,7 +779,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       email: email,
       address: address,
       facultyId: facultyId,
-      academicRankId: academicId,
+      academicRank: academicRank,
       phone: phone,
       bachelor: bachelor,
       master: master,
@@ -739,7 +794,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     String firstName,
     String lastName,
     int facultyId,
-    int academicRankId,
+    String academicRank,
     String phone,
     String email,
     String address,
@@ -758,39 +813,40 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       String base64file = convert.base64Encode(imageFile.readAsBytesSync());
       http.Response response;
       Map map = Map();
-      map['fist_name'] = firstName;
+      map['first_name'] = firstName;
       map['last_name'] = lastName;
       map['faculty_id'] = facultyId;
-      map['academic_rank'] = academicRankId;
-      map['phone'] = phone;
+      map['academic_rank'] = academicRank;
+      map['direct_telephone'] = phone;
       map['email'] = email;
       map['address'] = address;
       map['bachelor'] = bachelor;
       map['master'] = master;
       map['phd'] = phd;
-      map['post_phd'] = postPhd;
-      map['web_page_link'] = webPageLink;
+      map['post_doctoral'] = postPhd;
+      map['webpage_link'] = webPageLink;
       map['filename'] = imageFile.path.split('/').last;
       map['image'] = base64file;
-      if(googleScholarLink.length != 0){
+      if (googleScholarLink.length != 0) {
         map['google_scholar_link'] = googleScholarLink;
       }
-      if(webPageLink.length != 0){
+      if (webPageLink.length != 0) {
         map['web_page_link'] = webPageLink;
       }
-      if(bachelor.length != 0){
+      if (bachelor.length != 0) {
         map['bachelor'] = bachelor;
       }
-      if(master.length != 0){
+      if (master.length != 0) {
         map['master'] = master;
       }
-      if(phd.length != 0){
+      if (phd.length != 0) {
         map['phd'] = phd;
       }
-      if(postPhd.length != 0){
+      if (postPhd.length != 0) {
         map['post_phd'] = postPhd;
       }
-
+      map['free_times_list'] = listSelectedTimeIds;
+      map['research_axes_list'] = listSelectedResearchFieldIds;
       response = await http.post(
         professorUrl,
         headers: {

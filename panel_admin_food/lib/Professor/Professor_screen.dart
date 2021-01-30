@@ -18,14 +18,15 @@ class ProfessorList extends StatefulWidget {
 }
 
 class _ProfessorListState extends State<ProfessorList> {
-  int facultyid;
+  int facultyid, faculty_id;
   String token;
   Map args;
 
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context).settings.arguments;
-    int facultyid = args['facultyid'];
+    int faculty_id = args['facultyid'];
+    this.faculty_id = faculty_id;
     token = args['token'];
     return  Scaffold(
       appBar: PreferredSize(
@@ -57,33 +58,38 @@ class _ProfessorListState extends State<ProfessorList> {
         ),
       ),
 
-      body: HomePageBody(facultyid),
+      body: HomePageBody(faculty_id),
 
-      floatingActionButton: EmptyEffect(
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            _navigateToNewProfessorScreen();
-          },
-        ),
-        borderColor: kPrimaryColor,
-        outermostCircleStartRadius: 20,
-        outermostCircleEndRadius: 175,
-        numberOfCircles: 4,
-        animationTime: Duration(seconds: 5),
-        delay: Duration(seconds: 6),
-        gap: 30,
-        borderWidth: 20,
-        startOpacity: 0.3,
+      // floatingActionButton: EmptyEffect(
+      //   child: FloatingActionButton(
+      //     child: Icon(Icons.add),
+      //     onPressed: () {
+      //       _navigateToNewProfessorScreen();
+      //     },
+      //   ),
+      //   borderColor: kPrimaryColor,
+      //   outermostCircleStartRadius: 20,
+      //   outermostCircleEndRadius: 175,
+      //   numberOfCircles: 4,
+      //   animationTime: Duration(seconds: 5),
+      //   delay: Duration(seconds: 6),
+      //   gap: 30,
+      //   borderWidth: 20,
+      //   startOpacity: 0.3,
+      // ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          _navigateToNewProfessorScreen();
+        },
       ),
-
-      //),
     );
   }
 
   _navigateToNewProfessorScreen()  {
      Navigator.pushNamed(context, NewProfessorScreen.id,arguments: {
        'token': token,
+       'faculty_id': faculty_id,
      });
      setState(() {});
   }

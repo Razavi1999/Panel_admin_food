@@ -3,9 +3,9 @@ import 'package:persian_fonts/persian_fonts.dart';
 
 import '../../constants.dart';
 
-class CustomResearchFieldsAndTimesCard extends StatelessWidget {
+class CustomResearchFieldsAndTimesCard extends StatefulWidget {
   final String text1, text2, text3, text4;
-  final Function onPressed, onPressed2;
+  final Function onPressed, onPressed2, onTimesRemovePressed, onResearchRemovePressed;
   final List times;
   final List researchFields;
 
@@ -18,8 +18,15 @@ class CustomResearchFieldsAndTimesCard extends StatelessWidget {
     this.onPressed2,
     this.times,
     this.researchFields,
+    this.onResearchRemovePressed,
+    this.onTimesRemovePressed,
   });
 
+  @override
+  _CustomResearchFieldsAndTimesCardState createState() => _CustomResearchFieldsAndTimesCardState();
+}
+
+class _CustomResearchFieldsAndTimesCardState extends State<CustomResearchFieldsAndTimesCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -60,12 +67,12 @@ class CustomResearchFieldsAndTimesCard extends StatelessWidget {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
                         highlightColor: Colors.transparent,
-                        onTap: onPressed,
+                        onTap: widget.onPressed,
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Center(
                             child: Text(
-                              text2,
+                              widget.text2,
                               textAlign: TextAlign.center,
                               style: PersianFonts.Shabnam.copyWith(
                                 fontSize: 16,
@@ -80,61 +87,43 @@ class CustomResearchFieldsAndTimesCard extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
-                  if(times != null)...[
-                    for (int i = 0; i < times.length; i++) ...{
-                      Row(
-                        children: [
-                          Text(
-                            times[i],
-                            style: PersianFonts.Shabnam.copyWith(
-                              fontSize: 14,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(
-                            Icons.done,
-                            color: Colors.green,
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.end,
-                      ),
-                    },
-                  ],
+
                   Text(
-                    text1,
+                    widget.text1,
                     style: PersianFonts.Shabnam.copyWith(
                       fontSize: 15,
                       color: kPrimaryColor,
                     ),
                   ),
-                  if (researchFields != null) ...[
-                    for (int i = 0; i < researchFields.length; i++) ...{
-                      Row(
-                        children: [
-                          Text(
-                            researchFields[i],
-                            style: PersianFonts.Shabnam.copyWith(
-                              fontSize: 14,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(
-                            Icons.done,
-                            color: Colors.green,
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.end,
-                      ),
-                    },
-                  ],
+
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
+              if(widget.times != null)...[
+                for (int i = 0; i < widget.times.length; i++) ...{
+                  Row(
+                    children: [
+                      Text(
+                        widget.times[i],
+                        style: PersianFonts.Shabnam.copyWith(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(
+                        Icons.clear,
+                        color: Colors.red,
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.end,
+                  ),
+                },
+              ],
               SizedBox(
                 height: 10,
               ),
@@ -154,12 +143,12 @@ class CustomResearchFieldsAndTimesCard extends StatelessWidget {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
                         highlightColor: Colors.transparent,
-                        onTap: onPressed2,
+                        onTap: widget.onPressed2,
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Center(
                             child: Text(
-                              text4,
+                              widget.text4,
                               textAlign: TextAlign.center,
                               style: PersianFonts.Shabnam.copyWith(
                                 fontSize: 16,
@@ -175,13 +164,39 @@ class CustomResearchFieldsAndTimesCard extends StatelessWidget {
                     width: 10,
                   ),
                   Text(
-                    text3,
+                    widget.text3,
                     style: PersianFonts.Shabnam.copyWith(
                       fontSize: 15,
                       color: kPrimaryColor,
                     ),
                   ),
                 ],
+              ),
+              if (widget.researchFields != null) ...[
+                for (int i = 0; i < widget.researchFields.length; i++) ...{
+                  Row(
+                    children: [
+                      Text(
+                        widget.researchFields[i],
+                        style: PersianFonts.Shabnam.copyWith(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(
+                        Icons.clear,
+                        color: Colors.red,
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.end,
+                  ),
+                },
+              ],
+              SizedBox(
+                height: 10,
               ),
             ],
           ),
