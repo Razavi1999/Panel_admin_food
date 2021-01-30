@@ -83,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       "assets/images/asli_8.jpg",
                       width: size.width  * 1.5,
                       height: size.height * 1.1,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   SingleChildScrollView(

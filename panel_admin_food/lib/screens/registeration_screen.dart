@@ -66,6 +66,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
                     child: Image.asset(
                       "assets/images/ahmad_3.jpg",
                       width: size.width * 1.4 ,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   SingleChildScrollView(

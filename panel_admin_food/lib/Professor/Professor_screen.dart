@@ -6,7 +6,7 @@ import 'package:persian_fonts/persian_fonts.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 
 import '../constants.dart';
-import 'NewProfessorScreen.dart';
+import 'new_professor_screen.dart';
 import 'home_page_body.dart';
 
 

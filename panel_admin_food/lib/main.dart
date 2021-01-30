@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:panel_admin_food_origin/Professor/NewProfessorScreen.dart';
+import 'package:panel_admin_food_origin/Professor/new_professor_screen.dart';
 import 'package:panel_admin_food_origin/Professor/faculty_screen.dart';
 
 import 'Professor/Professor_screen.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         accentColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: LoginScreen.id,
+      initialRoute: NewProfessorScreen.id,
       routes: {
         NewProfessorScreen.id : (context) => NewProfessorScreen(),
         DetailPageProfessor.id : (context) => DetailPageProfessor(),

@@ -16,7 +16,7 @@ import '../constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import 'NewProfessorScreen.dart';
+import 'new_professor_screen.dart';
 import 'Professor_screen.dart';
 
 var COLORS = [
