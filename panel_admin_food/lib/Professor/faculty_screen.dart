@@ -17,7 +17,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 import 'new_professor_screen.dart';
-import 'Professor_screen.dart';
+import 'professor_screen.dart';
 
 var COLORS = [
   Color(0xFFB892FF),
@@ -27,7 +27,6 @@ var COLORS = [
   Color(0xFFB892FF)
 ];
 
-
 class FacultyScreen extends StatefulWidget {
   static String id = "Faculty_screen";
 
@@ -36,11 +35,10 @@ class FacultyScreen extends StatefulWidget {
 }
 
 class _FacultyScreenState extends State<FacultyScreen> {
-  String token , url = "$baseUrl/api/professors/faculties/";
+  String token, url = "$baseUrl/api/professors/faculties/";
   int userId;
 
   ///*********************************/
-
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -56,7 +54,6 @@ class _FacultyScreenState extends State<FacultyScreen> {
     return true;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,28 +61,35 @@ class _FacultyScreenState extends State<FacultyScreen> {
         backgroundColor: kPrimaryColor,
         elevation: 0.0,
         centerTitle: true,
-
-        title: Text("دانشکده های دانشگاه" ,
-              textDirection: TextDirection.rtl,
-              textAlign: TextAlign.center,
-              style: PersianFonts.Shabnam.copyWith(
-                color: Colors.white, fontSize: 20.0
-              ),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.chevron_right),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        title: Text(
+          "دانشکده های دانشگاه",
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.center,
+          style: PersianFonts.Shabnam.copyWith(
+              color: Colors.white, fontSize: 20.0),
         ),
       ),
-
       body: RefreshIndicator(
         onRefresh: () {
           return _refresh();
         },
         child: Container(
           decoration: BoxDecoration(
-            /*image: DecorationImage(
+              /*image: DecorationImage(
               fit: BoxFit.cover,
               image : AssetImage("assets/images/ahmad_12.jpg",
               ),
             )*/
-          ),
+              ),
           child: FutureBuilder(
             future: getToken(),
             builder: (context, snapshot) {
@@ -94,17 +98,16 @@ class _FacultyScreenState extends State<FacultyScreen> {
                 print(url);
                 //return SizedBox(height: 10,);
                 return FutureBuilder(
-                  future: http.get(
-                      '${url}',
-                      headers: {
-                        HttpHeaders.authorizationHeader: token,
-                      }),
+                  future: http.get('${url}', headers: {
+                    HttpHeaders.authorizationHeader: token,
+                  }),
                   builder: (context, snapshot) {
                     if (snapshot.hasData &&
                         snapshot.connectionState == ConnectionState.done) {
                       http.Response response = snapshot.data;
                       if (response.statusCode >= 400) {
-                        print("response StatusCode : " + response.statusCode.toString());
+                        print("response StatusCode : " +
+                            response.statusCode.toString());
 
                         return Center(
                           child: Text(
@@ -124,7 +127,6 @@ class _FacultyScreenState extends State<FacultyScreen> {
                         mapList.add(map);
                       }
 
-
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: count,
@@ -141,7 +143,8 @@ class _FacultyScreenState extends State<FacultyScreen> {
                             image: mapList[index]['image'],
                             color: COLORS[Random().nextInt(5)],
                             onPressed: () {
-                              _navigateToProfessorListScreen(mapList[index]['id']);
+                              _navigateToProfessorListScreen(
+                                  mapList[index]['id']);
                             },
                           );
                         },
@@ -150,36 +153,32 @@ class _FacultyScreenState extends State<FacultyScreen> {
                     } else {
                       return Center(
                           child: SpinKitWave(
-                            color: kPrimaryColor,
-                          )
-                      );
+                        color: kPrimaryColor,
+                      ));
                     }
                   },
                 );
-              }
-
-              else {
-                return Center(child: SpinKitWave(
+              } else {
+                return Center(
+                    child: SpinKitWave(
                   color: kPrimaryColor,
-                )
-                );
+                ));
               }
             },
           ),
         ),
       ),
-
     );
   }
 
   _navigateToProfessorListScreen(int facultyid) {
-    Navigator.pushNamed(context, ProfessorList.id ,
+    Navigator.pushNamed(
+      context,
+      ProfessorList.id,
       arguments: {
         'facultyid': facultyid,
         'token': token,
       },
     );
   }
-
-
 }

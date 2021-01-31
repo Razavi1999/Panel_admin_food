@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:panel_admin_food_origin/components/EmptyEffect.dart';
 import 'package:panel_admin_food_origin/food/new_food_screen.dart';
@@ -8,7 +7,6 @@ import 'package:persian_fonts/persian_fonts.dart';
 import '../constants.dart';
 import 'new_professor_screen.dart';
 import 'home_page_body.dart';
-
 
 class ProfessorList extends StatefulWidget {
   static String id = "Professor_list";
@@ -28,33 +26,47 @@ class _ProfessorListState extends State<ProfessorList> {
     int faculty_id = args['facultyid'];
     this.faculty_id = faculty_id;
     token = args['token'];
-    return  Scaffold(
+    return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size( double.infinity , 100),
-        child: Container(
-          padding:  EdgeInsets.only(top: 20),
-          height: 100,
-          child:  Center(
-            child: Text("اساتید دانشکده",
-              style: PersianFonts.Shabnam.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.0
+        preferredSize: Size(double.infinity, 100),
+        child: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 20),
+              height: 100,
+              child: Center(
+                child: Text(
+                  "اساتید دانشکده",
+                  style: PersianFonts.Shabnam.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18.0),
+                ),
+              ),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [const Color(0xFF3366FF), const Color(0xFF00CCFF)],
+                    begin: const FractionalOffset(0.0, 0.0),
+                    end: const FractionalOffset(1.0, 0.0),
+                    stops: [0.0, 1.0],
+                    tileMode: TileMode.clamp),
               ),
             ),
-          ),
-          decoration:  BoxDecoration(
-            gradient:  LinearGradient(
-                colors: [
-                  const Color(0xFF3366FF),
-                  const Color(0xFF00CCFF)
-                ],
-                begin: const FractionalOffset(0.0, 0.0),
-                end: const FractionalOffset(1.0, 0.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp
-            ),
-          ),
+            Positioned(
+              right: 0,
+              top: 35,
+              child: IconButton(
+                icon: Icon(
+                  Icons.chevron_right,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
+          ],
         ),
       ),
 
@@ -86,18 +98,16 @@ class _ProfessorListState extends State<ProfessorList> {
     );
   }
 
-  _navigateToNewProfessorScreen()  {
-     Navigator.pushNamed(context, NewProfessorScreen.id,arguments: {
-       'token': token,
-       'faculty_id': faculty_id,
-     });
-     setState(() {});
+  _navigateToNewProfessorScreen() {
+    Navigator.pushNamed(context, NewProfessorScreen.id, arguments: {
+      'token': token,
+      'faculty_id': faculty_id,
+    });
+    setState(() {});
   }
 }
 
 class GradientAppBar extends StatelessWidget {
-
-
   final String title;
   final double barHeight = 66.0;
 
@@ -105,37 +115,26 @@ class GradientAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double statusBarHeight = MediaQuery
-        .of(context)
-        .padding
-        .top;
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
 
-    return  Container(
-      padding:  EdgeInsets.only(top: statusBarHeight),
+    return Container(
+      padding: EdgeInsets.only(top: statusBarHeight),
       height: statusBarHeight + barHeight,
-      child:  Center(
-        child: Text(title,
+      child: Center(
+        child: Text(
+          title,
           style: PersianFonts.Shabnam.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 18.0
-          ),
+              color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18.0),
         ),
       ),
-      decoration:  BoxDecoration(
-        gradient:  LinearGradient(
-            colors: [
-              const Color(0xFF3366FF),
-              const Color(0xFF00CCFF)
-            ],
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            colors: [const Color(0xFF3366FF), const Color(0xFF00CCFF)],
             begin: const FractionalOffset(0.0, 0.0),
             end: const FractionalOffset(1.0, 0.0),
             stops: [0.0, 1.0],
-            tileMode: TileMode.clamp
-        ),
+            tileMode: TileMode.clamp),
       ),
     );
   }
 }
-
-

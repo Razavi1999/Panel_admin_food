@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:panel_admin_food_origin/Professor/new_professor_screen.dart';
 import 'package:panel_admin_food_origin/Professor/faculty_screen.dart';
 
-import 'Professor/Professor_screen.dart';
+import 'Professor/professor_screen.dart';
 import 'event/event_details_screen.dart';
 import 'event/events_screen.dart';
 import 'event/users_screen.dart';
