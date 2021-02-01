@@ -99,10 +99,21 @@ class _ProfessorListState extends State<ProfessorList> {
   }
 
   _navigateToNewProfessorScreen() {
-    Navigator.pushNamed(context, NewProfessorScreen.id, arguments: {
-      'token': token,
-      'faculty_id': faculty_id,
-    });
+    // Navigator.pushNamed(context, NewProfessorScreen.id, arguments: {
+    //   'token': token,
+    //   'faculty_id': faculty_id,
+    // });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return NewProfessorScreen(
+            token: token,
+            facultyId: faculty_id,
+          );
+        },
+      ),
+    );
     setState(() {});
   }
 }

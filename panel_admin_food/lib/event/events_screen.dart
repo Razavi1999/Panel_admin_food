@@ -293,8 +293,8 @@ class _EventScreenState extends State<EventScreen> {
                         outermostCircleStartRadius: 15,
                         outermostCircleEndRadius: 175,
                         numberOfCircles: 4,
-                        animationTime: Duration(seconds: 5),
-                        delay: Duration(seconds: 1),
+                        animationTime: Duration(seconds: 3),
+                        delay: Duration(seconds: 3),
                         gap: 30,
                         borderWidth: 20,
                         startOpacity: 0.3,
@@ -620,6 +620,7 @@ class _EventScreenState extends State<EventScreen> {
             }),
             builder: (context, snapshot) {
               // print('*$authorizedUsersUrl&search=$authSearch*');
+              print('$authorizedUsersUrl&search=$authSearch');
               if (snapshot.hasData &&
                   snapshot.connectionState == ConnectionState.done) {
                 http.Response response = snapshot.data;

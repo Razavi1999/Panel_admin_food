@@ -116,7 +116,7 @@ class CustomColumnImageCard extends StatelessWidget {
                     width: 20,
                   ),
                   Text(
-                    'رنک آموزشی',
+                    'مرتبه علمی',
                     style: PersianFonts.Shabnam.copyWith(
                       fontSize: 18,
                       color: kPrimaryColor,

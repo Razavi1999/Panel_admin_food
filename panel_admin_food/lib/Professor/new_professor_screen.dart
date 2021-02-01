@@ -29,7 +29,9 @@ import 'dart:ui' as ui;
 
 class NewProfessorScreen extends StatefulWidget {
   static String id = 'new_professor_screen';
-
+  int facultyId;
+  String token;
+  NewProfessorScreen({this.facultyId, this.token});
   @override
   _NewProfessorScreenState createState() => _NewProfessorScreenState();
 }
@@ -46,10 +48,10 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
   TextEditingController postPhdController = TextEditingController();
   TextEditingController webPageLinkController = TextEditingController();
   TextEditingController googleScholarController = TextEditingController();
-  String facultyName = 'دانشکده ای انتخاب نشده',
-      academicRank = 'رنکی مشخص نکرده اید';
-  int facultyId, academicRankId;
-  String base64Image, token;
+  String facultyName = 'انتخاب نشده',
+      academicRank = 'انتخاب نشده';
+  int academicRankId;
+  String base64Image;
   String facultiesUrl = '$baseUrl/api/professors/faculties';
 
   // String academicRanksUrl = '$baseUrl/api/professors/research-axes';
@@ -117,9 +119,9 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    args = ModalRoute.of(context).settings.arguments;
-    token = args['token'];
-    facultyId = args['faculty_id'];
+    // args = ModalRoute.of(context).settings.arguments;
+    // token = args['token'];
+    // facultyId = args['faculty_id'];
     final node = FocusScope.of(context);
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
@@ -146,7 +148,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       ),
       body: Container(
         child: SingleChildScrollView(
-          reverse: true,
+          // reverse: true,
           child: Padding(
             padding: EdgeInsets.only(bottom: bottom),
             child: Column(
@@ -365,7 +367,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
 
   onFacultyPressed() async {
     http.Response response = await http
-        .get(facultiesUrl, headers: {HttpHeaders.authorizationHeader: token});
+        .get(facultiesUrl, headers: {HttpHeaders.authorizationHeader: widget.token});
     var jsonResponse =
         convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
     print('*****************************');
@@ -398,7 +400,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    facultyId = mapList[index]['id'];
+                    widget.facultyId = mapList[index]['id'];
                     setState(() {
                       facultyName = mapList[index]['name'];
                     });
@@ -470,7 +472,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
 
   onTimesPressed() async {
     http.Response response = await http
-        .get(timesUrl, headers: {HttpHeaders.authorizationHeader: token});
+        .get(timesUrl, headers: {HttpHeaders.authorizationHeader: widget.token});
     var jsonResponse =
         convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
     print(jsonResponse);
@@ -550,27 +552,27 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
                         ),
                       );
                     }
-                    return InkWell(
-                      onTap: () {
-                        facultyId = mapList[index]['id'];
-                        setState(() {
-                          facultyName = mapList[index]['name'];
-                        });
-                        // Navigator.pop(context);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            mapList[index]['name'],
-                            // textDirection: TextDirection.rtl,
-                            style: PersianFonts.Shabnam.copyWith(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    // return InkWell(
+                    //   onTap: () {
+                    //     widget.facultyId = mapList[index]['id'];
+                    //     setState(() {
+                    //       facultyName = mapList[index]['name'];
+                    //     });
+                    //     // Navigator.pop(context);
+                    //   },
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.end,
+                    //     children: [
+                    //       Text(
+                    //         mapList[index]['name'],
+                    //         // textDirection: TextDirection.rtl,
+                    //         style: PersianFonts.Shabnam.copyWith(
+                    //           fontSize: 20,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // );
                   },
                 ),
                 SizedBox(
@@ -599,11 +601,11 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
   }
 
   onResearchFieldsPressed() async {
-    http.Response response = await http.get("$researchFieldsUrl/?faculty_id=$facultyId",
-        headers: {HttpHeaders.authorizationHeader: token});
+    http.Response response = await http.get("$researchFieldsUrl/?faculty_id=${widget.facultyId}",
+        headers: {HttpHeaders.authorizationHeader: widget.token});
     print(response.body);
     print('------------------------');
-    print('$researchFieldsUrl/?faculty_id=$facultyId');
+    print('$researchFieldsUrl/?faculty_id=${widget.facultyId}');
     var jsonResponse =
         convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
     print('***********************');
@@ -726,7 +728,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     String lastName = lastNameController.text;
     String email = emailController.text;
     String address = addressController.text;
-    int facultyId = this.facultyId;
+    int facultyId = widget.facultyId;
     String academicRank = listRanks[academicRankId];
     String phone = phoneController.text;
     String bachelor = bachelorController.text;
@@ -748,12 +750,12 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       open(context, 'آدرس ایمیل را وارد کنید');
       return;
     }
-    if (address.length == 0) {
-      open(context, 'آدرس را وارد کنید');
-      return;
-    }
+    // if (address.length == 0) {
+    //   open(context, 'آدرس را وارد کنید');
+    //   return;
+    // }
     if (academicRank == null) {
-      open(context, 'رنک آموزشی را وارد کنید');
+      open(context, 'مرتبه علمی را وارد کنید');
       return;
     }
     if (facultyId == null) {
@@ -817,21 +819,29 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       map['last_name'] = lastName;
       map['faculty_id'] = facultyId;
       map['academic_rank'] = academicRank;
-      map['direct_telephone'] = phone;
       map['email'] = email;
-      map['address'] = address;
-      map['bachelor'] = bachelor;
-      map['master'] = master;
-      map['phd'] = phd;
-      map['post_doctoral'] = postPhd;
-      map['webpage_link'] = webPageLink;
+      // map['direct_telephone'] = phone;
+      // map['address'] = address;
+      // map['bachelor'] = bachelor;
+      // map['master'] = master;
+      // map['phd'] = phd;
+      // map['post_doctoral'] = postPhd;
+      // map['webpage_link'] = webPageLink;
       map['filename'] = imageFile.path.split('/').last;
       map['image'] = base64file;
+      map['free_times_list'] = listSelectedTimeIds;
+      map['research_axes_list'] = listSelectedResearchFieldIds;
+      if (phone.length != 0) {
+        map['direct_telephone'] = phone;
+      }
+      if (address.length != 0) {
+        map['address'] = address;
+      }
       if (googleScholarLink.length != 0) {
         map['google_scholar_link'] = googleScholarLink;
       }
       if (webPageLink.length != 0) {
-        map['web_page_link'] = webPageLink;
+        map['webpage_link'] = webPageLink;
       }
       if (bachelor.length != 0) {
         map['bachelor'] = bachelor;
@@ -843,14 +853,12 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
         map['phd'] = phd;
       }
       if (postPhd.length != 0) {
-        map['post_phd'] = postPhd;
+        map['postdoctoral'] = postPhd;
       }
-      map['free_times_list'] = listSelectedTimeIds;
-      map['research_axes_list'] = listSelectedResearchFieldIds;
       response = await http.post(
         professorUrl,
         headers: {
-          HttpHeaders.authorizationHeader: token,
+          HttpHeaders.authorizationHeader: widget.token,
           "Accept": "application/json",
           "content-type": "application/json",
         },
