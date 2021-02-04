@@ -50,7 +50,7 @@ class CustomNameAndResearchFieldsCard extends StatelessWidget {
               Text(
                 text1,
                 style: PersianFonts.Shabnam.copyWith(
-                  fontSize: 15,
+                  fontSize: 18,
                   color: kPrimaryColor,
                 ),
               ),
@@ -113,7 +113,7 @@ class CustomNameAndResearchFieldsCard extends StatelessWidget {
               Text(
                 text2,
                 style: PersianFonts.Shabnam.copyWith(
-                  fontSize: 15,
+                  fontSize: 18,
                   color: kPrimaryColor,
                 ),
               ),

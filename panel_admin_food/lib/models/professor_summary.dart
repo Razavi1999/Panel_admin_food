@@ -4,7 +4,7 @@ import 'package:panel_admin_food_origin/models/separator.dart';
 import 'package:panel_admin_food_origin/models/text_style.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 
-import 'detailProfessor.dart';
+import '../Professor/detail_professor.dart';
 
 
 class PlanetSummary extends StatelessWidget {

@@ -27,68 +27,33 @@ class _ProfessorListState extends State<ProfessorList> {
     this.faculty_id = faculty_id;
     token = args['token'];
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 100),
-        child: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: 20),
-              height: 100,
-              child: Center(
-                child: Text(
-                  "اساتید دانشکده",
-                  style: PersianFonts.Shabnam.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18.0),
-                ),
-              ),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [const Color(0xFF3366FF), const Color(0xFF00CCFF)],
-                    begin: const FractionalOffset(0.0, 0.0),
-                    end: const FractionalOffset(1.0, 0.0),
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp),
-              ),
+      appBar: AppBar(
+        backgroundColor: kPrimaryColor,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+
+        actions: <Widget>[
+
+          IconButton(
+            icon: Icon(
+              Icons.chevron_right,
+              color: Colors.white,
             ),
-            Positioned(
-              right: 0,
-              top: 35,
-              child: IconButton(
-                icon: Icon(
-                  Icons.chevron_right,
-                  color: Colors.white,
-                  size: 30,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            )
-          ],
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+
+        title: Text("اساتید دانشکده" ,
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.center,
+          style: PersianFonts.Shabnam.copyWith(
+              color: Colors.white, fontSize: 20.0
+          ),
         ),
       ),
-
       body: HomePageBody(faculty_id),
-
-      // floatingActionButton: EmptyEffect(
-      //   child: FloatingActionButton(
-      //     child: Icon(Icons.add),
-      //     onPressed: () {
-      //       _navigateToNewProfessorScreen();
-      //     },
-      //   ),
-      //   borderColor: kPrimaryColor,
-      //   outermostCircleStartRadius: 20,
-      //   outermostCircleEndRadius: 175,
-      //   numberOfCircles: 4,
-      //   animationTime: Duration(seconds: 5),
-      //   delay: Duration(seconds: 6),
-      //   gap: 30,
-      //   borderWidth: 20,
-      //   startOpacity: 0.3,
-      // ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -99,17 +64,12 @@ class _ProfessorListState extends State<ProfessorList> {
   }
 
   _navigateToNewProfessorScreen() {
-    // Navigator.pushNamed(context, NewProfessorScreen.id, arguments: {
-    //   'token': token,
-    //   'faculty_id': faculty_id,
-    // });
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) {
           return NewProfessorScreen(
             token: token,
-            facultyId: faculty_id,
           );
         },
       ),

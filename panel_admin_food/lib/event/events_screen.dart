@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:panel_admin_food_origin/constants.dart';
 import 'package:panel_admin_food_origin/event/users_screen.dart';
 
@@ -18,7 +18,6 @@ String eventsUrl = '$baseUrl/api/event/admin/requests/all/';
 String eventChangeUrl = '$baseUrl/api/event/admin/requests/';
 String authorizedUsersUrl = '$baseUrl/api/event/admin/auth/all/?state=true';
 String changeUserAccessUrl = '$baseUrl/api/event/admin/auth/';
-String authSearch = '';
 
 class EventScreen extends StatefulWidget {
   static String id = 'event_screen';
@@ -33,7 +32,9 @@ class _EventScreenState extends State<EventScreen> {
   String token;
   Map args = Map();
   Size size;
-  String eventSearch = '', cartableSearch = '';
+  String eventSearch = '',
+      cartableSearch = '',
+      authSearch = '';
 
   TextEditingController userController = TextEditingController();
   TextEditingController eventController = TextEditingController();
@@ -41,12 +42,49 @@ class _EventScreenState extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
-    args = ModalRoute.of(context).settings.arguments;
+    size = MediaQuery
+        .of(context)
+        .size;
+    args = ModalRoute
+        .of(context)
+        .settings
+        .arguments;
     token = args['token'];
     //token = 'Token dd324d7d0d603c13c34647ddf59ebb176db085c1';
     return Scaffold(
       backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.grey[200],
+        title: Container(
+          height: 40,
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: TextField(
+            controller: cartableController,
+            onChanged: (value) {
+              if (selectedItem == 0) {
+                authSearch = userController.text;
+              }
+              else if (selectedItem == 1) {
+                cartableSearch = cartableController.text;
+              }
+              else {
+                eventSearch = eventController.text;
+              }
+              setState(() {});
+            },
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.search),
+              labelText:
+              '                                                  جستجو',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: selectedBodyItem(),
       floatingActionButton: Visibility(
         child: FloatingActionButton(
@@ -57,26 +95,74 @@ class _EventScreenState extends State<EventScreen> {
         ),
         visible: visible,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Color(0xFF6200EE),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white.withOpacity(.60),
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        currentIndex: selectedItem,
-        onTap: (value) {
-          selectedItem = value;
-          setState(() {});
-          print(value);
-        },
+      bottomNavigationBar: CurvedNavigationBar(
+        height: 65,
         items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.accessibility), label: 'دسترسی'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'کارتابل'),
-          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'ایوند'),
+          Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.accessibility,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text('دسترسی',
+                  style: TextStyle(color: Colors.white, fontSize: 10),),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text('کارتابل',
+                  style: TextStyle(color: Colors.white, fontSize: 10),),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.event,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text('رویدادها',
+                  style: TextStyle(color: Colors.white, fontSize: 10),),
+              ],
+            ),
+          ),
         ],
+        color: Color(0xFF6200EE),
+        buttonBackgroundColor: Color(0xFF6200EE),
+        backgroundColor: Colors.grey[200],
+        animationCurve: Curves.easeInOut,
+        animationDuration: Duration(milliseconds: 600),
+        onTap: (index) {
+          setState(() {
+            selectedItem = index;
+          });
+        },
+        letIndexChange: (index) => true,
       ),
+
     );
   }
 
@@ -98,248 +184,257 @@ class _EventScreenState extends State<EventScreen> {
 
   Widget cartableList() {
     return SafeArea(
-      child: Column(
-        children: [
-          Container(
-            height: 40,
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: TextField(
-              controller: cartableController,
-              onChanged: (value) {
-                cartableSearch = cartableController.text;
-                setState(() {});
-              },
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                labelText:
-                    '                                                  جستجو',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+      child: FutureBuilder(
+        future: http
+            .get('$eventsUrl?state=false&search=$cartableSearch', headers: {
+          HttpHeaders.authorizationHeader: token,
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            http.Response response = snapshot.data;
+            print(response.body);
+            if (response.statusCode >= 400) {
+              print(response.statusCode);
+              print(response.body);
+              try {
+                String jsonResponse = convert
+                    .jsonDecode(convert.utf8.decode(response.bodyBytes));
+                if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
+                  return errorWidget(
+                      'شما به عنوان ارشد دانشکده انتخاب نشدید.');
+                } else {
+                  return errorWidget('sth else');
+                }
+              } catch (e) {
+                print(e);
+                return errorWidget('مشکلی درارتباط با سرور پیش آمد');
+              }
+            }
+            var jsonResponse =
+            convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+            // print(jsonResponse);
+            List<Map> mapList = [];
+            int cartableCount = 0;
+            // print(jsonResponse);
+            for (Map map in jsonResponse) {
+              cartableCount++;
+              mapList.add(map);
+              // print(map.toString());
+            }
+            if (cartableCount == 0) {
+              return errorWidget('رویدادی وجود ندارد');
+            }
+            return Expanded(
+              child: ListView.builder(
+                // shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return cartableBuilder(
+                    '$baseUrl${mapList[index]['image']}',
+                    mapList[index]['name'],
+                    mapList[index]['remaining_capacity'],
+                    mapList[index]['event_id'],
+                    (mapList[index]['image'] == null) ? false : true,
+                  );
+                },
+                itemCount: cartableCount,
+              ),
+            );
+          } else {
+            return Container(
+              height: size.height * 0.8,
+              child: Center(
+                child: SpinKitWave(
+                  color: kPrimaryColor,
                 ),
               ),
-            ),
-          ),
-          FutureBuilder(
-            future: http
-                .get('$eventsUrl?state=false&search=$cartableSearch', headers: {
-              HttpHeaders.authorizationHeader: token,
-            }),
-            builder: (context, snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.connectionState == ConnectionState.done) {
-                http.Response response = snapshot.data;
-                print(response.body);
-                if (response.statusCode >= 400) {
-                  print(response.statusCode);
-                  print(response.body);
-                  try {
-                    String jsonResponse = convert
-                        .jsonDecode(convert.utf8.decode(response.bodyBytes));
-                    if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
-                      return errorWidget(
-                          'شما به عنوان ارشد دانشکده انتخاب نشدید.');
-                    } else {
-                      return errorWidget('sth else');
-                    }
-                  } catch (e) {
-                    print(e);
-                    return errorWidget('مشکلی درارتباط با سرور پیش آمد');
-                  }
-                }
-                var jsonResponse =
-                    convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-                // print(jsonResponse);
-                List<Map> mapList = [];
-                int cartableCount = 0;
-                // print(jsonResponse);
-                for (Map map in jsonResponse) {
-                  cartableCount++;
-                  mapList.add(map);
-                  // print(map.toString());
-                }
-                if (cartableCount == 0) {
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: 40,
-                      ),
-
-                      Icon(
-                          Icons.folder,
-                          size: 45,
-                          color: Colors.purple,
-                        ),
-
-
-                      Text('ایوندی وجود ندارد' ,
-                        style: PersianFonts.Shabnam.copyWith(
-                          color: kPrimaryColor,
-                          fontSize: 25,
-
-
-                        ),
-                      )
-                    ],
-                  );
-                }
-                return Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return cartableBuilder(
-                        '$baseUrl${mapList[index]['image']}',
-                        mapList[index]['name'],
-                        mapList[index]['remaining_capacity'],
-                        mapList[index]['event_id'],
-                        (mapList[index]['image'] == null) ? false : true,
-                      );
-                    },
-                    itemCount: cartableCount,
-                  ),
-                );
-              } else {
-                return Container(
-                  height: size.height*0.8,
-                  child: Center(
-                    child: SpinKitWave(
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                );
-
-              }
-            },
-          ),
-        ],
+            );
+          }
+        },
       ),
     );
   }
 
   Widget eventList() {
     return SafeArea(
-      child: Column(
-        children: [
-          Container(
-            height: 40,
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: TextField(
-              //textAlign: TextAlign.right,
-              //textDirection: TextDirection.rtl,
-              controller: eventController,
-              onChanged: (value) {
-                eventSearch = eventController.text;
-                setState(() {});
-              },
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                labelText:
-                    '                                                  جستجو',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-          ),
-          FutureBuilder(
-            future:
-                http.get('$eventsUrl?state=true&search=$eventSearch', headers: {
-              HttpHeaders.authorizationHeader: token,
-            }),
-            builder: (context, snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.connectionState == ConnectionState.done) {
-                http.Response response = snapshot.data;
-                if (response.statusCode >= 400) {
-                  print(response.statusCode);
-                  print(response.body);
-                  try {
-                    String jsonResponse = convert
-                        .jsonDecode(convert.utf8.decode(response.bodyBytes));
-                    if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
-                      return errorWidget(
-                          'شما به عنوان ارشد دانشکده انتخاب نشدید.');
-                    } else {
-                      return errorWidget('sth else');
-                    }
-                  } catch (e) {
-                    print(e);
-                    return errorWidget('مشکلی درارتباط با سرور پیش آمد');
-                  }
+      child: FutureBuilder(
+        future:
+        http.get('$eventsUrl?state=true&search=$eventSearch', headers: {
+          HttpHeaders.authorizationHeader: token,
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            http.Response response = snapshot.data;
+            if (response.statusCode >= 400) {
+              print(response.statusCode);
+              print(response.body);
+              try {
+                String jsonResponse = convert
+                    .jsonDecode(convert.utf8.decode(response.bodyBytes));
+                if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
+                  return errorWidget(
+                      'شما به عنوان ارشد دانشکده انتخاب نشدید.');
+                } else {
+                  return errorWidget('sth else');
                 }
-                var jsonResponse =
-                    convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-                // print(jsonResponse);
-                List<Map> mapList = [];
-                int eventCount = 0;
-                // print(jsonResponse);
-                for (Map map in jsonResponse) {
-                  eventCount++;
-                  mapList.add(map);
-                  // print(map.toString());
-                }
-                if (eventCount == 0) {
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: 40,
+              } catch (e) {
+                print(e);
+                return errorWidget('مشکلی درارتباط با سرور پیش آمد');
+              }
+            }
+            var jsonResponse =
+            convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+            // print(jsonResponse);
+            List<Map> mapList = [];
+            int eventCount = 0;
+            print('-------------------------');
+            print(jsonResponse);
+            for (Map map in jsonResponse) {
+              eventCount++;
+              mapList.add(map);
+              // print(map.toString());
+            }
+            if (eventCount == 0) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 40,
+                    ),
+                    EmptyEffect(
+                      child: Icon(
+                        Icons.folder,
+                        size: 45,
+                        color: Colors.purple,
                       ),
-                      EmptyEffect(
-                        child: Icon(
-                          Icons.folder,
-                          size: 45,
-                          color: Colors.purple,
-                        ),
-                        borderColor: kPrimaryColor,
-                        outermostCircleStartRadius: 15,
-                        outermostCircleEndRadius: 175,
-                        numberOfCircles: 4,
-                        animationTime: Duration(seconds: 3),
-                        delay: Duration(seconds: 3),
-                        gap: 30,
-                        borderWidth: 20,
-                        startOpacity: 0.3,
+                      borderColor: kPrimaryColor,
+                      outermostCircleStartRadius: 15,
+                      outermostCircleEndRadius: 175,
+                      numberOfCircles: 4,
+                      animationTime: Duration(seconds: 3),
+                      delay: Duration(seconds: 3),
+                      gap: 30,
+                      borderWidth: 20,
+                      startOpacity: 0.3,
+                    ),
+                    Text('ایوندی وجود ندارد',
+                      style: PersianFonts.Shabnam.copyWith(
+                        color: kPrimaryColor,
+                        fontSize: 25,
                       ),
-                      Text('ایوندی وجود ندارد' ,
-                        style: PersianFonts.Shabnam.copyWith(
-                          color: kPrimaryColor,
-                          fontSize: 25,
-
-
-                        ),
-                      )
-                    ],
-                  );
-                }
-                return Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return eventBuilder(
-                        '$baseUrl${mapList[index]['image']}',
-                        mapList[index]['name'],
-                        mapList[index]['remaining_capacity'],
-                        //mapList[index][''],
-                        mapList[index]['event_id'],
-                        (mapList[index]['image'] == null) ? false : true,
-                      );
-                    },
-                    itemCount: eventCount,
-                  ),
-                );
-              } else {
-                return Container(
-                height: size.height*0.8,
-                child: Center(
-                  child: SpinKitWave(
-                    color: kPrimaryColor,
-                  ),
+                    )
+                  ],
                 ),
               );
+            }
+            return Expanded(
+              child: ListView.builder(
+                // shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return eventBuilder(
+                    '$baseUrl${mapList[index]['image']}',
+                    mapList[index]['name'],
+                    mapList[index]['remaining_capacity'],
+                    mapList[index]['event_id'],
+                    (mapList[index]['image'] == null) ? false : true,
+                    mapList[index]['capacity'],
+                  );
+                },
+                itemCount: eventCount,
+              ),
+            );
+          } else {
+            return Container(
+              height: size.height * 0.8,
+              child: Center(
+                child: SpinKitWave(
+                  color: kPrimaryColor,
+                ),
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
 
+  Widget authorizedUsersList() {
+    return SafeArea(
+      child: FutureBuilder(
+        future:
+        http.get("$authorizedUsersUrl&search=$authSearch", headers: {
+          HttpHeaders.authorizationHeader: token,
+        }),
+        builder: (context, snapshot) {
+          // print('*$authorizedUsersUrl&search=$authSearch*');
+          print('$authorizedUsersUrl&search=$authSearch');
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            http.Response response = snapshot.data;
+            if (response.statusCode >= 400) {
+              print(response.statusCode);
+              print(response.body);
+              try {
+                String jsonResponse = convert
+                    .jsonDecode(convert.utf8.decode(response.bodyBytes));
+                if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
+                  return errorWidget(
+                      'شما به عنوان ارشد دانشکده انتخاب نشدید.');
+                } else {
+                  return errorWidget('sth else');
+                }
+              } catch (e) {
+                print(e);
+                return errorWidget('مشکلی درارتباط با سرور پیش آمد');
               }
-            },
-          ),
-        ],
+            }
+            var jsonResponse =
+            convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+            // print(jsonResponse);
+            List<Map> mapList = [];
+            int userCount = 0;
+            // print(jsonResponse);
+            for (Map map in jsonResponse) {
+              userCount++;
+              mapList.add(map);
+              // print(map.toString());
+            }
+            if (userCount == 0) {
+              return errorWidget('شخصی دارای مجوز وجود ندارد.');
+            }
+
+            return Expanded(
+              child: ListView.builder(
+                // shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  return userAuthBuilder(
+                    mapList[index]['username'],
+                    mapList[index]['first_name'],
+                    mapList[index]['last_name'],
+                    mapList[index]['grant'],
+                        () {
+                      grantDeclineUserAccess(mapList[index]['grant'],
+                          mapList[index]['user_id']);
+                    },
+                  );
+                },
+                itemCount: userCount,
+              ),
+            );
+          } else {
+            return Container(
+              height: size.height * 0.8,
+              child: Center(
+                child: SpinKitWave(
+                  color: kPrimaryColor,
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -366,12 +461,12 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   Widget eventBuilder(String imageUrl, String eventName, int remainingCapacity,
-      int eventId, bool imageIsAvailable) {
+      int eventId, bool imageIsAvailable, int capacity) {
     Map<String, double> eventMap = Map();
 
     eventMap = {
-      "صندلی خالی": double.parse((200 - remainingCapacity).toString()),
-      " صندلی پر": double.parse(remainingCapacity.toString()),
+      "صندلی خالی": double.parse((remainingCapacity).toString()),
+      " صندلی پر": double.parse((capacity - remainingCapacity).toString()),
     };
 
     return Card(
@@ -427,7 +522,10 @@ class _EventScreenState extends State<EventScreen> {
                       legendFontWeight: FontWeight.w900,
                       animationDuration: Duration(milliseconds: 800),
                       chartLegendSpacing: 7.0,
-                      chartRadius: MediaQuery.of(context).size.width / 7,
+                      chartRadius: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 7,
                       showChartValuesInPercentage: true,
                       showChartValues: true,
                       //showChartValuesOutside: false,
@@ -446,7 +544,7 @@ class _EventScreenState extends State<EventScreen> {
                 height: 110.0,
                 width: 90.0,
                 decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
                   child: FadeInImage(
@@ -521,7 +619,7 @@ class _EventScreenState extends State<EventScreen> {
                       text: TextSpan(
                           text: eventName,
                           style: PersianFonts.Shabnam.copyWith(
-                              //fontSize: 16.0,
+                            //fontSize: 16.0,
                               fontWeight: FontWeight.w900,
                               fontSize: 15,
                               color: kPrimaryColor)),
@@ -535,7 +633,7 @@ class _EventScreenState extends State<EventScreen> {
                           alignment: Alignment.bottomLeft,
                           child: Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Switch(
                               activeTrackColor: Colors.green,
                               activeColor: Colors.green,
@@ -569,7 +667,7 @@ class _EventScreenState extends State<EventScreen> {
                 height: 110.0,
                 width: 90.0,
                 decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
                   child: FadeInImage(
@@ -586,105 +684,6 @@ class _EventScreenState extends State<EventScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget authorizedUsersList() {
-    return SafeArea(
-      child: Column(
-        children: [
-          Container(
-            height: 40,
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: TextField(
-              textDirection: TextDirection.rtl,
-              controller: userController,
-              onChanged: (value) {
-                onChange();
-              },
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                labelText:
-                    '                                                  جستجو',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-          ),
-          FutureBuilder(
-            future:
-                http.get("$authorizedUsersUrl&search=$authSearch", headers: {
-              HttpHeaders.authorizationHeader: token,
-            }),
-            builder: (context, snapshot) {
-              // print('*$authorizedUsersUrl&search=$authSearch*');
-              print('$authorizedUsersUrl&search=$authSearch');
-              if (snapshot.hasData &&
-                  snapshot.connectionState == ConnectionState.done) {
-                http.Response response = snapshot.data;
-                if (response.statusCode >= 400) {
-                  print(response.statusCode);
-                  print(response.body);
-                  try {
-                    String jsonResponse = convert
-                        .jsonDecode(convert.utf8.decode(response.bodyBytes));
-                    if (jsonResponse.startsWith('ERROR: You haven\'t been')) {
-                      return errorWidget(
-                          'شما به عنوان ارشد دانشکده انتخاب نشدید.');
-                    } else {
-                      return errorWidget('sth else');
-                    }
-                  } catch (e) {
-                    print(e);
-                    return errorWidget('مشکلی درارتباط با سرور پیش آمد');
-                  }
-                }
-                var jsonResponse =
-                    convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
-                // print(jsonResponse);
-                List<Map> mapList = [];
-                int userCount = 0;
-                // print(jsonResponse);
-                for (Map map in jsonResponse) {
-                  userCount++;
-                  mapList.add(map);
-                  // print(map.toString());
-                }
-                if (userCount == 0) errorWidget('شخصی دارای مجوز وجود ندارد.');
-
-                return Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return userAuthBuilder(
-                        mapList[index]['username'],
-                        mapList[index]['first_name'],
-                        mapList[index]['last_name'],
-                        mapList[index]['grant'],
-                        () {
-                          grantDeclineUserAccess(mapList[index]['grant'],
-                              mapList[index]['user_id']);
-                        },
-                      );
-                    },
-                    itemCount: userCount,
-                  ),
-                );
-              } else {
-                return Container(
-                  height: size.height*0.8,
-                  child: Center(
-                    child: SpinKitWave(
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
       ),
     );
   }
@@ -729,7 +728,7 @@ class _EventScreenState extends State<EventScreen> {
           ),
           trailing: FlatButton(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             color: status ? Colors.red : Colors.green,
             onPressed: onPressed,
             child: Text(
@@ -747,11 +746,6 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
-  onChange() {
-    authSearch = userController.text;
-    setState(() {});
-  }
-
   _navigateToUsersScreen() async {
     print("_navigateToUsersScreen : " + token);
 
@@ -762,13 +756,39 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   Widget errorWidget(String message) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.only(top: 300),
-        child: Text(
-          message,
-          textDirection: TextDirection.rtl,
-          style: PersianFonts.Shabnam.copyWith(fontSize: 20),
+    return Container(
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * 0.6,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundColor: kPrimaryColor,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 58,
+                child: Icon(
+                  Icons.close,
+                  size: 100,
+                  color: kPrimaryColor,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              message,
+              style: PersianFonts.Shabnam.copyWith(
+                  fontSize: 20, color: kPrimaryColor),
+              textDirection: TextDirection.rtl,
+            ),
+          ],
         ),
       ),
     );

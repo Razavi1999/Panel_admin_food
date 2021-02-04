@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jalali_calendar/jalali_calendar.dart';
+import 'package:panel_admin_food_origin/components/EmptyEffect.dart';
 import 'package:panel_admin_food_origin/models/food.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
@@ -172,6 +173,33 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              EmptyEffect(
+                                child: CircleAvatar(
+                                  radius: 60,
+                                  backgroundColor: kPrimaryColor,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 58,
+                                    child: Icon(
+                                      Icons.close,
+                                      size: 100,
+                                      color: kPrimaryColor,
+                                    ),
+                                  ),
+                                ),
+                                borderColor: kPrimaryColor,
+                                outermostCircleStartRadius: 20,
+                                outermostCircleEndRadius: 175,
+                                numberOfCircles: 4,
+                                animationTime: Duration(seconds: 3),
+                                delay: Duration(seconds: 3),
+                                gap: 30,
+                                borderWidth: 20,
+                                startOpacity: 0.3,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
                               Text(
                                 'غذایی فروخته نشده !!!',
                                 style: PersianFonts.Shabnam.copyWith(fontSize: 20),

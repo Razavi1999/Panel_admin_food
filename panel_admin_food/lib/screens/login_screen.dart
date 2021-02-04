@@ -150,15 +150,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   checkValidation(BuildContext context) async {
     if (email.length == 0) {
-      open(context, 'ایمیل را پر کنید');
+      discuss(context, 'ایمیل را پر کنید');
       return;
     }
     if (!email.contains('@')) {
-      open(context, 'فرمت ایمیل اشتباه است');
+      discuss(context, 'فرمت ایمیل اشتباه است');
       return;
     }
     if (password.length == 0) {
-      open(context, 'رمز را پر کنید');
+      discuss(context, 'رمز را پر کنید');
       return;
     }
     setState(() {
@@ -196,14 +196,14 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           showSpinner = false;
         });
-        open(context, 'همچین ایمیلی موجود نیست و یا رمز اشتباه است');
+        discuss(context, 'همچین ایمیلی موجود نیست و یا رمز اشتباه است');
       }
 
       else {
         setState(() {
           showSpinner = false;
         });
-        open(context, result.body);
+        discuss(context, result.body);
         print(result.statusCode);
         print(result.body);
       }
@@ -211,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         showSpinner = false;
       });
-      open(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
+      discuss(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
       print("My Error: $e");
     }
   }

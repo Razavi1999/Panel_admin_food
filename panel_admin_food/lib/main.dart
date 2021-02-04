@@ -14,9 +14,9 @@ import 'food/new_food_screen.dart';
 import 'screens/registeration_screen.dart';
 import 'screens/home_screen.dart';
 import 'food/food_screen.dart';
-import 'food/request_screen.dart';
+import 'food/food_request_screen.dart';
 import 'screens/guide_screen.dart';
-import 'models/detailProfessor.dart';
+import 'Professor/detail_professor.dart';
 
 void main() => runApp(MyApp());
 

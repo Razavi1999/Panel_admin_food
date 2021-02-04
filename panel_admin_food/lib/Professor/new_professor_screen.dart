@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-//import 'package:flutter_picker/Picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart' as intl;
 import 'package:image_cropper/image_cropper.dart';
@@ -29,9 +28,10 @@ import 'dart:ui' as ui;
 
 class NewProfessorScreen extends StatefulWidget {
   static String id = 'new_professor_screen';
-  int facultyId;
   String token;
-  NewProfessorScreen({this.facultyId, this.token});
+
+  NewProfessorScreen({this.token});
+
   @override
   _NewProfessorScreenState createState() => _NewProfessorScreenState();
 }
@@ -48,9 +48,8 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
   TextEditingController postPhdController = TextEditingController();
   TextEditingController webPageLinkController = TextEditingController();
   TextEditingController googleScholarController = TextEditingController();
-  String facultyName = 'انتخاب نشده',
-      academicRank = 'انتخاب نشده';
-  int academicRankId;
+  String facultyName = 'انتخاب نشده', academicRank = 'انتخاب نشده';
+  int academicRankId, facultyId;
   String base64Image;
   String facultiesUrl = '$baseUrl/api/professors/faculties';
 
@@ -119,9 +118,10 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // args = ModalRoute.of(context).settings.arguments;
-    // token = args['token'];
-    // facultyId = args['faculty_id'];
+    print('*************************');
+    print(facultyId);
+    print(facultyName);
+    print('*************************');
     final node = FocusScope.of(context);
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
@@ -183,18 +183,6 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                // CustomNameAndResearchFieldsCard(
-                //   controller1: emailController,
-                //   controller2: addressController,
-                //   node: node,
-                //   text1: 'آدرس ایمیل',
-                //   text2: 'آدرس دفتر',
-                //   text3: '  زمان های آزاد   ',
-                //   text4: 'زمان ها',
-                //   onPressed: () {
-                //     onTimesPressed();
-                //   },
-                // ),
                 CustomResearchFieldsAndTimesCard(
                   text1: 'زمان های مراجعه',
                   text2: 'زمان ها',
@@ -219,7 +207,6 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
                   text1: 'آدرس ایمیل',
                   text2: 'آدرس دفتر',
                 ),
-
                 SizedBox(
                   height: 10,
                 ),
@@ -276,6 +263,9 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     showDialog(
       context: context,
       child: AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -366,8 +356,8 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
   }
 
   onFacultyPressed() async {
-    http.Response response = await http
-        .get(facultiesUrl, headers: {HttpHeaders.authorizationHeader: widget.token});
+    http.Response response = await http.get(facultiesUrl,
+        headers: {HttpHeaders.authorizationHeader: widget.token});
     var jsonResponse =
         convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
     print('*****************************');
@@ -382,6 +372,9 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       showDialog(
         context: context,
         child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           content: Center(
             child: Text('دانشکده ای وجود ندارد'),
           ),
@@ -391,6 +384,9 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       showDialog(
         context: context,
         child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           content: Container(
             height: 400,
             width: 250,
@@ -398,25 +394,36 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
               shrinkWrap: true,
               itemCount: count,
               itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    widget.facultyId = mapList[index]['id'];
-                    setState(() {
-                      facultyName = mapList[index]['name'];
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        mapList[index]['name'],
-                        // textDirection: TextDirection.rtl,
-                        style: PersianFonts.Shabnam.copyWith(
-                          fontSize: 20,
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.purple.shade100,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        facultyId = mapList[index]['id'];
+                        setState(() {
+                          facultyName = mapList[index]['name'];
+                        });
+                        print('===========');
+                        print(facultyName);
+                        print(facultyId);
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: Text(
+                          mapList[index]['name'],
+                          textAlign: TextAlign.center,
+                          // textDirection: TextDirection.rtl,
+                          style: PersianFonts.Shabnam.copyWith(
+                            fontSize: 20,
+                          ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 );
               },
@@ -437,30 +444,42 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     showDialog(
       context: context,
       child: AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         content: Container(
-          height: 100,
+          height: 150,
           width: 200,
           child: ListView.builder(
             shrinkWrap: true,
             itemCount: 3,
             itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  academicRankId = index;
-                  academicRank = listPersianRanks[index];
-                  Navigator.pop(context);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      listPersianRanks[index],
-                      // textDirection: TextDirection.rtl,
-                      style: PersianFonts.Shabnam.copyWith(
-                        fontSize: 20,
+              return Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Material(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.purple.shade100,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () {
+                      academicRankId = index;
+                      academicRank = listPersianRanks[index];
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      child: Center(
+                        child: Text(
+                          listPersianRanks[index],
+                          textAlign: TextAlign.center,
+                          style: PersianFonts.Shabnam.copyWith(
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
               );
             },
@@ -471,8 +490,8 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
   }
 
   onTimesPressed() async {
-    http.Response response = await http
-        .get(timesUrl, headers: {HttpHeaders.authorizationHeader: widget.token});
+    http.Response response = await http.get(timesUrl,
+        headers: {HttpHeaders.authorizationHeader: widget.token});
     var jsonResponse =
         convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
     print(jsonResponse);
@@ -486,6 +505,9 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       showDialog(
         context: context,
         child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           content: Center(
             child: Text('دانشکده ای وجود ندارد'),
           ),
@@ -495,6 +517,9 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       showDialog(
         context: context,
         child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           content: Container(
             height: 400,
             width: 150,
@@ -508,24 +533,30 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
                     String name =
                         '${mapList[index]['weekday']} ${mapList[index]['time']}';
                     if (listSelectedTimeIds.contains(id)) {
-                      return ListTile(
-                        leading: IconButton(
-                          icon: Icon(
-                            Icons.clear,
-                            color: Colors.red,
-                          ),
-                          onPressed: () {
-                            listSelectedTimeIds.remove(id);
-                            listSelectedTimeNames.remove(name);
-                            setState(() {});
-                            Navigator.pop(context);
-                            onTimesPressed();
-                          },
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        title: Text(
-                          name,
-                          style: PersianFonts.Shabnam.copyWith(
-                            fontSize: 15,
+                        color: Colors.purple.shade100,
+                        child: ListTile(
+                          leading: IconButton(
+                            icon: Icon(
+                              Icons.clear,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              listSelectedTimeIds.remove(id);
+                              listSelectedTimeNames.remove(name);
+                              setState(() {});
+                              Navigator.pop(context);
+                              onTimesPressed();
+                            },
+                          ),
+                          title: Text(
+                            name,
+                            style: PersianFonts.Shabnam.copyWith(
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       );
@@ -552,27 +583,6 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
                         ),
                       );
                     }
-                    // return InkWell(
-                    //   onTap: () {
-                    //     widget.facultyId = mapList[index]['id'];
-                    //     setState(() {
-                    //       facultyName = mapList[index]['name'];
-                    //     });
-                    //     // Navigator.pop(context);
-                    //   },
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.end,
-                    //     children: [
-                    //       Text(
-                    //         mapList[index]['name'],
-                    //         // textDirection: TextDirection.rtl,
-                    //         style: PersianFonts.Shabnam.copyWith(
-                    //           fontSize: 20,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // );
                   },
                 ),
                 SizedBox(
@@ -601,11 +611,17 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
   }
 
   onResearchFieldsPressed() async {
-    http.Response response = await http.get("$researchFieldsUrl/?faculty_id=${widget.facultyId}",
+    if (facultyId == null) {
+      discuss(context, 'لطفا ابتدا دانشکده ی استاد را وارد کنید');
+    }
+    print('=========================');
+    print(facultyName);
+    http.Response response = await http.get(
+        "$researchFieldsUrl/?faculty_id=${facultyId}",
         headers: {HttpHeaders.authorizationHeader: widget.token});
     print(response.body);
     print('------------------------');
-    print('$researchFieldsUrl/?faculty_id=${widget.facultyId}');
+    print('$researchFieldsUrl/?faculty_id=${facultyId}');
     var jsonResponse =
         convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
     print('***********************');
@@ -620,8 +636,42 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       showDialog(
         context: context,
         child: AlertDialog(
-          content: Center(
-            child: Text('فیلد تحقیقاتی وجود ندارد'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: Container(
+            height: 100,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'فیلد تحقیقاتی وجود ندارد',
+                    textAlign: TextAlign.center,
+                    style: PersianFonts.Shabnam.copyWith(
+                        fontSize: 20, color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  FlatButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    color: Colors.purple.shade400,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'باشه',
+                      style: PersianFonts.Shabnam.copyWith(
+                          fontSize: 18, color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       );
@@ -629,9 +679,12 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       showDialog(
         context: context,
         child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           content: Container(
             height: 400,
-            width: 200,
+            width: 250,
             child: Column(
               children: [
                 ListView.builder(
@@ -641,46 +694,54 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
                     int id = mapList[index]['research_axis_id'];
                     String name = mapList[index]['subject'];
                     if (listSelectedResearchFieldIds.contains(id)) {
-                      return ListTile(
-                        leading: IconButton(
-                          icon: Icon(
-                            Icons.clear,
-                            color: Colors.red,
-                          ),
-                          onPressed: () {
-                            listSelectedResearchFieldIds.remove(id);
-                            listSelectedResearchFieldNames.remove(name);
-                            setState(() {});
-                            Navigator.pop(context);
-                            onResearchFieldsPressed();
-                          },
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        title: Text(
-                          name,
-                          style: PersianFonts.Shabnam.copyWith(
-                            fontSize: 15,
+                        color: Colors.purple.shade100,
+                        child: ListTile(
+                          leading: IconButton(
+                            icon: Icon(
+                              Icons.clear,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              listSelectedResearchFieldIds.remove(id);
+                              listSelectedResearchFieldNames.remove(name);
+                              setState(() {});
+                              Navigator.pop(context);
+                              onResearchFieldsPressed();
+                            },
+                          ),
+                          title: Text(
+                            name,
+                            style: PersianFonts.Shabnam.copyWith(
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       );
                     } else {
-                      return ListTile(
-                        leading: IconButton(
-                          icon: Icon(
-                            Icons.done,
-                            color: Colors.green,
+                      return Card(
+                        child: ListTile(
+                          leading: IconButton(
+                            icon: Icon(
+                              Icons.done,
+                              color: Colors.green,
+                            ),
+                            onPressed: () {
+                              listSelectedResearchFieldIds.add(id);
+                              listSelectedResearchFieldNames.add(name);
+                              setState(() {});
+                              Navigator.pop(context);
+                              onResearchFieldsPressed();
+                            },
                           ),
-                          onPressed: () {
-                            listSelectedResearchFieldIds.add(id);
-                            listSelectedResearchFieldNames.add(name);
-                            setState(() {});
-                            Navigator.pop(context);
-                            onResearchFieldsPressed();
-                          },
-                        ),
-                        title: Text(
-                          name,
-                          style: PersianFonts.Shabnam.copyWith(
-                            fontSize: 15,
+                          title: Text(
+                            name,
+                            style: PersianFonts.Shabnam.copyWith(
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       );
@@ -701,7 +762,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
                   child: Text(
                     'باشه',
                     textAlign: TextAlign.center,
-                    style: PersianFonts.Shabnam.copyWith(color: Colors.white),
+                    style: PersianFonts.Shabnam.copyWith(color: Colors.white, fontSize: 18),
                   ),
                 ),
               ],
@@ -710,13 +771,6 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
         ),
       );
     }
-  }
-
-  onResearchRemovePressed (){
-
-  }
-  onTimesRemovePressed (){
-
   }
 
   onSubmitPressed() {
@@ -728,7 +782,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     String lastName = lastNameController.text;
     String email = emailController.text;
     String address = addressController.text;
-    int facultyId = widget.facultyId;
+    int facultyId = this.facultyId;
     String academicRank = listRanks[academicRankId];
     String phone = phoneController.text;
     String bachelor = bachelorController.text;
@@ -739,39 +793,35 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     String googleScholarLink = googleScholarController.text;
 
     if (firstName.length == 0) {
-      open(context, 'نام را وارد کنید');
+      discuss(context, 'نام را وارد کنید');
       return;
     }
     if (lastName.length == 0) {
-      open(context, 'نام خانوادگی را وارد کنید');
+      discuss(context, 'نام خانوادگی را وارد کنید');
       return;
     }
     if (email.length == 0) {
-      open(context, 'آدرس ایمیل را وارد کنید');
+      discuss(context, 'آدرس ایمیل را وارد کنید');
       return;
     }
-    // if (address.length == 0) {
-    //   open(context, 'آدرس را وارد کنید');
-    //   return;
-    // }
     if (academicRank == null) {
-      open(context, 'مرتبه علمی را وارد کنید');
+      discuss(context, 'مرتبه علمی را وارد کنید');
       return;
     }
     if (facultyId == null) {
-      open(context, 'دانشکده را وارد کنید');
+      discuss(context, 'دانشکده را انتخاب کنید');
       return;
     }
     if (imageFile == null) {
-      open(context, 'عکسی انتخاب کنید');
+      discuss(context, 'عکسی انتخاب کنید');
       return;
     }
     if (listSelectedTimeIds.length == 0) {
-      open(context, 'زمان های خالی استاد را وارد کنید');
+      discuss(context, 'زمان های خالی استاد را وارد کنید');
       return;
     }
     if (listSelectedResearchFieldIds.length == 0) {
-      open(context, 'فیلد های تبلیغاتی استاد را وارد کنید');
+      discuss(context, 'فیلد های تبلیغاتی استاد را وارد کنید');
       return;
     }
 
@@ -792,22 +842,21 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
     );
   }
 
-  postInformation({
-    String firstName,
-    String lastName,
-    int facultyId,
-    String academicRank,
-    String phone,
-    String email,
-    String address,
-    String bachelor,
-    String master,
-    String phd,
-    String postPhd,
-    String webPageLink,
-    String googleScholarLink,
-    times,
-  }) async {
+  postInformation(
+      {String firstName,
+      String lastName,
+      int facultyId,
+      String academicRank,
+      String phone,
+      String email,
+      String address,
+      String bachelor,
+      String master,
+      String phd,
+      String postPhd,
+      String webPageLink,
+      String googleScholarLink,
+      times}) async {
     setState(() {
       showSpinner = true;
     });
@@ -820,13 +869,6 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
       map['faculty_id'] = facultyId;
       map['academic_rank'] = academicRank;
       map['email'] = email;
-      // map['direct_telephone'] = phone;
-      // map['address'] = address;
-      // map['bachelor'] = bachelor;
-      // map['master'] = master;
-      // map['phd'] = phd;
-      // map['post_doctoral'] = postPhd;
-      // map['webpage_link'] = webPageLink;
       map['filename'] = imageFile.path.split('/').last;
       map['image'] = base64file;
       map['free_times_list'] = listSelectedTimeIds;
@@ -868,7 +910,7 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
         success(context, "استاد اضافه شد");
       } else {
         print(response.body);
-        open(context, "متاسفانه مشکلی پیش آمد.");
+        discuss(context, "متاسفانه مشکلی پیش آمد.");
       }
       setState(() {
         showSpinner = false;

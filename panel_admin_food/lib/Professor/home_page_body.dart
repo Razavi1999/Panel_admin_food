@@ -5,8 +5,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:panel_admin_food_origin/models/PlanetSummary.dart';
-import 'package:panel_admin_food_origin/models/detailProfessor.dart';
+import 'package:panel_admin_food_origin/models/professor_summary.dart';
+import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/Professor/detail_professor.dart';
 import 'package:panel_admin_food_origin/models/plants.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,13 +15,12 @@ import '../constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import '../components/OrderCard2.dart';
-import 'null.dart';
 
 
 class HomePageBody extends StatefulWidget {
-  int faculty_id;
+  int facultyId;
 
-  HomePageBody(this.faculty_id);
+  HomePageBody(this.facultyId);
 
   @override
   _HomePageBodyState createState() => _HomePageBodyState();
@@ -57,11 +56,9 @@ class _HomePageBodyState extends State<HomePageBody> {
           builder: (context, snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
-              //print("I m connectionState !!!");
-              //print(url);
               return FutureBuilder(
                 future: http.get(
-                    '$url${widget.faculty_id}',
+                    '$url${widget.facultyId}',
                     headers: {
                       HttpHeaders.authorizationHeader: token,
                     }),
@@ -92,7 +89,9 @@ class _HomePageBodyState extends State<HomePageBody> {
                       mapList.add(map);
                     }
 
-                    //print(jsonResponse.toString());
+                    if(count == 0){
+                      return errorWidget('استادی به ثبت نرسیده است');
+                    }
 
                     for(int i = 0 ; i < count ; i++)
                     {
@@ -118,10 +117,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                     //return Text("heig you",);
 
                     return ListView.builder(
-                      //shrinkWrap: true,
                       itemCount: count,
                       itemBuilder: (context, index) {
-                      // print("P[index] : " + P[index].id.toString());
                        return OrderCard2(
                          name: P[index].name,
                          cost: P[index].location,
@@ -161,12 +158,47 @@ class _HomePageBodyState extends State<HomePageBody> {
     );
   }
 
-  void navigateToProfessorDetailScreen(int professor_id) {
+  Widget errorWidget(String message) {
+    return Container(
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * 0.6,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundColor: kPrimaryColor,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 58,
+                child: Image.asset('assets/images/unkown.png'),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              message,
+              style: PersianFonts.Shabnam.copyWith(
+                  fontSize: 20, color: kPrimaryColor),
+              textDirection: TextDirection.rtl,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void navigateToProfessorDetailScreen(int professorId) {
     Navigator.pushNamed(
       context,
       DetailPageProfessor.id,
       arguments: {
-        'id': professor_id,
+        'id': professorId,
       },
     );
 

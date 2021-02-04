@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:panel_admin_food_origin/components/EmptyEffect.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -146,13 +147,41 @@ class _RequestScreenState extends State<RequestScreen> {
                         for (Map map in jsonResponse) {
                           count++;
                           mapList.add(map);
-                          // print(map.toString());
                         }
                         if (count == 0) {
                           return Container(
+                            height: MediaQuery.of(context).size.height * 0.6,
                             child: Center(
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  EmptyEffect(
+                                    child: CircleAvatar(
+                                      radius: 60,
+                                      backgroundColor: kPrimaryColor,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        radius: 58,
+                                        child: Icon(
+                                          Icons.close,
+                                          size: 100,
+                                          color: kPrimaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                    borderColor: kPrimaryColor,
+                                    outermostCircleStartRadius: 20,
+                                    outermostCircleEndRadius: 175,
+                                    numberOfCircles: 4,
+                                    animationTime: Duration(seconds: 3),
+                                    delay: Duration(seconds: 3),
+                                    gap: 30,
+                                    borderWidth: 20,
+                                    startOpacity: 0.3,
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
                                   Text(
                                     'درخواست غذایی برای امروز وجود ندارد !!!',
                                     style: PersianFonts.Shabnam.copyWith(

@@ -44,8 +44,8 @@ String replaceFarsiNumber(String input)
   return input;
 }
 
-void open(BuildContext context, String message) {
-  AwesomeDialog dialog = AwesomeDialog(
+void discuss(BuildContext context, String message) {
+  AwesomeDialog(
       context: context,
       dialogType: DialogType.ERROR,
       animType: AnimType.RIGHSLIDE,
@@ -53,6 +53,7 @@ void open(BuildContext context, String message) {
       title: 'خطا',
       desc: message,
       btnOkOnPress: () {},
+
       btnOkIcon: Icons.cancel,
       btnOkColor: Colors.red)..show();
 }

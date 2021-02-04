@@ -15,7 +15,7 @@ import '../constants.dart';
 import 'food_details_screen.dart';
 import 'history_screen.dart';
 import 'new_food_screen.dart';
-import 'request_screen.dart';
+import 'food_request_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:persian_date/persian_date.dart';
 import '../screens/EmptyEffect.dart';
@@ -179,10 +179,18 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               EmptyEffect(
-                                child: Icon(
-                                  Icons.folder,
-                                  size: 55,
-                                  color: kPrimaryColor,
+                                child: CircleAvatar(
+                                  radius: 60,
+                                  backgroundColor: kPrimaryColor,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 58,
+                                    child: Icon(
+                                      Icons.close,
+                                      size: 100,
+                                      color: kPrimaryColor,
+                                    ),
+                                  ),
                                 ),
                                 borderColor: kPrimaryColor,
                                 outermostCircleStartRadius: 20,

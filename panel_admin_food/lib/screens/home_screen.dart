@@ -111,54 +111,56 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
               SafeArea(
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/images/elmos_3.png",
-                          width: 72,
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Image.asset(
-                          "assets/images/logo.png",
-                          width: 72,
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(
-                      height: 14,
-                    ),
-
-                    Text(
-                      "اپلیکیشن جامع دانشگاه من",
-                      style: PersianFonts.Shabnam.copyWith(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      " خوش آمدید " + lastName + " " + firstName,
-                      //textDirection: TextDirection.rtl,
-                      style: PersianFonts.Shabnam.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        //color: Colors.white
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/images/elmos_3.png",
+                            width: 72,
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Image.asset(
+                            "assets/images/logo.png",
+                            width: 72,
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    bodyContainer(),
-                  ],
+
+                      SizedBox(
+                        height: 14,
+                      ),
+
+                      Text(
+                        "اپلیکیشن جامع دانشگاه من",
+                        style: PersianFonts.Shabnam.copyWith(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        " خوش آمدید " + lastName + " " + firstName,
+                        //textDirection: TextDirection.rtl,
+                        style: PersianFonts.Shabnam.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          //color: Colors.white
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      bodyContainer(),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -295,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           child: HomeItem(
                             title: "اساتید دانشکده" ,
                             subtitle: "زمینه های تحقیقاتی اساتید",
-                            img: "assets/images/professor.jfif",
+                            img: "assets/images/prof.png",
                             size: size,
                           ),
                         ),

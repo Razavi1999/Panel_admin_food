@@ -164,37 +164,37 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
 
   checkValidation(BuildContext context) async {
     if (email.length == 0) {
-      open(context , 'ایمیل را پر کنید');
+      discuss(context , 'ایمیل را پر کنید');
       return;
     }
 
     if (firstName.length == 0) {
-      open(context , 'انام خود را وارد کنید');
+      discuss(context , 'انام خود را وارد کنید');
     }
 
     if (lastName.length == 0) {
-      open(context , 'نام خانوادگی خود را وارد کنید');
+      discuss(context , 'نام خانوادگی خود را وارد کنید');
       return;
     }
     if (sid.length != 8) {
-      open(context, 'فرمت شماره دانشجویی اشتباه است');
+      discuss(context, 'فرمت شماره دانشجویی اشتباه است');
       return;
     }
     try {
       int.parse(sid);
     } catch (e) {
-      open(context, 'فرمت شماره دانشجویی اشتباه است');
+      discuss(context, 'فرمت شماره دانشجویی اشتباه است');
       return;
     }
     try {
       int.parse(sid);
     } catch (e) {
       print('My Error: $e');
-      open(context, 'فرمت شماره دانشجویی اشتباه است');
+      discuss(context, 'فرمت شماره دانشجویی اشتباه است');
       return;
     }
     if (password.length == 0) {
-      open(context, 'رمز را پر کنید');
+      discuss(context, 'رمز را پر کنید');
       return;
     }
     count++;
@@ -269,7 +269,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           });
         } else {
           resetCounter();
-          open(context, 'ارسال ایمیل ناموفق بود');
+          discuss(context, 'ارسال ایمیل ناموفق بود');
           setState(() {
             showSpinner = false;
           });
@@ -281,26 +281,26 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
           showSpinner = false;
         });
         resetCounter();
-        open(context, 'لطفا ایمیل دانشجویی وارد کنید');
+        discuss(context, 'لطفا ایمیل دانشجویی وارد کنید');
       } else if (result.statusCode == 500) {
         setState(() {
           showSpinner = false;
         });
         resetCounter();
-        open(context, 'این ایمیل توسط کاربر دیگری در مورد استفاده است');
+        discuss(context, 'این ایمیل توسط کاربر دیگری در مورد استفاده است');
       } else {
         setState(() {
           showSpinner = false;
         });
         resetCounter();
-        open(context, result.body);
+        discuss(context, result.body);
         print(result.statusCode);
         print(result.body);
       }
     } catch (e) {
       showSpinner = false;
       resetCounter();
-      open(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
+      discuss(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
       print("My Error: $e");
     }
   }

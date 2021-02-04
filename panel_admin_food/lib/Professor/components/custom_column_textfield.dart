@@ -30,7 +30,7 @@ class CustomColumnTextField extends StatelessWidget {
                 text,
                 textAlign: TextAlign.end,
                 style: PersianFonts.Shabnam.copyWith(
-                  fontSize: 15,
+                  fontSize: 17,
                   color: kPrimaryColor,
                 ),
               ),
