@@ -187,7 +187,8 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           showSpinner = false;
         });
-        var jsonResponse = convert.jsonDecode(result.body);
+        var jsonResponse =
+        convert.jsonDecode(convert.utf8.decode(result.bodyBytes));
         print(jsonResponse['token']);
         print(jsonResponse);
         addStringToSF(jsonResponse['token'], jsonResponse['user_id'],

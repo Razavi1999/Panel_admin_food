@@ -208,7 +208,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                 image: DecorationImage(
               colorFilter: new ColorFilter.mode(
                   Colors.black.withOpacity(0.5), BlendMode.dstATop),
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.cover,
               image: AssetImage("assets/images/ahmad_13.jpg"),
             )),
             //*/
@@ -306,7 +306,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                                       width: 10,
                                     ),
                                     Text(
-                                      '${date.year}-${date.month}-${date.day}',
+                                      replaceFarsiNumber('${date.year}-${date.month}-${date.day}'),
                                       textAlign: TextAlign.center,
                                       textDirection: TextDirection.rtl,
                                       style: PersianFonts.Shabnam.copyWith(
@@ -681,7 +681,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                                   colorFilter: new ColorFilter.mode(
                                       Colors.black.withOpacity(0.5),
                                       BlendMode.dstATop),
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.cover,
                                   image: AssetImage(
                                     "assets/images/ahmad_13.jpg",
                                   ),

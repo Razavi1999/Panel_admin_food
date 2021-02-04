@@ -5,7 +5,6 @@ import 'package:persian_fonts/persian_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 const kPrimaryColor = Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
 const kAnimationDuration = Duration(milliseconds: 200);
@@ -33,8 +32,7 @@ const List<BoxShadow> shadow = [
   BoxShadow(color: Colors.black12, offset: Offset(0, 3), blurRadius: 6)
 ];
 
-String replaceFarsiNumber(String input)
-{
+String replaceFarsiNumber(String input) {
   const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   const farsi = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
 
@@ -53,12 +51,12 @@ void discuss(BuildContext context, String message) {
       title: 'خطا',
       desc: message,
       btnOkOnPress: () {},
-
       btnOkIcon: Icons.cancel,
-      btnOkColor: Colors.red)..show();
+      btnOkColor: Colors.red)
+    ..show();
 }
 
-void warning_logout(BuildContext context, String message){
+void warning_logout(BuildContext context, String message) {
   AwesomeDialog(
       context: context,
       dialogType: DialogType.WARNING,
@@ -67,6 +65,8 @@ void warning_logout(BuildContext context, String message){
       showCloseIcon: true,
       closeIcon: Icon(Icons.close_fullscreen_outlined),
       title: 'اخطار',
+      btnOkText: 'بله',
+      btnCancelText: 'خیر',
       desc: message,
       btnCancelOnPress: () {
         //Navigator.pop(context);
@@ -76,33 +76,35 @@ void warning_logout(BuildContext context, String message){
         await preferences.clear();
         //Navigator.pop(context);
         Navigator.popAndPushNamed(context, LoginScreen.id);
-      }
-      )..show();
+      })
+    ..show();
 }
 
 void success(BuildContext context, String message) {
-  AwesomeDialog dialog = AwesomeDialog(
+  AwesomeDialog(
       context: context,
       dialogType: DialogType.SUCCES,
       animType: AnimType.RIGHSLIDE,
-      headerAnimationLoop: false,
+      headerAnimationLoop: true,
       title: 'موفق شدید',
       desc: message,
-      btnOkOnPress: () {},
+      btnOkOnPress: () {
+
+      },
       btnOkIcon: Icons.check_circle,
-      btnOkColor: Colors.green)..show();
+      btnOkColor: Colors.green)
+    ..show();
 }
 
-void info(BuildContext context, String message){
-      AwesomeDialog(
-        context: context,
-        headerAnimationLoop: true,
-        animType: AnimType.BOTTOMSLIDE,
-        title: 'اطلاعات',
-        desc: message,
-      )..show();
+void info(BuildContext context, String message) {
+  AwesomeDialog(
+    context: context,
+    headerAnimationLoop: true,
+    animType: AnimType.BOTTOMSLIDE,
+    title: 'اطلاعات',
+    desc: message,
+  )..show();
 }
-
 
 final kHomeDecoration = BoxDecoration(
   color: Color(
@@ -110,7 +112,6 @@ final kHomeDecoration = BoxDecoration(
   ),
   borderRadius: BorderRadius.circular(20),
 );
-
 
 final kShadowColor = Color(0xFFD3D3D3).withOpacity(.84);
 String baseUrl = 'http://172.17.3.157';

@@ -58,7 +58,7 @@ class _EventScreenState extends State<EventScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.grey[200],
         title: Container(
-          height: 40,
+          height: 45,
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: TextField(
             controller: cartableController,
@@ -75,9 +75,10 @@ class _EventScreenState extends State<EventScreen> {
               setState(() {});
             },
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(bottom: 22.5),
               prefixIcon: Icon(Icons.search),
               labelText:
-              '                                                  جستجو',
+              'جستجو',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -304,23 +305,20 @@ class _EventScreenState extends State<EventScreen> {
                     SizedBox(
                       height: 40,
                     ),
-                    EmptyEffect(
-                      child: Icon(
-                        Icons.folder,
-                        size: 45,
-                        color: Colors.purple,
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundColor: kPrimaryColor,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 58,
+                        child: Icon(
+                          Icons.close,
+                          size: 100,
+                          color: kPrimaryColor,
+                        ),
                       ),
-                      borderColor: kPrimaryColor,
-                      outermostCircleStartRadius: 15,
-                      outermostCircleEndRadius: 175,
-                      numberOfCircles: 4,
-                      animationTime: Duration(seconds: 3),
-                      delay: Duration(seconds: 3),
-                      gap: 30,
-                      borderWidth: 20,
-                      startOpacity: 0.3,
                     ),
-                    Text('ایوندی وجود ندارد',
+                    Text('رویداد وجود ندارد',
                       style: PersianFonts.Shabnam.copyWith(
                         color: kPrimaryColor,
                         fontSize: 25,
@@ -453,8 +451,9 @@ class _EventScreenState extends State<EventScreen> {
         });
     if (response.statusCode == 200) {
       setState(() {});
+      success(context, 'رویداد با موفقیت لغو شد');
     } else {
-      _showDialog('مشکلی پیش آمد');
+      discuss(context, 'مشکلی پیش آمد');
       print(response.statusCode);
       print(response.body);
     }
@@ -514,6 +513,36 @@ class _EventScreenState extends State<EventScreen> {
                       textAlign: TextAlign.right,
                       style: PersianFonts.Shabnam.copyWith(
                           fontSize: 16.0, color: Colors.black87),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Switch(
+                              activeTrackColor: Colors.green,
+                              activeColor: Colors.green,
+                              inactiveTrackColor: Colors.blueGrey,
+                              value: true,
+                              onChanged: (value) {
+                                declineEvent(eventId);
+                              },
+                            ),
+                          ),
+                        ),
+                        Text(
+                          'لغو رویداد : ',
+                          textAlign: TextAlign.end,
+                          textDirection: TextDirection.rtl,
+                          style: PersianFonts.Shabnam.copyWith(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black87),
+                        ),
+                      ],
                     ),
                     PieChart(
                       dataMap: eventMap,
@@ -637,11 +666,11 @@ class _EventScreenState extends State<EventScreen> {
                             child: Switch(
                               activeTrackColor: Colors.green,
                               activeColor: Colors.green,
-                              inactiveTrackColor: Colors.white,
-                              value: true,
+                              inactiveTrackColor: Colors.blueGrey,
+                              value: false,
                               onChanged: (value) {
                                 acceptEvent(eventId);
-                                success(context, 'رویداد با موفقیت اضافه شد');
+                                success(context, 'رویداد با موفقیت تایید شد');
                               },
                             ),
                           ),

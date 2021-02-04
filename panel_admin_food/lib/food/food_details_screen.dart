@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:persian_fonts/persian_fonts.dart';
@@ -110,15 +111,13 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                       final Map<String , double> my_map = Map() ;
 
                       for(int i = 0 ; i < result.length ; i++)
-                        my_map[replaceFarsiNumber( result[i]['start_serve_time'].toString().substring(0,5) )]
+                        my_map[replaceFarsiNumber( '${result[i]['start_serve_time'].toString().substring(0,5)} - ${result[i]['end_serve_time'].toString().substring(0,5)}' )]
                         = double.parse( result[i]['remaining_count'].toString());
 
                       print('my_map' + my_map.toString());
 
                       for (var each in result)
                         count++;
-
-
 
                       return SingleChildScrollView(
                         child: Column(
@@ -256,23 +255,13 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                 horizontal: 30,
                                 vertical: 0,
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Flexible(
-                                    child: RichText(
-                                      overflow: TextOverflow.ellipsis,
-                                      strutStyle: StrutStyle(fontSize: 12.0),
-                                      text: TextSpan(
-                                          text: result[0]['food']['description'],
-                                          style: PersianFonts.Shabnam.copyWith(
-                                              fontWeight: FontWeight.w800,
-                                              color: kPrimaryColor
-                                          )
-                                      ),
-                                    ),
+                              child: Text(
+                                  result[0]['food']['description'],
+                                  style: PersianFonts.Shabnam.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: kPrimaryColor
                                   ),
-                                ],
+                                textDirection: TextDirection.rtl,
                               ),
                             ),
                             SizedBox(
@@ -282,7 +271,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                             PieChart(
                               dataMap: my_map,
                               legendFontColor: Colors.blueGrey[900],
-                              legendFontSize: 22.0,
+                              legendFontSize: 18.0,
                               legendFontWeight: FontWeight.w800,
                               animationDuration: Duration(milliseconds: 800),
                               chartLegendSpacing: 25.0,
@@ -344,17 +333,17 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                 return SizedBox();
                               },
                             ),
-
-
-
-
-
                           ],
                         ),
                       );
                     } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
+                      return Container(
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        child: Center(
+                          child: SpinKitWave(
+                            color: kPrimaryColor,
+                          ),
+                        ),
                       );
                     }
                   },
