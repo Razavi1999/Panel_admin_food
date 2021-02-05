@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:persian_fonts/persian_fonts.dart';
 
 import '../constants.dart';
 
@@ -23,6 +24,7 @@ class RoundedPasswordField extends StatelessWidget {
       child: TextField(
         obscureText: isObscured ?? true,
         onChanged: onChanged,
+        style: PersianFonts.Shabnam.copyWith(),
         cursorColor: kPrimaryColor,
         decoration: InputDecoration(
           hintText: "رمز",

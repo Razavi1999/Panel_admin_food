@@ -99,10 +99,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           RichText(
                             text: TextSpan(
                               text : "به مدیریت دانشگاه من خوش آمدید",
-                              style: TextStyle(fontWeight: FontWeight.bold ,
+                              style: PersianFonts.Shabnam.copyWith(
+                                  fontWeight: FontWeight.bold ,
                                   color: kPrimaryColor ,
                                   fontSize: 20
-                              ),
+                              )
                             ),
                           ),
                           SizedBox(height: size.height * 0.03),
@@ -191,6 +192,10 @@ class _LoginScreenState extends State<LoginScreen> {
         convert.jsonDecode(convert.utf8.decode(result.bodyBytes));
         print(jsonResponse['token']);
         print(jsonResponse);
+        if(jsonResponse['role'] == 'student'){
+          discuss(context, 'شما به عنوان دانشجو نمیتوانید وارد اپ ادمین شوید');
+          return;
+        }
         addStringToSF(jsonResponse['token'], jsonResponse['user_id'],
             jsonResponse['username'], jsonResponse['first_name'], jsonResponse['last_name'], jsonResponse['role']);
       } else if (result.statusCode == 400) {

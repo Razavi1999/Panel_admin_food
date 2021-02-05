@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:panel_admin_food_origin/Professor/faculty_screen.dart';
 import 'package:panel_admin_food_origin/components/home_item.dart';
+import 'package:panel_admin_food_origin/components/home_item2.dart';
 import 'package:panel_admin_food_origin/event/events_screen.dart';
 import 'package:panel_admin_food_origin/screens/guide_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
@@ -43,21 +44,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
-    // )..repeat(reverse: true);
+      // )..repeat(reverse: true);
     );
     _controller.forward();
-    _animation1 = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.ease
-    );
+    _animation1 = CurvedAnimation(parent: _controller, curve: Curves.ease);
     _animation2 = CurvedAnimation(
-        parent: _controller,
-        curve: Interval(0.5 ,1.0, curve: Curves.ease)
-    );
+        parent: _controller, curve: Interval(0.5, 1.0, curve: Curves.ease));
     _animation3 = CurvedAnimation(
-        parent: _controller,
-        curve: Interval(0.8 ,1.0, curve: Curves.ease)
-    );
+        parent: _controller, curve: Interval(0.8, 1.0, curve: Curves.ease));
   }
 
   @override
@@ -130,11 +124,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-
                       SizedBox(
                         height: 14,
                       ),
-
                       Text(
                         "اپلیکیشن جامع دانشگاه من",
                         style: PersianFonts.Shabnam.copyWith(
@@ -142,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
                       ),
-
                       SizedBox(
                         height: 5,
                       ),
@@ -170,8 +161,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  bodyContainer(){
-    if(role == null || role.toLowerCase() == 'admin-all'){
+  bodyContainer() {
+    if (role == null || role.toLowerCase() == 'admin-all') {
       return Container(
         height: size.height * 0.7,
         child: Column(
@@ -188,13 +179,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(20),
-                        onTap: (){
-                          Navigator.pushNamed(context, OrderPage.id, arguments: {
-                            'token': token,
-                            'user_id': userId,
-                            'first_name': firstName,
-                            'last_name': lastName,
-                          });
+                        onTap: () {
+                          Navigator.pushNamed(context, OrderPage.id,
+                              arguments: {
+                                'token': token,
+                                'user_id': userId,
+                                'first_name': firstName,
+                                'last_name': lastName,
+                              });
                         },
                         child: Container(
                           height: size.height * 0.22,
@@ -218,13 +210,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(20),
-                        onTap: (){
-                          Navigator.pushNamed(context, EventScreen.id, arguments: {
-                            'token': token,
-                            'user_id': userId,
-                            'first_name': firstName,
-                            'last_name': lastName,
-                          });
+                        onTap: () {
+                          Navigator.pushNamed(context, EventScreen.id,
+                              arguments: {
+                                'token': token,
+                                'user_id': userId,
+                                'first_name': firstName,
+                                'last_name': lastName,
+                              });
                         },
                         child: Container(
                           height: size.height * 0.22,
@@ -253,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(20),
-                        onTap: (){
+                        onTap: () {
                           Navigator.pushNamed(context, guide.id, arguments: {
                             'token': token,
                             'user_id': userId,
@@ -265,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           height: size.height * 0.22,
                           width: size.width * 0.45,
                           child: HomeItem(
-                            title: "راهنمای برنامه" ,
+                            title: "راهنمای برنامه",
                             subtitle: "توضیحات برنامه",
                             img: "assets/images/question.png",
                             size: size,
@@ -283,19 +276,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(20),
-                        onTap: (){
-                          Navigator.pushNamed(context, FacultyScreen.id, arguments: {
-                            'token': token,
-                            'user_id': userId,
-                            'first_name': firstName,
-                            'last_name': lastName,
-                          });
+                        onTap: () {
+                          Navigator.pushNamed(context, FacultyScreen.id,
+                              arguments: {
+                                'token': token,
+                                'user_id': userId,
+                                'first_name': firstName,
+                                'last_name': lastName,
+                              });
                         },
                         child: Container(
                           height: size.height * 0.22,
                           width: size.width * 0.45,
                           child: HomeItem(
-                            title: "اساتید دانشکده" ,
+                            title: "اساتید دانشکده",
                             subtitle: "زمینه های تحقیقاتی اساتید",
                             img: "assets/images/prof.png",
                             size: size,
@@ -318,8 +312,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(20),
-                        onTap: (){
-                          warning_logout(context , "خارج می شوید ؟");
+                        onTap: () {
+                          warning_logout(context, "خارج می شوید ؟");
                           //showLogoutDialog();
                         },
                         child: Container(
@@ -327,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           width: size.width * 0.5,
                           child: HomeItem(
                             title: "خروج از برنامه",
-                            subtitle: "" ,
+                            subtitle: "",
                             img: "assets/images/shut_down.png",
                             size: size,
                           ),
@@ -341,208 +335,192 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ],
         ),
       );
-    }
-    else if(role.toLowerCase() == 'food-manager'){
+    } else if (role.toLowerCase() == 'food-manager') {
       return Container(
-        height: size.height * 0.7,
+        height: size.height * 0.75,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ScaleTransition(
-                  scale: _animation2,
-                  child: Container(
-                    decoration: kHomeDecoration,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: (){
-                          Navigator.pushNamed(context, OrderPage.id, arguments: {
-                            'token': token,
-                            'user_id': userId,
-                            'first_name': firstName,
-                            'last_name': lastName,
-                          });
-                        },
-                        child: Container(
-                          height: size.height * 0.22,
-                          width: size.width * 0.45,
-                          child: HomeItem(
-                            title: "سامانه تغذیه",
-                            subtitle: "اتوماسیون سلف آزاد",
-                            img: "assets/images/food.png",
-                            size: size,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                ScaleTransition(
-                  scale: _animation2,
-                  child: Container(
-                    decoration: kHomeDecoration,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: (){
-                          Navigator.pushNamed(context, guide.id, arguments: {
-                            'token': token,
-                            'user_id': userId,
-                            'first_name': firstName,
-                            'last_name': lastName,
-                          });
-                        },
-                        child: Container(
-                          height: size.height * 0.22,
-                          width: size.width * 0.45,
-                          child: HomeItem(
-                            title: "راهنمای برنامه" ,
-                            subtitle: "توضیحات برنامه",
-                            img: "assets/images/question.png",
-                            size: size,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: size.height * 0.04,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ScaleTransition(
-                  scale: _animation3,
-                  child: Container(
-                    decoration: kHomeDecoration,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: (){
-                          warning_logout(context, "خارج می شوید؟ ");
-                          //showLogoutDialog();
-                        },
-                        child: Container(
-                          height: size.height * 0.18,
-                          width: size.width * 0.5,
-                          child: HomeItem(
-                            title: "خروج از برنامه",
-                            subtitle: "" ,
-                            img: "assets/images/shut_down.png",
-                            size: size,
-                          ),
-                        ),
+            ScaleTransition(
+              scale: _animation2,
+              child: Container(
+                decoration: kHomeDecoration,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, OrderPage.id, arguments: {
+                        'token': token,
+                        'user_id': userId,
+                        'first_name': firstName,
+                        'last_name': lastName,
+                      });
+                    },
+                    child: Container(
+                      height: size.height * 0.22,
+                      width: size.width * 0.85,
+                      child: HomeItem2(
+                        title: "سامانه تغذیه",
+                        subtitle: "اتوماسیون سلف آزاد",
+                        img: "assets/images/food.png",
+                        size: size,
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
+            ),
+            ScaleTransition(
+              scale: _animation2,
+              child: Container(
+                decoration: kHomeDecoration,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, guide.id, arguments: {
+                        'token': token,
+                        'user_id': userId,
+                        'first_name': firstName,
+                        'last_name': lastName,
+                      });
+                    },
+                    child: Container(
+                      height: size.height * 0.22,
+                      width: size.width * 0.85,
+                      child: HomeItem2(
+                        title: "راهنمای برنامه",
+                        subtitle: "توضیحات برنامه",
+                        img: "assets/images/question.png",
+                        size: size,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            ScaleTransition(
+              scale: _animation3,
+              child: Container(
+                decoration: kHomeDecoration,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      warning_logout(context, "خارج می شوید؟ ");
+                      //showLogoutDialog();
+                    },
+                    child: Container(
+                      height: size.height * 0.22,
+                      width: size.width * 0.85,
+                      child: HomeItem2(
+                        title: "خروج از برنامه",
+                        subtitle: "",
+                        img: "assets/images/shut_down.png",
+                        size: size,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
       );
-    }
-    else if(role.toLowerCase() == 'culture-deputy'){
+    } else if (role.toLowerCase() == 'culture-deputy') {
       return Container(
-        height: size.height * 0.7,
+        height: size.height * 0.75,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ScaleTransition(
-                  scale: _animation2,
-                  child: Container(
-                    decoration: kHomeDecoration,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: (){
-                          Navigator.pushNamed(context, EventScreen.id, arguments: {
-                            'token': token,
-                            'user_id': userId,
-                            'first_name': firstName,
-                            'last_name': lastName,
-                          });
-                        },
-                        child: Container(
-                          height: size.height * 0.22,
-                          width: size.width * 0.45,
-                          child: HomeItem(
-                            title: "سامانه رویدادها",
-                            subtitle: "رویداد برای تحکیم فردا",
-                            img: "assets/images/Event.png",
-                            size: size,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                ScaleTransition(
-                  scale: _animation2,
-                  child: Container(
-                    decoration: kHomeDecoration,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: (){
-                          Navigator.pushNamed(context, guide.id, arguments: {
-                            'token': token,
-                            'user_id': userId,
-                            'first_name': firstName,
-                            'last_name': lastName,
-                          });
-                        },
-                        child: Container(
-                          height: size.height * 0.22,
-                          width: size.width * 0.45,
-                          child: HomeItem(
-                            title: "راهنمای برنامه" ,
-                            subtitle: "توضیحات برنامه",
-                            img: "assets/images/question.png",
-                            size: size,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: size.height * 0.04,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ScaleTransition(
-                  scale: _animation3,
-                  child: Container(
-                    decoration: kHomeDecoration,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: (){
-                          warning_logout(context , "خارج می شوید ؟");
-                          //showLogoutDialog();
-                        },
-                        child: Container(
-                          height: size.height * 0.18,
-                          width: size.width * 0.5,
-                          child: HomeItem(
-                            title: "خروج از برنامه",
-                            subtitle: "" ,
-                            img: "assets/images/shut_down.png",
-                            size: size,
-                          ),
-                        ),
+            ScaleTransition(
+              scale: _animation2,
+              child: Container(
+                decoration: kHomeDecoration,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, EventScreen.id, arguments: {
+                        'token': token,
+                        'user_id': userId,
+                        'first_name': firstName,
+                        'last_name': lastName,
+                      });
+                    },
+                    child: Container(
+                      height: size.height * 0.22,
+                      width: size.width * 0.85,
+                      child: HomeItem2(
+                        title: "سامانه رویدادها",
+                        subtitle: "رویداد برای تحکیم فردا",
+                        img: "assets/images/Event.png",
+                        size: size,
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
+            ),
+            ScaleTransition(
+              scale: _animation2,
+              child: Container(
+                decoration: kHomeDecoration,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, guide.id, arguments: {
+                        'token': token,
+                        'user_id': userId,
+                        'first_name': firstName,
+                        'last_name': lastName,
+                      });
+                    },
+                    child: Container(
+                      height: size.height * 0.22,
+                      width: size.width * 0.85,
+                      child: HomeItem2(
+                        title: "راهنمای برنامه",
+                        subtitle: "توضیحات برنامه",
+                        img: "assets/images/question.png",
+                        size: size,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            ScaleTransition(
+              scale: _animation3,
+              child: Container(
+                decoration: kHomeDecoration,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      warning_logout(context, "خارج می شوید ؟");
+                      //showLogoutDialog();
+                    },
+                    child: Container(
+                      height: size.height * 0.22,
+                      width: size.width * 0.85,
+                      child: HomeItem2(
+                        title: "خروج از برنامه",
+                        subtitle: "",
+                        img: "assets/images/shut_down.png",
+                        size: size,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -644,10 +622,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-
-
   void logoutApp() async {
-
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
     Navigator.pop(context);

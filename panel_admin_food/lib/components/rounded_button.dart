@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:persian_fonts/persian_fonts.dart';
 import '../constants.dart';
 
 class RoundedButton extends StatelessWidget {
   final String text;
   final Function press;
   final Color color, textColor;
+
   const RoundedButton({
     Key key,
     this.text,
@@ -27,9 +29,8 @@ class RoundedButton extends StatelessWidget {
           onPressed: press,
           child: Text(
             text,
-            style: TextStyle(
-                fontSize: 20,
-                color: textColor),
+            style:
+                PersianFonts.Shabnam.copyWith(fontSize: 20, color: textColor),
           ),
         ),
       ),

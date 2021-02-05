@@ -43,8 +43,8 @@ class _guideState extends State<guide> {
       body: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
-              //color: Colors.grey[200]
-              ),
+            //color: Colors.grey[200]
+          ),
           child: Column(
             children: [
               SizedBox(
@@ -182,11 +182,11 @@ class _guideState extends State<guide> {
                 padding: EdgeInsets.only(left: 16, right: 16),
                 child: Text(
                   "مدیر می تواند با مراجعه به کارتابل،"
-                  " لیست رویداد های متقاضی، "
-                  " "
-                  "مراجعه به ایونت رویداد های قبول شده  ،"
-                  " و با مراجعه به دسترسی ، "
-                  "به افراد اجازه ایجاد رویداد را بدهند ",
+                      " لیست رویداد های متقاضی، "
+                      " "
+                      "مراجعه به ایونت رویداد های قبول شده  ،"
+                      " و با مراجعه به دسترسی ، "
+                      "به افراد اجازه ایجاد رویداد را بدهند ",
                   textDirection: TextDirection.rtl,
                   style: PersianFonts.Shabnam.copyWith(
                     color: kPrimaryColor,

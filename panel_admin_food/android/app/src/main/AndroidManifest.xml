@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="panel_admin_food_origin"
+        android:label="پنل ادمین"
         android:icon="@mipmap/admin">
         <activity
             android:name=".MainActivity"

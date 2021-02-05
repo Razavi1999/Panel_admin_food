@@ -218,8 +218,39 @@ class _DetailPageProfessorState extends State<DetailPageProfessor> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(
-                                      'زمان های مراجعه : ${(result['free_times'].length != 0) ? result['free_times'][0] : 'N/A'}',
+                                  if (result['free_times'].length != 0) ...[
+                                    Container(
+
+                                      child: Material(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        color: Colors.blueGrey,
+                                        child: InkWell(
+                                          borderRadius:
+                                          BorderRadius.circular(10.0),
+                                          onTap: () {
+                                            _showTimesDialog(
+                                                result['free_times']);
+                                          },
+                                          child: Container(
+                                            width: 150,
+                                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                                            child: Center(
+                                              child: Text(
+                                                ' نمایش زمان ها',
+                                                textAlign: TextAlign.center,
+                                                style: PersianFonts.Shabnam.copyWith(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ] else ...[
+                                    Text('N/A'),
+                                  ],
+                                  Text('زمان های مراجعه : ',
                                       textDirection: TextDirection.rtl,
                                       style: PersianFonts.Shabnam.copyWith(
                                           fontSize: 18,
@@ -302,36 +333,79 @@ class _DetailPageProfessorState extends State<DetailPageProfessor> {
     );
   }
 
-  // Container _getBackground() {
+  // Container _getGradient() {
   //   return new Container(
-  //     child: new Image.network(
-  //       widget.planet.picture,
-  //       fit: BoxFit.cover,
-  //       height: 300.0,
+  //     margin: new EdgeInsets.only(top: 190.0),
+  //     height: 110.0,
+  //     decoration: new BoxDecoration(
+  //       gradient: new LinearGradient(
+  //         colors: <Color>[new Color(0x00736AB7), new Color(0xFF736AB7)],
+  //         stops: [0.0, 0.9],
+  //         begin: const FractionalOffset(0.0, 0.0),
+  //         end: const FractionalOffset(0.0, 1.0),
+  //       ),
   //     ),
-  //     constraints: new BoxConstraints.expand(height: 295.0),
+  //   );
+  // }
+  //
+  // Container _getToolbar(BuildContext context) {
+  //   return new Container(
+  //     margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+  //     child: new BackButton(color: Colors.white),
   //   );
   // }
 
-  Container _getGradient() {
-    return new Container(
-      margin: new EdgeInsets.only(top: 190.0),
-      height: 110.0,
-      decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-          colors: <Color>[new Color(0x00736AB7), new Color(0xFF736AB7)],
-          stops: [0.0, 0.9],
-          begin: const FractionalOffset(0.0, 0.0),
-          end: const FractionalOffset(0.0, 1.0),
+  _showTimesDialog(List mapList) async {
+    print('======================================================');
+    print(mapList[0]);
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        content: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          // color: kPrimaryLightColor,
+          height: 450,
+          width: 250,
+          child: ListView.builder(
+            // shrinkWrap: true,
+            itemCount: mapList.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin:
+                EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.purple.shade200,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 5),
+                      child: Text(
+                        replaceFarsiNumber(mapList[index]),
+                        textDirection: TextDirection.rtl,
+                        textAlign: TextAlign.center,
+                        style: PersianFonts.Shabnam.copyWith(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
-  Container _getToolbar(BuildContext context) {
-    return new Container(
-      margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: new BackButton(color: Colors.white),
-    );
-  }
+
 }

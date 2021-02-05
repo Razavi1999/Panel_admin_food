@@ -49,6 +49,7 @@ void discuss(BuildContext context, String message) {
       animType: AnimType.RIGHSLIDE,
       headerAnimationLoop: false,
       title: 'خطا',
+      btnOkText: 'باشه',
       desc: message,
       btnOkOnPress: () {},
       btnOkIcon: Icons.cancel,
