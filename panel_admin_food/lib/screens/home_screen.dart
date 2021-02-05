@@ -350,7 +350,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 decoration: kHomeDecoration,
                 child: Material(
                   color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(20),
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
                     onTap: () {
                       Navigator.pushNamed(context, OrderPage.id, arguments: {
                         'token': token,
@@ -378,8 +380,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               child: Container(
                 decoration: kHomeDecoration,
                 child: Material(
+                  borderRadius: BorderRadius.circular(20),
                   color: Colors.transparent,
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
                     onTap: () {
                       Navigator.pushNamed(context, guide.id, arguments: {
                         'token': token,
@@ -408,7 +412,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 decoration: kHomeDecoration,
                 child: Material(
                   color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(20),
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
                     onTap: () {
                       warning_logout(context, "خارج می شوید؟ ");
                       //showLogoutDialog();
@@ -444,8 +450,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               child: Container(
                 decoration: kHomeDecoration,
                 child: Material(
+                  borderRadius: BorderRadius.circular(20),
                   color: Colors.transparent,
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
                     onTap: () {
                       Navigator.pushNamed(context, EventScreen.id, arguments: {
                         'token': token,
@@ -473,8 +481,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               child: Container(
                 decoration: kHomeDecoration,
                 child: Material(
+                  borderRadius: BorderRadius.circular(20),
                   color: Colors.transparent,
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
                     onTap: () {
                       Navigator.pushNamed(context, guide.id, arguments: {
                         'token': token,
@@ -502,8 +512,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               child: Container(
                 decoration: kHomeDecoration,
                 child: Material(
+                  borderRadius: BorderRadius.circular(20),
                   color: Colors.transparent,
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
                     onTap: () {
                       warning_logout(context, "خارج می شوید ؟");
                       //showLogoutDialog();

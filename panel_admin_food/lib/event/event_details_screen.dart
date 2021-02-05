@@ -128,21 +128,19 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       horizontal: 30,
                       vertical: 0,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          result['name'],
-                          textDirection: TextDirection.rtl,
-                          style: PersianFonts.Shabnam.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: kPrimaryColor,
-                              fontSize: 28
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
+                    child: Text(
+                      result['name'],
+                      textDirection: TextDirection.rtl,
+                      style: PersianFonts.Shabnam.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: kPrimaryColor,
+                          fontSize: MediaQuery.of(context).size.width * 0.06,
+                      ),
+                      textAlign: TextAlign.right,
                     ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
@@ -181,7 +179,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       ],
                     ),
                   ),
-
+                  SizedBox(
+                    height: 30,
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 30,

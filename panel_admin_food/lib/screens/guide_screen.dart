@@ -199,7 +199,7 @@ class _guideState extends State<guide> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: Image(
-                  image: AssetImage("assets/images/ahmad_event.jpg"),
+                  image: AssetImage("assets/images/guide_event.jpg"),
                   width: 400,
                   height: 400,
                 ),

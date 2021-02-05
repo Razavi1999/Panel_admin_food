@@ -525,28 +525,52 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
             width: 150,
             child: Column(
               children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: count,
-                  itemBuilder: (context, index) {
-                    int id = mapList[index]['time_id'];
-                    String name =
-                        '${mapList[index]['weekday']} ${mapList[index]['time']}';
-                    if (listSelectedTimeIds.contains(id)) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        color: Colors.purple.shade100,
-                        child: ListTile(
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: count,
+                    itemBuilder: (context, index) {
+                      int id = mapList[index]['time_id'];
+                      String name =
+                          '${mapList[index]['weekday']} ${mapList[index]['time']}';
+                      if (listSelectedTimeIds.contains(id)) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          color: Colors.purple.shade100,
+                          child: ListTile(
+                            leading: IconButton(
+                              icon: Icon(
+                                Icons.clear,
+                                color: Colors.red,
+                              ),
+                              onPressed: () {
+                                listSelectedTimeIds.remove(id);
+                                listSelectedTimeNames.remove(name);
+                                setState(() {});
+                                Navigator.pop(context);
+                                onTimesPressed();
+                              },
+                            ),
+                            title: Text(
+                              name,
+                              style: PersianFonts.Shabnam.copyWith(
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return ListTile(
                           leading: IconButton(
                             icon: Icon(
-                              Icons.clear,
-                              color: Colors.red,
+                              Icons.done,
+                              color: Colors.green,
                             ),
                             onPressed: () {
-                              listSelectedTimeIds.remove(id);
-                              listSelectedTimeNames.remove(name);
+                              listSelectedTimeIds.add(id);
+                              listSelectedTimeNames.add(name);
                               setState(() {});
                               Navigator.pop(context);
                               onTimesPressed();
@@ -558,32 +582,10 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
                               fontSize: 15,
                             ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return ListTile(
-                        leading: IconButton(
-                          icon: Icon(
-                            Icons.done,
-                            color: Colors.green,
-                          ),
-                          onPressed: () {
-                            listSelectedTimeIds.add(id);
-                            listSelectedTimeNames.add(name);
-                            setState(() {});
-                            Navigator.pop(context);
-                            onTimesPressed();
-                          },
-                        ),
-                        title: Text(
-                          name,
-                          style: PersianFonts.Shabnam.copyWith(
-                            fontSize: 15,
-                          ),
-                        ),
-                      );
-                    }
-                  },
+                        );
+                      }
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 10,
@@ -687,66 +689,68 @@ class _NewProfessorScreenState extends State<NewProfessorScreen> {
             width: 250,
             child: Column(
               children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: count,
-                  itemBuilder: (context, index) {
-                    int id = mapList[index]['research_axis_id'];
-                    String name = mapList[index]['subject'];
-                    if (listSelectedResearchFieldIds.contains(id)) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        color: Colors.purple.shade100,
-                        child: ListTile(
-                          leading: IconButton(
-                            icon: Icon(
-                              Icons.clear,
-                              color: Colors.red,
-                            ),
-                            onPressed: () {
-                              listSelectedResearchFieldIds.remove(id);
-                              listSelectedResearchFieldNames.remove(name);
-                              setState(() {});
-                              Navigator.pop(context);
-                              onResearchFieldsPressed();
-                            },
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: count,
+                    itemBuilder: (context, index) {
+                      int id = mapList[index]['research_axis_id'];
+                      String name = mapList[index]['subject'];
+                      if (listSelectedResearchFieldIds.contains(id)) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          title: Text(
-                            name,
-                            style: PersianFonts.Shabnam.copyWith(
-                              fontSize: 15,
+                          color: Colors.purple.shade100,
+                          child: ListTile(
+                            leading: IconButton(
+                              icon: Icon(
+                                Icons.clear,
+                                color: Colors.red,
+                              ),
+                              onPressed: () {
+                                listSelectedResearchFieldIds.remove(id);
+                                listSelectedResearchFieldNames.remove(name);
+                                setState(() {});
+                                Navigator.pop(context);
+                                onResearchFieldsPressed();
+                              },
                             ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Card(
-                        child: ListTile(
-                          leading: IconButton(
-                            icon: Icon(
-                              Icons.done,
-                              color: Colors.green,
-                            ),
-                            onPressed: () {
-                              listSelectedResearchFieldIds.add(id);
-                              listSelectedResearchFieldNames.add(name);
-                              setState(() {});
-                              Navigator.pop(context);
-                              onResearchFieldsPressed();
-                            },
-                          ),
-                          title: Text(
-                            name,
-                            style: PersianFonts.Shabnam.copyWith(
-                              fontSize: 15,
+                            title: Text(
+                              name,
+                              style: PersianFonts.Shabnam.copyWith(
+                                fontSize: 15,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }
-                  },
+                        );
+                      } else {
+                        return Card(
+                          child: ListTile(
+                            leading: IconButton(
+                              icon: Icon(
+                                Icons.done,
+                                color: Colors.green,
+                              ),
+                              onPressed: () {
+                                listSelectedResearchFieldIds.add(id);
+                                listSelectedResearchFieldNames.add(name);
+                                setState(() {});
+                                Navigator.pop(context);
+                                onResearchFieldsPressed();
+                              },
+                            ),
+                            title: Text(
+                              name,
+                              style: PersianFonts.Shabnam.copyWith(
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 10,
