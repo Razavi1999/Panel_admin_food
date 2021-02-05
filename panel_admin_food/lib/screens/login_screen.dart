@@ -126,13 +126,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               checkValidation(context);
                             },
                           ),
-                          SizedBox(height: size.height * 0.03),
-                          AlreadyHaveAnAccountCheck(
-                            press: () {
-                              Navigator.popAndPushNamed(
-                                  context, RegisterationScreen.id);
-                            },
-                          ),
+                          // SizedBox(height: size.height * 0.03),
+                          // AlreadyHaveAnAccountCheck(
+                          //   press: () {
+                          //     Navigator.popAndPushNamed(
+                          //         context, RegisterationScreen.id);
+                          //   },
+                          // ),
                         ],
                       ),
                     ),
