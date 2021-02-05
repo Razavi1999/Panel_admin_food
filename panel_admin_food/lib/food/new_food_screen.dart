@@ -208,7 +208,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                 image: DecorationImage(
               colorFilter: new ColorFilter.mode(
                   Colors.black.withOpacity(0.5), BlendMode.dstATop),
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.cover,
               image: AssetImage("assets/images/ahmad_13.jpg"),
             )),
             //*/
@@ -306,7 +306,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                                       width: 10,
                                     ),
                                     Text(
-                                      '${date.year}-${date.month}-${date.day}',
+                                      replaceFarsiNumber('${date.year}-${date.month}-${date.day}'),
                                       textAlign: TextAlign.center,
                                       textDirection: TextDirection.rtl,
                                       style: PersianFonts.Shabnam.copyWith(
@@ -681,7 +681,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
                                   colorFilter: new ColorFilter.mode(
                                       Colors.black.withOpacity(0.5),
                                       BlendMode.dstATop),
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.cover,
                                   image: AssetImage(
                                     "assets/images/ahmad_13.jpg",
                                   ),
@@ -835,22 +835,22 @@ class _NewFoodScreenState extends State<NewFoodScreen>
     if (isAddingCompletelyNewFood == true) {
       String food_name = foodController.text;
       if (food_name.length == 0) {
-        open(context, 'لطفا نام غذا را وارد کنید');
+        discuss(context, 'لطفا نام غذا را وارد کنید');
         return;
       }
       String food_ingredient = ingredientController.text;
       if (food_ingredient.length == 0) {
-        open(context, 'لطفا مواد اولیه غذا را وارد کنید');
+        discuss(context, 'لطفا مواد اولیه غذا را وارد کنید');
         return;
       }
       String price = priceController.text;
       if (price.length == 0) {
-        open(context, 'لطفا قیمت غذا را وارد کنید');
+        discuss(context, 'لطفا قیمت غذا را وارد کنید');
         return;
       }
     } else {
       if (selectedFoodId == null) {
-        open(context, 'لطفا ابتدا یک غذا را انتخاب کنید');
+        discuss(context, 'لطفا ابتدا یک غذا را انتخاب کنید');
         return;
       }
     }
@@ -863,7 +863,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
       }
     }
     if (flag == false) {
-      open(context, 'لطفا حداقل برای یک بازه ی ساعتی تعداد غذا را وارد کنید.');
+      discuss(context, 'لطفا حداقل برای یک بازه ی ساعتی تعداد غذا را وارد کنید.');
       return;
     }
     addingTimes();
@@ -913,7 +913,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
         }
         var jsonRes = convert.jsonDecode(response.body);
         if (response.statusCode >= 400) {
-          open(context, 'مشکلی پیش آمد');
+          discuss(context, 'مشکلی پیش آمد');
           return;
         }
         selectedFoodId = jsonRes['food_id'];
@@ -921,6 +921,8 @@ class _NewFoodScreenState extends State<NewFoodScreen>
       Map map = Map();
 
       map['food_id'] = selectedFoodId;
+      print('==============================================================');
+      print(selectedFoodId);
       map['seller_id'] = userId;
       map['date'] = selectedDate.toString().substring(0, 10);
       print('date: ${map['date']}');
@@ -944,7 +946,7 @@ class _NewFoodScreenState extends State<NewFoodScreen>
         success(context, "غذا سرو شد");
       } else {
         print(response.body);
-        open(context, "متاسفانه مشکلی پیش آمد.");
+        discuss(context, "متاسفانه مشکلی پیش آمد.");
       }
       setState(() {
         showSpinner = false;

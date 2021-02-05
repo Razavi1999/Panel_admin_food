@@ -71,7 +71,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
             Map result =
-                convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
+            convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
             print(result);
 
             return SingleChildScrollView(
@@ -80,6 +80,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   Container(
                     child: Center(
                       child: Banner(
+                        //textStyle: ,
 
                         color: Colors.purple.shade300,
                         message: replaceFarsiNumber(result['cost'].toString()),
@@ -87,9 +88,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: FadeInImage(
-                            height: 200,
-                            width: 200,
-                            fit: BoxFit.cover,
+                            height: 320,
+                            width: 320,
+                            fit: BoxFit.fitWidth,
+
                             placeholder: AssetImage('assets/images/book-1.png'),
                             image: (result['image'] != null)
                                 ? NetworkImage('$baseUrl' + result['image'])
@@ -126,21 +128,19 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       horizontal: 30,
                       vertical: 0,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          result['name'],
-                          textDirection: TextDirection.rtl,
-                          style: PersianFonts.Shabnam.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: kPrimaryColor,
-                              fontSize: 28
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
+                    child: Text(
+                      result['name'],
+                      textDirection: TextDirection.rtl,
+                      style: PersianFonts.Shabnam.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: kPrimaryColor,
+                          fontSize: MediaQuery.of(context).size.width * 0.06,
+                      ),
+                      textAlign: TextAlign.right,
                     ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
@@ -168,8 +168,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.right,
                           style: PersianFonts.Shabnam.copyWith(
-                              //color: kPrimaryColor,
-                              fontSize: 18,
+                            //color: kPrimaryColor,
+                            fontSize: 18,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -179,23 +179,25 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       ],
                     ),
                   ),
-
+                  SizedBox(
+                    height: 30,
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 0,
-                        ),
+                      horizontal: 30,
+                      vertical: 0,
+                    ),
                     child: Flexible(
                       child: CreditCard(
-                        cardExpiry: 'دیدار ما : ${replaceFarsiNumber(getTime(result['start_time']))}',
+                        cardExpiry: 'آغاز رویداد : ${replaceFarsiNumber(getTime(result['start_time']))}',
                         cvv: "cvv",
                         showBackSide: false,
                         frontBackground: CardBackgrounds.black,
                         backBackground: CardBackgrounds.white,
                         showShadow: true,
 
-                        cardNumber: ("123"),
-                        bankName: 'دیدار ما : ${replaceFarsiNumber(getTime(result['start_time']))}',
+                        cardNumber: (" رویداد به صورت ${result['hold_type'] == 'Online' ? 'مجازی' : 'حضوری'}  "),
+                        bankName: 'منتظر حضور گرمتان هستیم',
                         cardHolderName: 'مکان دیدار : ${result['location']}' ,
 
                         height: 200,
@@ -213,12 +215,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
 
                   Padding(
-                    padding: EdgeInsets.only(right: 1, left: 5),
+                    padding: EdgeInsets.only(right: 35 ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
                           ' رویداد به صورت ${result['hold_type'] == 'Online' ? 'مجازی' : 'حضوری'} برگزار خواهد شد!  ',
                           textDirection: TextDirection.rtl,
+                          // textAlign: TextAlign.start,
                           style: PersianFonts.Shabnam.copyWith(
                               fontWeight: FontWeight.bold,
                               //color: kPrimaryColor,
@@ -242,8 +246,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   ///*
                   Padding(
                     padding: EdgeInsets.only(
-                        right: 35 ,
-                        //left: 220
+                      right: 35 ,
+                      //left: 220
                     ), //*/
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -274,7 +278,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
                   Padding(
                     padding: EdgeInsets.only(
-                      right: 35
+                        right: 35
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -359,101 +363,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   ),
 
 
-                  Padding(
-                    padding: EdgeInsets.only(right: 1, left: 5),
-                    child: Row(
-                      children: [
-                        Text(
-                          ' رویداد به صورت ${result['hold_type'] == 'Online' ? 'مجازی' : 'حضوری'} برگزار خواهد شد!  ',
-                          textDirection: TextDirection.rtl,
-                          style: PersianFonts.Shabnam.copyWith(
-                              fontWeight: FontWeight.bold,
-                              //color: kPrimaryColor,
-                              fontSize: 17),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Icon(
-                          Icons.accessibility,
-                          color: kPrimaryColor,
-                        ),
-                      ],
-                    ),
-                  ),
-
                   SizedBox(
                     height: 15,
                   ),
 
                   ///*
-                  Padding(
-                    padding: EdgeInsets.only(
-                      right: 35 ,
-                      //left: 220
-                    ), //*/
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          '${replaceFarsiNumber(getTime(result['start_time']))}',
-                          textDirection: TextDirection.rtl,
-                          //textAlign: TextAlign.right,
-                          style: PersianFonts.Shabnam.copyWith(
-                              fontWeight: FontWeight.w100,
-                              //color: kPrimaryColor,
-                              fontSize: 17),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Icon(
-                          Icons.access_alarm,
-                          color: kPrimaryColor,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(
-                        right: 35
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          '${result['location']}',
-                          textDirection: TextDirection.rtl,
-                          textAlign: TextAlign.end,
-                          style: PersianFonts.Shabnam.copyWith(
-                              fontWeight: FontWeight.w100,
-                              //color: kPrimaryColor,
-                              fontSize: 17),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Icon(
-                          Icons.place,
-                          color: kPrimaryColor,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                    child: Text(
-                        ' منتظر حضورتان هستیم در روز \n${replaceFarsiNumber(result['start_time']).substring(0, 10)}',
-                        textDirection: TextDirection.rtl,
-                        style: PersianFonts.Shabnam.copyWith(
-                            color: kPrimaryColor, fontSize: 20)),
-                  ),
 
                   SizedBox(
                     height: 40,
@@ -471,7 +385,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       ),
     );
   }
-  
+
   String getTime(String date){
     print("date : " + date);
     date = date.substring(0,10);
@@ -484,7 +398,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     print(j);
 
     return '${j.day} / ${j.month} / ${j.year}';
-    
+
     return j.toString().substring(7,19);
   }
 

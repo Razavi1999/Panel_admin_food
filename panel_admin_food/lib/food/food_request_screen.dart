@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:panel_admin_food_origin/components/EmptyEffect.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -146,13 +147,30 @@ class _RequestScreenState extends State<RequestScreen> {
                         for (Map map in jsonResponse) {
                           count++;
                           mapList.add(map);
-                          // print(map.toString());
                         }
                         if (count == 0) {
                           return Container(
+                            height: MediaQuery.of(context).size.height * 0.6,
                             child: Center(
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  CircleAvatar(
+                                    radius: 60,
+                                    backgroundColor: kPrimaryColor,
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 58,
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 100,
+                                        color: kPrimaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
                                   Text(
                                     'درخواست غذایی برای امروز وجود ندارد !!!',
                                     style: PersianFonts.Shabnam.copyWith(
@@ -223,48 +241,11 @@ class _RequestScreenState extends State<RequestScreen> {
       }),
     );
     if (response.statusCode >= 400) {
-      showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text(
-            'مشکلی پیش آمد.',
-            textDirection: TextDirection.rtl,
-          ),
-          content: FlatButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              '!باشه',
-              textDirection: TextDirection.rtl,
-            ),
-          ),
-        ),
-      );
+      discuss(context, 'مشکلی پیش آمد.');
     }
     var jsonResponse = convert.jsonDecode(response.body);
     if (jsonResponse['done'] == true) {
-      bool result = await showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text(
-            'غذا فروخته شد',
-            textDirection: TextDirection.rtl,
-            textAlign: TextAlign.center,
-            style: PersianFonts.Shabnam.copyWith(color: kPrimaryColor),
-          ),
-          content: FlatButton(
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-            child: Text(
-              '!باشه',
-              style: PersianFonts.Shabnam.copyWith(),
-            ),
-          ),
-        ),
-      );
-      setState(() {});
+      success(context, 'غذا فروخته شد');
     } else {}
   }
 }

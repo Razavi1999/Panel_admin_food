@@ -35,7 +35,7 @@ class _OrderCardState extends State<OrderCard> {
           shape:  RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          color: Colors.white,
+          color: Colors.purple.shade50,
           margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           elevation: 6,
           child: Padding(

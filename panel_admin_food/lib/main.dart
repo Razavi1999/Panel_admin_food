@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:panel_admin_food_origin/Professor/new_professor_screen.dart';
 import 'package:panel_admin_food_origin/Professor/faculty_screen.dart';
-import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/event_details_screen.dart';
-import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/events_screen.dart';
-import 'file:///D:/FlutterProjects/admin/panel_admin_food/lib/event/users_screen.dart';
+
+import 'Professor/professor_screen.dart';
+import 'event/event_details_screen.dart';
+import 'event/events_screen.dart';
+import 'event/users_screen.dart';
 import 'food/food_details_screen.dart';
 import 'food/history_screen.dart';
 import 'screens/login_screen.dart';
@@ -11,8 +14,9 @@ import 'food/new_food_screen.dart';
 import 'screens/registeration_screen.dart';
 import 'screens/home_screen.dart';
 import 'food/food_screen.dart';
-import 'food/request_screen.dart';
+import 'food/food_request_screen.dart';
 import 'screens/guide_screen.dart';
+import 'Professor/detail_professor.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,6 +33,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: LoginScreen.id,
       routes: {
+        NewProfessorScreen.id : (context) => NewProfessorScreen(),
+        DetailPageProfessor.id : (context) => DetailPageProfessor(),
+        ProfessorList.id : (context) => ProfessorList(),
         FacultyScreen.id : (context) => FacultyScreen(),
         guide.id   :(context) => guide(),
         RegisterationScreen.id: (context) => RegisterationScreen(),

@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jalali_calendar/jalali_calendar.dart';
 import 'package:panel_admin_food_origin/components/brightness_switch.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,7 @@ import '../constants.dart';
 import 'food_details_screen.dart';
 import 'history_screen.dart';
 import 'new_food_screen.dart';
-import 'request_screen.dart';
+import 'food_request_screen.dart';
 import 'package:persian_fonts/persian_fonts.dart';
 import 'package:persian_date/persian_date.dart';
 import '../screens/EmptyEffect.dart';
@@ -56,6 +57,7 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
   }
 
   Future<bool> _refresh() async {
+
     setState(() {});
     return true;
   }
@@ -87,36 +89,6 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
     );
   }
 
-  void _showDatePicker() {
-    final bool showTitleActions = false;
-    DatePicker.showDatePicker(context,
-        minYear: 1300,
-        maxYear: 1450,
-        confirm: Text(
-          'تایید',
-          style: TextStyle(color: Colors.red),
-        ),
-        cancel: Text(
-          'لغو',
-          style: TextStyle(color: Colors.cyan),
-        ),
-        dateFormat: _format, onChanged: (year, month, day) {
-          if (!showTitleActions) {
-            _datetime = '$year-$month-$day';
-          }
-        }, onConfirm: (year, month, day) {
-          setState(() {});
-          Jalali j = Jalali(year, month, day);
-          selectedDate = j.toDateTime();
-          print('dateTime is: $selectedDate');
-          _datetime = '$year-$month-$day';
-          setState(() {
-            _datetime = '$year-$month-$day';
-            print('time' + _datetime);
-          });
-        });
-  }
-
 
   saveToSharedPreferences(String foodName, int count) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -144,8 +116,6 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
             color: Colors.white,
           ),
           onPressed: () {
-            // showCalendarDialog();
-            // _showDatePicker();
             _showDateTimePicker();
           },
         ),
@@ -209,10 +179,18 @@ class _OrderPageState extends State<OrderPage> with SingleTickerProviderStateMix
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               EmptyEffect(
-                                child: Icon(
-                                  Icons.folder,
-                                  size: 55,
-                                  color: kPrimaryColor,
+                                child: CircleAvatar(
+                                  radius: 60,
+                                  backgroundColor: kPrimaryColor,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 58,
+                                    child: Icon(
+                                      Icons.close,
+                                      size: 100,
+                                      color: kPrimaryColor,
+                                    ),
+                                  ),
                                 ),
                                 borderColor: kPrimaryColor,
                                 outermostCircleStartRadius: 20,

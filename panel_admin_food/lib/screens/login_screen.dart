@@ -83,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       "assets/images/asli_8.jpg",
                       width: size.width  * 1.5,
                       height: size.height * 1.1,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   SingleChildScrollView(
@@ -98,10 +99,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           RichText(
                             text: TextSpan(
                               text : "به مدیریت دانشگاه من خوش آمدید",
-                              style: TextStyle(fontWeight: FontWeight.bold ,
+                              style: PersianFonts.Shabnam.copyWith(
+                                  fontWeight: FontWeight.bold ,
                                   color: kPrimaryColor ,
                                   fontSize: 20
-                              ),
+                              )
                             ),
                           ),
                           SizedBox(height: size.height * 0.03),
@@ -125,13 +127,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               checkValidation(context);
                             },
                           ),
-                          SizedBox(height: size.height * 0.03),
-                          AlreadyHaveAnAccountCheck(
-                            press: () {
-                              Navigator.popAndPushNamed(
-                                  context, RegisterationScreen.id);
-                            },
-                          ),
+                          // SizedBox(height: size.height * 0.03),
+                          // AlreadyHaveAnAccountCheck(
+                          //   press: () {
+                          //     Navigator.popAndPushNamed(
+                          //         context, RegisterationScreen.id);
+                          //   },
+                          // ),
                         ],
                       ),
                     ),
@@ -149,15 +151,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   checkValidation(BuildContext context) async {
     if (email.length == 0) {
-      open(context, 'ایمیل را پر کنید');
+      discuss(context, 'ایمیل را پر کنید');
       return;
     }
     if (!email.contains('@')) {
-      open(context, 'فرمت ایمیل اشتباه است');
+      discuss(context, 'فرمت ایمیل اشتباه است');
       return;
     }
     if (password.length == 0) {
-      open(context, 'رمز را پر کنید');
+      discuss(context, 'رمز را پر کنید');
       return;
     }
     setState(() {
@@ -186,23 +188,28 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           showSpinner = false;
         });
-        var jsonResponse = convert.jsonDecode(result.body);
+        var jsonResponse =
+        convert.jsonDecode(convert.utf8.decode(result.bodyBytes));
         print(jsonResponse['token']);
         print(jsonResponse);
+        if(jsonResponse['role'] == 'student'){
+          discuss(context, 'شما به عنوان دانشجو نمیتوانید وارد اپ ادمین شوید');
+          return;
+        }
         addStringToSF(jsonResponse['token'], jsonResponse['user_id'],
             jsonResponse['username'], jsonResponse['first_name'], jsonResponse['last_name'], jsonResponse['role']);
       } else if (result.statusCode == 400) {
         setState(() {
           showSpinner = false;
         });
-        open(context, 'همچین ایمیلی موجود نیست و یا رمز اشتباه است');
+        discuss(context, 'همچین ایمیلی موجود نیست و یا رمز اشتباه است');
       }
 
       else {
         setState(() {
           showSpinner = false;
         });
-        open(context, result.body);
+        discuss(context, result.body);
         print(result.statusCode);
         print(result.body);
       }
@@ -210,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         showSpinner = false;
       });
-      open(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
+      discuss(context, 'مشکلی در ارتباط با سرور به وجود آمده است!');
       print("My Error: $e");
     }
   }

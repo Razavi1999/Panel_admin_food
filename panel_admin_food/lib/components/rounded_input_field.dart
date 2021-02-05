@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:persian_fonts/persian_fonts.dart';
 
 import '../constants.dart';
 
@@ -30,6 +31,7 @@ class RoundedInputField extends StatelessWidget {
         child: TextField(
           onChanged: onChanged,
           cursorColor: kPrimaryColor,
+          style: PersianFonts.Shabnam.copyWith(),
           decoration: InputDecoration(
             icon: Visibility(
               visible: visible ?? true,
