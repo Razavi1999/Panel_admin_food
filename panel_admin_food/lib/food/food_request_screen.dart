@@ -155,29 +155,18 @@ class _RequestScreenState extends State<RequestScreen> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  EmptyEffect(
+                                  CircleAvatar(
+                                    radius: 60,
+                                    backgroundColor: kPrimaryColor,
                                     child: CircleAvatar(
-                                      radius: 60,
-                                      backgroundColor: kPrimaryColor,
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: 58,
-                                        child: Icon(
-                                          Icons.close,
-                                          size: 100,
-                                          color: kPrimaryColor,
-                                        ),
+                                      backgroundColor: Colors.white,
+                                      radius: 58,
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 100,
+                                        color: kPrimaryColor,
                                       ),
                                     ),
-                                    borderColor: kPrimaryColor,
-                                    outermostCircleStartRadius: 20,
-                                    outermostCircleEndRadius: 175,
-                                    numberOfCircles: 4,
-                                    animationTime: Duration(seconds: 3),
-                                    delay: Duration(seconds: 3),
-                                    gap: 30,
-                                    borderWidth: 20,
-                                    startOpacity: 0.3,
                                   ),
                                   SizedBox(
                                     height: 30,
@@ -252,48 +241,11 @@ class _RequestScreenState extends State<RequestScreen> {
       }),
     );
     if (response.statusCode >= 400) {
-      showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text(
-            'مشکلی پیش آمد.',
-            textDirection: TextDirection.rtl,
-          ),
-          content: FlatButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              '!باشه',
-              textDirection: TextDirection.rtl,
-            ),
-          ),
-        ),
-      );
+      discuss(context, 'مشکلی پیش آمد.');
     }
     var jsonResponse = convert.jsonDecode(response.body);
     if (jsonResponse['done'] == true) {
-      bool result = await showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text(
-            'غذا فروخته شد',
-            textDirection: TextDirection.rtl,
-            textAlign: TextAlign.center,
-            style: PersianFonts.Shabnam.copyWith(color: kPrimaryColor),
-          ),
-          content: FlatButton(
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-            child: Text(
-              '!باشه',
-              style: PersianFonts.Shabnam.copyWith(),
-            ),
-          ),
-        ),
-      );
-      setState(() {});
+      success(context, 'غذا فروخته شد');
     } else {}
   }
 }

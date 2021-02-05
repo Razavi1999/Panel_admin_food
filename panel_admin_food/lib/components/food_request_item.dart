@@ -54,7 +54,7 @@ class FoodRequestItem extends StatelessWidget {
                         .substring(0, price.toString().length - 2)) +
                     ' تومان',
                 style: PersianFonts.Shabnam.copyWith(
-                    fontSize:16,
+                    fontSize:12,
                     color: kPrimaryColor
                    ),
                 textDirection: TextDirection.rtl,

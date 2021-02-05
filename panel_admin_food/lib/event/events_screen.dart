@@ -570,14 +570,13 @@ class _EventScreenState extends State<EventScreen> {
                 width: 10.0,
               ),
               Container(
-                height: 110.0,
-                width: 90.0,
+                width: 300,
                 decoration:
                 BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
                   child: FadeInImage(
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitWidth,
                     //height: 80,
                     //width: 100,
                     placeholder: AssetImage('assets/images/junk.jpeg'),

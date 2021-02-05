@@ -921,6 +921,8 @@ class _NewFoodScreenState extends State<NewFoodScreen>
       Map map = Map();
 
       map['food_id'] = selectedFoodId;
+      print('==============================================================');
+      print(selectedFoodId);
       map['seller_id'] = userId;
       map['date'] = selectedDate.toString().substring(0, 10);
       print('date: ${map['date']}');
